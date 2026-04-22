@@ -1,0 +1,2868 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JapanLife UI Preview — 言語選択 & ホーム</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    /* ─── DESIGN TOKENS ─────────────────────────────── */
+    :root {
+      --accent: #fbae17;
+      --accent-light: #fff3d6;
+      --accent-dim: rgba(251,174,23,0.15);
+      --navy: #1e2d4e;
+      --navy-light: #263762;
+      --navy-deep: #151f37;
+      --text: #1C1C1C;
+      --muted: #6B6B6B;
+      --muted-light: #9B9B9B;
+      --border: #E8E8E4;
+      --border-light: #F0F0EC;
+      --surface: #FFFFFF;
+      --bg: #FAFAF7;
+      --success: #27ae60;
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --font-h: 'Zen Maru Gothic', sans-serif;
+      --font-b: 'Noto Sans JP', 'Noto Sans', sans-serif;
+    }
+
+    /* ─── RESET & BASE ──────────────────────────────── */
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    html, body {
+      background: #c8c5bf;
+      font-family: var(--font-b);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ─── LAYOUT: SIDE BY SIDE PREVIEW ─────────────── */
+    .preview-wrapper {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      padding: 48px 24px;
+      flex-wrap: wrap;
+    }
+    .phone-frame {
+      width: 390px;
+      flex-shrink: 0;
+    }
+    .phone-label {
+      font-family: var(--font-h);
+      font-size: 13px;
+      font-weight: 700;
+      color: #555;
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: 0.08em;
+    }
+    .phone-shell {
+      width: 390px;
+      min-height: 844px;
+      background: var(--bg);
+      border-radius: 44px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 8px #1a1a1a,
+        0 0 0 10px #2a2a2a,
+        0 32px 80px rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .phone-notch {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 34px;
+      background: #1a1a1a;
+      border-radius: 20px;
+      z-index: 100;
+    }
+    .phone-content {
+      padding-top: 0;
+      min-height: 844px;
+    }
+
+    /* ─── SCREEN: LANGUAGE SELECTION ───────────────── */
+    .lang-screen {
+      min-height: 844px;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      padding: 80px 28px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background decoration */
+    .lang-screen::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -80px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(251,174,23,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .lang-screen::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      left: -80px;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .lang-header {
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .lang-logo {
+      font-family: var(--font-h);
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .lang-logo-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.12em;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+    .lang-divider {
+      width: 32px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin: 14px 0;
+      opacity: 0.6;
+    }
+    .lang-prompt {
+      font-family: var(--font-h);
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Language buttons */
+    .lang-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .lang-btn {
+      width: 100%;
+      background: rgba(255,255,255,0.055);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      color: white;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      text-align: left;
+    }
+    .lang-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .lang-btn:hover, .lang-btn.selected {
+      background: rgba(251,174,23,0.15);
+      border-color: var(--accent);
+    }
+    .lang-btn.selected .lang-btn-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .lang-flag-box {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.08);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .lang-flag-code {
+      font-family: var(--font-h);
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 0.05em;
+    }
+    .lang-btn-text {
+      flex: 1;
+    }
+    .lang-btn-name {
+      font-family: var(--font-h);
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .lang-btn-native {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+    }
+    .lang-btn-badge {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--font-h);
+      background: var(--accent);
+      color: var(--navy);
+      padding: 3px 9px;
+      border-radius: 100px;
+    }
+    .lang-btn-check {
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .lang-btn-check svg {
+      width: 11px;
+      height: 11px;
+      stroke: var(--navy);
+      stroke-width: 3;
+    }
+
+    /* Powered by */
+    .lang-footer {
+      margin-top: auto;
+      padding-top: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+    .lang-footer-dot {
+      width: 4px;
+      height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+    }
+    .lang-footer-text {
+      font-size: 10px;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── SCREEN: HOME ──────────────────────────────── */
+    .home-screen {
+      min-height: 844px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Status bar area */
+    .status-bar {
+      height: 52px;
+      background: var(--surface);
+      padding: 14px 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .status-time {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      font-family: var(--font-h);
+    }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--text);
+    }
+
+    /* Header */
+    .home-header {
+      background: var(--surface);
+      padding: 10px 20px 14px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .home-logo {
+      font-family: var(--font-h);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .home-logo span {
+      color: var(--accent);
+    }
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .streak-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--accent-light);
+      border: 1px solid rgba(251,174,23,0.3);
+      border-radius: 100px;
+      padding: 5px 11px;
+      cursor: pointer;
+    }
+    .streak-pill svg {
+      width: 13px;
+      height: 13px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .streak-count {
+      font-family: var(--font-h);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      padding: 5px 11px 5px 9px;
+      cursor: pointer;
+    }
+    .lang-switch-flag {
+      width: 18px;
+      height: 18px;
+      background: var(--navy);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .lang-switch-flag-code {
+      font-size: 7px;
+      font-weight: 700;
+      font-family: var(--font-h);
+      color: white;
+      letter-spacing: 0;
+    }
+    .lang-switch-label {
+      font-family: var(--font-h);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .lang-switch svg {
+      width: 12px;
+      height: 12px;
+      color: var(--muted-light);
+    }
+
+    /* Scroll content */
+    .home-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 20px 100px;
+    }
+
+    /* Search bar */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 24px;
+      cursor: pointer;
+    }
+    .search-bar svg {
+      width: 16px;
+      height: 16px;
+      color: var(--muted-light);
+      flex-shrink: 0;
+    }
+    .search-bar-text {
+      font-size: 14px;
+      color: var(--muted-light);
+    }
+    .search-bar-shortcut {
+      margin-left: auto;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 10px;
+      color: var(--muted-light);
+      font-family: var(--font-h);
+    }
+
+    /* Section heading */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--font-h);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+    .section-action {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* Daily lesson card */
+    .daily-card {
+      background: var(--navy);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px 20px;
+      margin-bottom: 28px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .daily-card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(251,174,23,0.15) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .daily-card::after {
+      content: '';
+      position: absolute;
+      bottom: -40px;
+      left: -20px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .daily-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .daily-label-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .daily-label-text {
+      font-family: var(--font-h);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .daily-title {
+      font-family: var(--font-h);
+      font-size: 19px;
+      font-weight: 700;
+      color: white;
+      line-height: 1.35;
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    .daily-category {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+    .daily-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+    .daily-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent);
+      color: var(--navy);
+      font-family: var(--font-h);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 100px;
+    }
+    .daily-cta svg {
+      width: 13px;
+      height: 13px;
+    }
+    .daily-progress {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .daily-progress-dots {
+      display: flex;
+      gap: 4px;
+    }
+    .dp-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+    }
+    .dp-dot.done {
+      background: var(--accent);
+    }
+    .daily-progress-text {
+      font-size: 10px;
+      color: rgba(255,255,255,0.35);
+      font-family: var(--font-h);
+    }
+
+    /* Category grid */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .cat-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 16px 14px 14px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .cat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(251,174,23,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .cat-icon-wrap {
+      width: 36px;
+      height: 36px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .cat-icon-wrap svg {
+      width: 18px;
+      height: 18px;
+      color: var(--navy);
+    }
+    .cat-name {
+      font-family: var(--font-h);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .cat-count {
+      font-size: 11px;
+      color: var(--muted-light);
+      margin-bottom: 8px;
+    }
+    .cat-progress {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .cat-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    .cat-card.done .cat-progress-fill {
+      background: var(--success);
+    }
+    .cat-done-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      background: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cat-done-badge svg {
+      width: 11px;
+      height: 11px;
+      stroke: white;
+      stroke-width: 3;
+    }
+
+    /* ─── BOTTOM NAV ────────────────────────────────── */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      padding: 8px 0 20px;
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 6px 0;
+      cursor: pointer;
+      color: var(--muted-light);
+    }
+    .nav-item.active {
+      color: var(--accent);
+    }
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+    .nav-item-label {
+      font-family: var(--font-h);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .nav-item-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: absolute;
+      top: 4px;
+    }
+    .nav-item-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ─── SCREEN SWITCHER (PREVIEW CONTROL) ─────────── */
+    .preview-controls {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .preview-title {
+      font-family: var(--font-h);
+      font-size: 28px;
+      font-weight: 700;
+      color: #2a2a2a;
+      margin-bottom: 6px;
+    }
+    .preview-desc {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    .tab-switcher {
+      display: inline-flex;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+    }
+    .tab-btn {
+      font-family: var(--font-h);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--navy);
+      color: white;
+      box-shadow: 0 2px 8px rgba(30,45,78,0.3);
+    }
+
+    /* ─── ANNOTATION PANEL ──────────────────────────── */
+    .annotation-panel {
+      width: 300px;
+      flex-shrink: 0;
+      align-self: flex-start;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+    }
+    .anno-title {
+      font-family: var(--font-h);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .anno-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .anno-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .anno-dot.gold { background: var(--accent); }
+    .anno-dot.navy { background: var(--navy); }
+    .anno-dot.green { background: var(--success); }
+    .anno-dot.gray { background: var(--muted-light); }
+    .anno-text {
+      font-size: 12px;
+      color: #444;
+      line-height: 1.5;
+    }
+    .anno-text strong {
+      font-weight: 700;
+      color: #222;
+    }
+
+    /* ─── SCREEN: ONBOARDING (職種選択) ────────────── */
+    .onboard-screen {
+      min-height: 844px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      padding: 72px 24px 32px;
+    }
+    .onboard-step {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+    .onboard-step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .onboard-step-dot.active {
+      background: var(--accent);
+      width: 22px;
+      border-radius: 4px;
+    }
+    .onboard-step-dot.done {
+      background: var(--success);
+    }
+    .onboard-title {
+      font-family: var(--font-h);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .onboard-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .job-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      flex: 1;
+    }
+    .job-card {
+      background: var(--surface);
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 18px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+    .job-card.selected {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+    .job-card-check {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.2s ease;
+    }
+    .job-card.selected .job-card-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .job-card-check svg {
+      width: 11px;
+      height: 11px;
+      stroke: var(--navy);
+      stroke-width: 3;
+    }
+    .job-icon-wrap {
+      width: 40px;
+      height: 40px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .job-card.selected .job-icon-wrap {
+      background: rgba(251,174,23,0.15);
+    }
+    .job-icon-wrap svg {
+      width: 20px;
+      height: 20px;
+      color: var(--navy);
+    }
+    .job-card.selected .job-icon-wrap svg {
+      color: var(--accent);
+    }
+    .job-name {
+      font-family: var(--font-h);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .onboard-cta {
+      margin-top: 24px;
+      width: 100%;
+      background: var(--navy);
+      color: white;
+      font-family: var(--font-h);
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .onboard-cta svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ─── SCREEN: SEARCH ────────────────────────────── */
+    .search-screen {
+      min-height: 844px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+    .search-header {
+      background: var(--surface);
+      padding: 56px 20px 14px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .search-header-title {
+      font-family: var(--font-h);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .search-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 11px 14px;
+    }
+    .search-input-wrap.focused {
+      border-color: var(--navy);
+    }
+    .search-input-wrap svg {
+      width: 16px;
+      height: 16px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .search-input-field {
+      flex: 1;
+      font-size: 14px;
+      color: var(--text);
+      font-family: var(--font-b);
+    }
+    .search-input-cursor {
+      width: 1.5px;
+      height: 16px;
+      background: var(--navy);
+      display: inline-block;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    .search-cancel-btn {
+      font-size: 13px;
+      color: var(--navy);
+      font-family: var(--font-h);
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .search-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 20px 100px;
+    }
+    .search-section-title {
+      font-family: var(--font-h);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .recent-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 24px;
+    }
+    .recent-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 12px;
+      background: var(--surface);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+    .recent-item svg {
+      width: 15px;
+      height: 15px;
+      color: var(--muted-light);
+      flex-shrink: 0;
+    }
+    .recent-item-text {
+      flex: 1;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .recent-item-remove {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted-light);
+    }
+    .recent-item-remove svg {
+      width: 14px;
+      height: 14px;
+    }
+    .result-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .result-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 12px;
+      background: var(--surface);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+    .result-icon-wrap {
+      width: 36px;
+      height: 36px;
+      background: var(--accent-dim);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .result-icon-wrap svg {
+      width: 17px;
+      height: 17px;
+      color: var(--accent);
+    }
+    .result-item-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .result-item-title {
+      font-family: var(--font-h);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .result-item-cat {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .result-item-arrow {
+      color: var(--muted-light);
+    }
+    .result-item-arrow svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ─── SCREEN: CATEGORY (カテゴリ一覧) ───────────── */
+    .category-screen {
+      min-height: 844px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+    .cat-screen-header {
+      background: var(--surface);
+      padding: 52px 20px 14px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .back-btn {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .back-btn svg {
+      width: 18px;
+      height: 18px;
+      color: var(--text);
+    }
+    .cat-screen-header-body {
+      flex: 1;
+    }
+    .cat-screen-title {
+      font-family: var(--font-h);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .cat-screen-subtitle {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .cat-screen-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(39,174,96,0.12);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cat-screen-icon svg {
+      width: 20px;
+      height: 20px;
+      color: var(--success);
+    }
+    .cat-progress-bar-wrap {
+      background: var(--surface);
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .cat-progress-bar-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .cat-progress-bar-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: var(--font-h);
+      font-weight: 700;
+    }
+    .cat-progress-bar-count {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .cat-progress-bar-track {
+      height: 4px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .cat-progress-bar-fill {
+      height: 100%;
+      background: var(--success);
+      border-radius: 3px;
+      width: 40%;
+    }
+    .cat-item-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .cat-item-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      cursor: pointer;
+    }
+    .cat-item-state {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .cat-item-state.done {
+      background: rgba(39,174,96,0.12);
+    }
+    .cat-item-state.done svg {
+      width: 16px;
+      height: 16px;
+      color: var(--success);
+    }
+    .cat-item-state.pending {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+    }
+    .cat-item-state.pending svg {
+      width: 16px;
+      height: 16px;
+      color: var(--muted-light);
+    }
+    .cat-item-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .cat-item-title {
+      font-family: var(--font-h);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .cat-item-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .cat-item-row.done-item .cat-item-title {
+      color: var(--muted);
+    }
+    .cat-item-arrow svg {
+      width: 14px;
+      height: 14px;
+      color: var(--muted-light);
+    }
+
+    /* ─── SCREEN: ITEM DETAIL ───────────────────────── */
+    .detail-screen {
+      min-height: 844px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+    .detail-header {
+      background: var(--surface);
+      padding: 52px 20px 14px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .detail-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 20px 120px;
+    }
+    .detail-cat-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(39,174,96,0.1);
+      border-radius: 100px;
+      padding: 4px 12px 4px 8px;
+      margin-bottom: 14px;
+    }
+    .detail-cat-tag svg {
+      width: 12px;
+      height: 12px;
+      color: var(--success);
+    }
+    .detail-cat-tag-text {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--font-h);
+      color: var(--success);
+    }
+    .detail-title {
+      font-family: var(--font-h);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+    .detail-section-head {
+      font-family: var(--font-h);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      margin-top: 20px;
+    }
+    .detail-text-block {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .detail-text-block .ruby-text {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .tip-card {
+      background: var(--accent-light);
+      border: 1px solid rgba(251,174,23,0.25);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .tip-card-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .tip-card-icon svg {
+      width: 15px;
+      height: 15px;
+      color: white;
+    }
+    .tip-card-body {}
+    .tip-card-label {
+      font-family: var(--font-h);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .tip-card-text {
+      font-size: 13px;
+      color: #5a4010;
+      line-height: 1.6;
+    }
+    .detail-complete-btn {
+      position: absolute;
+      bottom: 80px;
+      left: 20px;
+      right: 20px;
+      background: var(--navy);
+      color: white;
+      font-family: var(--font-h);
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      z-index: 10;
+    }
+    .detail-complete-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+    .detail-complete-btn.done-state {
+      background: var(--success);
+    }
+    .success-card {
+      background: rgba(39,174,96,0.1);
+      border: 1.5px solid rgba(39,174,96,0.3);
+      border-radius: var(--radius-md);
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .success-card-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .success-card-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: white;
+      stroke-width: 2.5;
+    }
+    .success-card-body {}
+    .success-card-title {
+      font-family: var(--font-h);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--success);
+      margin-bottom: 2px;
+    }
+    .success-card-sub {
+      font-size: 12px;
+      color: #1a7040;
+    }
+
+    /* ─── SCREEN: QUIZ ──────────────────────────────── */
+    .quiz-screen {
+      min-height: 844px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+    .quiz-header {
+      background: var(--surface);
+      padding: 52px 20px 14px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .quiz-progress-wrap {
+      flex: 1;
+    }
+    .quiz-progress-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .quiz-progress-label {
+      font-family: var(--font-h);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .quiz-progress-count {
+      font-family: var(--font-h);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .quiz-progress-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #f9c44a);
+      border-radius: 4px;
+      width: 60%;
+      transition: width 0.4s ease;
+    }
+    .quiz-close-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .quiz-close-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+    .quiz-body {
+      flex: 1;
+      padding: 28px 20px 120px;
+      display: flex;
+      flex-direction: column;
+    }
+    .quiz-question-num {
+      font-family: var(--font-h);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .quiz-question {
+      font-family: var(--font-h);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.45;
+      margin-bottom: 28px;
+    }
+    .quiz-choices {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+    .quiz-choice {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 15px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .quiz-choice-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-h);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .quiz-choice-text {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .quiz-choice.correct {
+      border-color: var(--success);
+      background: rgba(39,174,96,0.07);
+    }
+    .quiz-choice.correct .quiz-choice-num {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+    }
+    .quiz-choice.wrong {
+      border-color: #e74c3c;
+      background: rgba(231,76,60,0.07);
+    }
+    .quiz-choice.wrong .quiz-choice-num {
+      background: #e74c3c;
+      border-color: #e74c3c;
+      color: white;
+    }
+    .quiz-feedback {
+      margin-top: 16px;
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      gap: 10px;
+    }
+    .quiz-feedback.correct-fb {
+      background: rgba(39,174,96,0.1);
+      border: 1px solid rgba(39,174,96,0.25);
+    }
+    .quiz-feedback.wrong-fb {
+      background: rgba(231,76,60,0.08);
+      border: 1px solid rgba(231,76,60,0.2);
+    }
+    .quiz-feedback svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .quiz-feedback.correct-fb svg { color: var(--success); }
+    .quiz-feedback.wrong-fb svg { color: #e74c3c; }
+    .quiz-feedback-text {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .quiz-feedback.correct-fb .quiz-feedback-text { color: #1a7040; }
+    .quiz-feedback.wrong-fb .quiz-feedback-text { color: #9b2519; }
+    .quiz-next-btn {
+      position: absolute;
+      bottom: 80px;
+      left: 20px;
+      right: 20px;
+      background: var(--navy);
+      color: white;
+      font-family: var(--font-h);
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      z-index: 10;
+    }
+    .quiz-next-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Quiz Result Screen */
+    .quiz-result-screen {
+      min-height: 844px;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 80px 24px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .quiz-result-screen::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -80px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(251,174,23,0.15) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .quiz-result-badge {
+      width: 90px;
+      height: 90px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 0 10px rgba(251,174,23,0.15);
+    }
+    .quiz-result-badge svg {
+      width: 42px;
+      height: 42px;
+      color: var(--navy);
+    }
+    .quiz-result-label {
+      font-family: var(--font-h);
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .quiz-result-title {
+      font-family: var(--font-h);
+      font-size: 28px;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+    .quiz-result-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+    }
+    .quiz-score-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+    }
+    .quiz-score-cell {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      padding: 16px 10px;
+      text-align: center;
+    }
+    .quiz-score-value {
+      font-family: var(--font-h);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .quiz-score-label {
+      font-size: 10px;
+      color: rgba(255,255,255,0.35);
+      font-family: var(--font-h);
+      font-weight: 700;
+    }
+    .quiz-result-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+    .quiz-result-btn-primary {
+      background: var(--accent);
+      color: var(--navy);
+      font-family: var(--font-h);
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      cursor: pointer;
+    }
+    .quiz-result-btn-secondary {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.7);
+      font-family: var(--font-h);
+      font-size: 14px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      cursor: pointer;
+    }
+    .quiz-xp-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(251,174,23,0.15);
+      border: 1px solid rgba(251,174,23,0.3);
+      border-radius: 100px;
+      padding: 6px 14px;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+    .quiz-xp-pill svg {
+      width: 14px;
+      height: 14px;
+      color: var(--accent);
+    }
+    .quiz-xp-text {
+      font-family: var(--font-h);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* ─── SCREEN: STATISTICS ────────────────────────── */
+    .stats-screen {
+      min-height: 844px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+    .stats-header {
+      background: var(--surface);
+      padding: 52px 20px 14px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .stats-header-title {
+      font-family: var(--font-h);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .stats-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 20px 100px;
+    }
+    .level-card {
+      background: var(--navy);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px 20px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .level-card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(251,174,23,0.15) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .level-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(251,174,23,0.15);
+      border: 1px solid rgba(251,174,23,0.3);
+      border-radius: 100px;
+      padding: 5px 12px;
+    }
+    .level-badge svg {
+      width: 13px;
+      height: 13px;
+      color: var(--accent);
+    }
+    .level-badge-text {
+      font-family: var(--font-h);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .level-num {
+      font-family: var(--font-h);
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+    }
+    .level-name {
+      font-family: var(--font-h);
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 4px;
+    }
+    .level-xp-text {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 14px;
+    }
+    .level-xp-bar-track {
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .level-xp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #f9c44a);
+      border-radius: 6px;
+      width: 68%;
+    }
+    .level-xp-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      position: relative;
+      z-index: 1;
+    }
+    .level-xp-bar-label {
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      font-family: var(--font-h);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .stats-cell {
+      background: var(--surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .stats-cell-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .stats-cell-icon svg {
+      width: 16px;
+      height: 16px;
+      color: var(--navy);
+    }
+    .stats-cell-value {
+      font-family: var(--font-h);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .stats-cell-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: var(--font-h);
+      font-weight: 700;
+    }
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .badge-cell {
+      background: var(--surface);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-cell.locked {
+      opacity: 0.45;
+    }
+    .badge-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .badge-icon.gold-bg {
+      background: var(--accent-light);
+    }
+    .badge-icon.navy-bg {
+      background: rgba(30,45,78,0.1);
+    }
+    .badge-icon.green-bg {
+      background: rgba(39,174,96,0.12);
+    }
+    .badge-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+    .badge-icon.gold-bg svg { color: var(--accent); }
+    .badge-icon.navy-bg svg { color: var(--navy); }
+    .badge-icon.green-bg svg { color: var(--success); }
+    .badge-name {
+      font-family: var(--font-h);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.3;
+    }
+    .badge-cell.locked .badge-icon {
+      background: var(--bg);
+    }
+    .badge-cell.locked .badge-icon svg {
+      color: var(--border);
+    }
+    .anno-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0;
+    }
+    .token-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .token-name {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .token-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .token-value {
+      font-family: monospace;
+      font-size: 10px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<div class="preview-controls">
+  <div class="preview-title">JapanLife — UIプレビュー</div>
+  <div class="preview-desc">全8画面のデザイン改善案</div>
+  <div class="tab-switcher">
+    <button class="tab-btn active" onclick="showScreen('lang')">言語選択</button>
+    <button class="tab-btn" onclick="showScreen('home')">ホーム</button>
+    <button class="tab-btn" onclick="showScreen('job')">職種選択</button>
+    <button class="tab-btn" onclick="showScreen('search')">検索</button>
+    <button class="tab-btn" onclick="showScreen('category')">カテゴリ</button>
+    <button class="tab-btn" onclick="showScreen('detail')">詳細</button>
+    <button class="tab-btn" onclick="showScreen('quiz')">クイズ</button>
+    <button class="tab-btn" onclick="showScreen('quizresult')">クイズ結果</button>
+    <button class="tab-btn" onclick="showScreen('stats')">統計</button>
+  </div>
+</div>
+
+<div class="preview-wrapper" id="preview-area">
+
+  <!-- ── PHONE 1: 言語選択 ── -->
+  <div class="phone-frame" id="frame-lang">
+    <div class="phone-label">言語選択画面</div>
+    <div class="phone-shell">
+      <div class="phone-notch"></div>
+      <div class="phone-content">
+
+        <div class="lang-screen">
+
+          <div class="lang-header">
+            <div class="lang-logo">JapanLife</div>
+            <div class="lang-logo-sub">TOMOSUMA — Life Guide</div>
+            <div class="lang-divider"></div>
+          </div>
+
+          <div class="lang-prompt">言語を選んでください</div>
+
+          <div class="lang-list">
+
+            <!-- 日本語 -->
+            <button class="lang-btn">
+              <div class="lang-flag-box">
+                <span class="lang-flag-code">JA</span>
+              </div>
+              <div class="lang-btn-text">
+                <div class="lang-btn-name">日本語</div>
+                <div class="lang-btn-native">Japanese</div>
+              </div>
+              <div class="lang-btn-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+            </button>
+
+            <!-- やさしい日本語 (selected) -->
+            <button class="lang-btn selected">
+              <div class="lang-flag-box">
+                <span class="lang-flag-code" style="font-size:8px;">JA</span>
+              </div>
+              <div class="lang-btn-text">
+                <div class="lang-btn-name">やさしい日本語</div>
+                <div class="lang-btn-native">かんたんな にほんご</div>
+              </div>
+              <div class="lang-btn-badge">やさしい</div>
+              <div class="lang-btn-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+            </button>
+
+            <!-- Tiếng Việt -->
+            <button class="lang-btn">
+              <div class="lang-flag-box">
+                <span class="lang-flag-code">VI</span>
+              </div>
+              <div class="lang-btn-text">
+                <div class="lang-btn-name">Tiếng Việt</div>
+                <div class="lang-btn-native">Vietnamese</div>
+              </div>
+              <div class="lang-btn-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+            </button>
+
+            <!-- ភាសាខ្មែរ -->
+            <button class="lang-btn">
+              <div class="lang-flag-box">
+                <span class="lang-flag-code">KM</span>
+              </div>
+              <div class="lang-btn-text">
+                <div class="lang-btn-name">ភាសាខ្មែរ</div>
+                <div class="lang-btn-native">Khmer</div>
+              </div>
+              <div class="lang-btn-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+            </button>
+
+            <!-- English -->
+            <button class="lang-btn">
+              <div class="lang-flag-box">
+                <span class="lang-flag-code">EN</span>
+              </div>
+              <div class="lang-btn-text">
+                <div class="lang-btn-name">English</div>
+                <div class="lang-btn-native">English</div>
+              </div>
+              <div class="lang-btn-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+            </button>
+
+          </div><!-- /lang-list -->
+
+          <div class="lang-footer">
+            <div class="lang-footer-dot"></div>
+            <div class="lang-footer-text">POWERED BY TOMOSUMA</div>
+            <div class="lang-footer-dot"></div>
+          </div>
+
+        </div><!-- /lang-screen -->
+
+      </div><!-- /phone-content -->
+    </div><!-- /phone-shell -->
+  </div><!-- /phone-frame lang -->
+
+
+  <!-- ── PHONE 2: ホーム ── -->
+  <div class="phone-frame" id="frame-home">
+    <div class="phone-label">ホーム画面</div>
+    <div class="phone-shell" style="position:relative;">
+      <div class="phone-notch"></div>
+      <div class="phone-content">
+
+        <div class="home-screen">
+
+          <!-- Status bar -->
+          <div class="status-bar">
+            <span class="status-time">9:41</span>
+            <div class="status-icons">
+              <svg class="status-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M1.5 8.5a13 13 0 0 1 21 0M5.5 12.5a7 7 0 0 1 13 0M9.5 16.5a3 3 0 0 1 5 0M12 20h.01"/>
+              </svg>
+              <svg class="status-icon" style="width:12px" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="2" y="7" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <path d="M16 10.5h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Header -->
+          <div class="home-header">
+            <div class="home-logo">Japan<span>Life</span></div>
+            <div class="header-controls">
+              <div class="streak-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+                </svg>
+                <span class="streak-count">7</span>
+              </div>
+              <div class="lang-switch">
+                <div class="lang-switch-flag">
+                  <span class="lang-switch-flag-code">やさ</span>
+                </div>
+                <span class="lang-switch-label">やさしい</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scroll content -->
+          <div class="home-scroll">
+
+            <!-- Search bar -->
+            <div class="search-bar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              <span class="search-bar-text">けんさく...</span>
+              <span class="search-bar-shortcut">Aa</span>
+            </div>
+
+            <!-- Daily lesson -->
+            <div class="section-head">
+              <span class="section-title">今日のレッスン</span>
+            </div>
+
+            <div class="daily-card">
+              <div class="daily-label">
+                <div class="daily-label-dot"></div>
+                <span class="daily-label-text">TODAY'S LESSON</span>
+              </div>
+              <div class="daily-title">しごとのあいさつ 5つ</div>
+              <div class="daily-category">しごとのマナー</div>
+              <div class="daily-footer">
+                <div class="daily-cta">
+                  始める
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </div>
+                <div class="daily-progress">
+                  <div class="daily-progress-dots">
+                    <div class="dp-dot done"></div>
+                    <div class="dp-dot done"></div>
+                    <div class="dp-dot done"></div>
+                    <div class="dp-dot"></div>
+                    <div class="dp-dot"></div>
+                  </div>
+                  <span class="daily-progress-text">3/5</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category grid -->
+            <div class="section-head">
+              <span class="section-title">カテゴリ</span>
+              <span class="section-action">すべて見る</span>
+            </div>
+
+            <div class="cat-grid">
+
+              <!-- Workplace - done -->
+              <div class="cat-card done">
+                <div class="cat-done-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <div class="cat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                  </svg>
+                </div>
+                <div class="cat-name">しごとのマナー</div>
+                <div class="cat-count">2 / 2</div>
+                <div class="cat-progress">
+                  <div class="cat-progress-fill" style="width:100%"></div>
+                </div>
+              </div>
+
+              <!-- Garbage - in progress -->
+              <div class="cat-card">
+                <div class="cat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                  </svg>
+                </div>
+                <div class="cat-name">ゴミの分け方</div>
+                <div class="cat-count">1 / 2</div>
+                <div class="cat-progress">
+                  <div class="cat-progress-fill" style="width:50%"></div>
+                </div>
+              </div>
+
+              <!-- Safety - not started -->
+              <div class="cat-card">
+                <div class="cat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </div>
+                <div class="cat-name">きゅうきゅう・ひなん</div>
+                <div class="cat-count">0 / 2</div>
+                <div class="cat-progress">
+                  <div class="cat-progress-fill" style="width:0%"></div>
+                </div>
+              </div>
+
+              <!-- Daily life - not started -->
+              <div class="cat-card">
+                <div class="cat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                  </svg>
+                </div>
+                <div class="cat-name">せいかつのヒント</div>
+                <div class="cat-count">0 / 2</div>
+                <div class="cat-progress">
+                  <div class="cat-progress-fill" style="width:0%"></div>
+                </div>
+              </div>
+
+            </div><!-- /cat-grid -->
+
+          </div><!-- /home-scroll -->
+
+          <!-- Bottom nav -->
+          <div class="bottom-nav">
+            <div class="nav-item active">
+              <div class="nav-item-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              </div>
+              <span class="nav-item-label">ホーム</span>
+            </div>
+            <div class="nav-item">
+              <div class="nav-item-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                </svg>
+              </div>
+              <span class="nav-item-label">けんさく</span>
+            </div>
+            <div class="nav-item">
+              <div class="nav-item-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+                </svg>
+                <div class="nav-item-dot"></div>
+              </div>
+              <span class="nav-item-label">クイズ</span>
+            </div>
+            <div class="nav-item">
+              <div class="nav-item-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+              </div>
+              <span class="nav-item-label">せいちょう</span>
+            </div>
+          </div><!-- /bottom-nav -->
+
+        </div><!-- /home-screen -->
+
+      </div><!-- /phone-content -->
+    </div><!-- /phone-shell -->
+  </div><!-- /phone-frame home -->
+
+
+  <!-- Annotation panel -->
+  <div class="annotation-panel" id="annotation-panel">
+    <div class="anno-title">デザイン改善ポイント</div>
+
+    <div class="anno-item">
+      <div class="anno-dot gold"></div>
+      <div class="anno-text"><strong>言語ボタン:</strong> glassmorphism風の背景に統一。選択時はgold borderと薄い背景で明確なフィードバック。チェックマークアニメーションで操作感を強化</div>
+    </div>
+    <div class="anno-item">
+      <div class="anno-dot navy"></div>
+      <div class="anno-text"><strong>ロゴ周り:</strong> ブランドラインを追加し「TOMOSUMA — Life Guide」でサービス文脈を即伝達。ゴールドdividerでブランドカラーを強調</div>
+    </div>
+    <div class="anno-item">
+      <div class="anno-dot gold"></div>
+      <div class="anno-text"><strong>ストリークpill:</strong> flame アイコン(Lucide)に統一。count=7の時に視覚的達成感を演出</div>
+    </div>
+    <div class="anno-item">
+      <div class="anno-dot navy"></div>
+      <div class="anno-text"><strong>デイリーカード:</strong> 進捗ドット(3/5表示)を追加。radial gradientで軽い奥行き感。CTAをpill型に変更してタップしやすく</div>
+    </div>
+    <div class="anno-item">
+      <div class="anno-dot green"></div>
+      <div class="anno-text"><strong>カテゴリカード:</strong> 完了状態はgreen badge + fill。アイコンをLucideに統一(絵文字排除)</div>
+    </div>
+    <div class="anno-item">
+      <div class="anno-dot gray"></div>
+      <div class="anno-text"><strong>ボトムナビ:</strong> ラベルをやさしい日本語対応。クイズタブにdot badge(新着通知想定)</div>
+    </div>
+
+    <div class="anno-divider"></div>
+    <div class="anno-title">トークン (変更なし)</div>
+
+    <div class="token-row">
+      <span class="token-name">--accent</span>
+      <div class="token-swatch" style="background:#fbae17"></div>
+      <span class="token-value">#fbae17</span>
+    </div>
+    <div class="token-row">
+      <span class="token-name">--navy</span>
+      <div class="token-swatch" style="background:#1e2d4e"></div>
+      <span class="token-value">#1e2d4e</span>
+    </div>
+    <div class="token-row">
+      <span class="token-name">--bg</span>
+      <div class="token-swatch" style="background:#FAFAF7;border:1px solid #eee"></div>
+      <span class="token-value">#FAFAF7</span>
+    </div>
+    <div class="token-row">
+      <span class="token-name">--success</span>
+      <div class="token-swatch" style="background:#27ae60"></div>
+      <span class="token-value">#27ae60</span>
+    </div>
+  </div><!-- /annotation-panel -->
+
+  <!-- ── PHONE 3: 職種選択 ── -->
+  <div class="phone-frame" id="frame-job" style="display:none">
+    <div class="phone-label">職種選択画面</div>
+    <div class="phone-shell">
+      <div class="phone-notch"></div>
+      <div class="phone-content">
+        <div class="onboard-screen">
+          <div class="onboard-step">
+            <div class="onboard-step-dot done"></div>
+            <div class="onboard-step-dot active"></div>
+            <div class="onboard-step-dot"></div>
+          </div>
+          <div class="onboard-title">どんな しごとを<br>していますか？</div>
+          <div class="onboard-subtitle">あなたの仕事に合った情報を表示します</div>
+          <div class="job-grid">
+            <div class="job-card selected">
+              <div class="job-card-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="job-icon-wrap"><i data-lucide="hard-hat" style="width:20px;height:20px;color:inherit"></i></div>
+              <div class="job-name">建設・土木</div>
+            </div>
+            <div class="job-card">
+              <div class="job-card-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="job-icon-wrap"><i data-lucide="leaf" style="width:20px;height:20px;color:inherit"></i></div>
+              <div class="job-name">農業・林業</div>
+            </div>
+            <div class="job-card">
+              <div class="job-card-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="job-icon-wrap"><i data-lucide="utensils" style="width:20px;height:20px;color:inherit"></i></div>
+              <div class="job-name">食品加工</div>
+            </div>
+            <div class="job-card">
+              <div class="job-card-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="job-icon-wrap"><i data-lucide="heart-pulse" style="width:20px;height:20px;color:inherit"></i></div>
+              <div class="job-name">介護・福祉</div>
+            </div>
+            <div class="job-card">
+              <div class="job-card-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="job-icon-wrap"><i data-lucide="factory" style="width:20px;height:20px;color:inherit"></i></div>
+              <div class="job-name">製造・工場</div>
+            </div>
+            <div class="job-card">
+              <div class="job-card-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="job-icon-wrap"><i data-lucide="briefcase" style="width:20px;height:20px;color:inherit"></i></div>
+              <div class="job-name">その他</div>
+            </div>
+          </div>
+          <button class="onboard-cta">
+            <span>つぎへ</span>
+            <i data-lucide="arrow-right" style="width:16px;height:16px"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /phone-frame job -->
+
+  <!-- ── PHONE 4: 検索 ── -->
+  <div class="phone-frame" id="frame-search" style="display:none">
+    <div class="phone-label">検索画面</div>
+    <div class="phone-shell">
+      <div class="phone-notch"></div>
+      <div class="phone-content">
+        <div class="search-screen">
+          <div class="search-header">
+            <div class="search-header-title">けんさく</div>
+            <div class="search-input-wrap focused">
+              <i data-lucide="search" style="width:16px;height:16px;color:var(--muted)"></i>
+              <div class="search-input-field">ごみ<span class="search-input-cursor"></span></div>
+              <div class="search-cancel-btn">やめる</div>
+            </div>
+          </div>
+          <div class="search-scroll">
+            <div class="search-section-title">けっか</div>
+            <div class="result-list">
+              <div class="result-item">
+                <div class="result-icon-wrap"><i data-lucide="trash-2" style="width:17px;height:17px;color:var(--accent)"></i></div>
+                <div class="result-item-body">
+                  <div class="result-item-title">ごみの ぶんべつ</div>
+                  <div class="result-item-cat">せいかつ › ごみ</div>
+                </div>
+                <div class="result-item-arrow"><i data-lucide="chevron-right" style="width:14px;height:14px;color:var(--muted-light)"></i></div>
+              </div>
+              <div class="result-item">
+                <div class="result-icon-wrap"><i data-lucide="calendar" style="width:17px;height:17px;color:var(--accent)"></i></div>
+                <div class="result-item-body">
+                  <div class="result-item-title">ごみを だす ひ</div>
+                  <div class="result-item-cat">せいかつ › ごみ</div>
+                </div>
+                <div class="result-item-arrow"><i data-lucide="chevron-right" style="width:14px;height:14px;color:var(--muted-light)"></i></div>
+              </div>
+              <div class="result-item">
+                <div class="result-icon-wrap"><i data-lucide="recycle" style="width:17px;height:17px;color:var(--accent)"></i></div>
+                <div class="result-item-body">
+                  <div class="result-item-title">リサイクル ステーション</div>
+                  <div class="result-item-cat">せいかつ › ごみ</div>
+                </div>
+                <div class="result-item-arrow"><i data-lucide="chevron-right" style="width:14px;height:14px;color:var(--muted-light)"></i></div>
+              </div>
+            </div>
+            <div style="margin-top:24px">
+              <div class="search-section-title">さいきん みた</div>
+              <div class="recent-list">
+                <div class="recent-item">
+                  <i data-lucide="clock" style="width:15px;height:15px;color:var(--muted-light)"></i>
+                  <div class="recent-item-text">きゅうきゅう でんわ</div>
+                  <div class="recent-item-remove"><i data-lucide="x" style="width:14px;height:14px;color:var(--muted-light)"></i></div>
+                </div>
+                <div class="recent-item">
+                  <i data-lucide="clock" style="width:15px;height:15px;color:var(--muted-light)"></i>
+                  <div class="recent-item-text">けんこう ほけん</div>
+                  <div class="recent-item-remove"><i data-lucide="x" style="width:14px;height:14px;color:var(--muted-light)"></i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /phone-frame search -->
+
+  <!-- ── PHONE 5: カテゴリ ── -->
+  <div class="phone-frame" id="frame-category" style="display:none">
+    <div class="phone-label">カテゴリ画面（医療）</div>
+    <div class="phone-shell">
+      <div class="phone-notch"></div>
+      <div class="phone-content">
+        <div class="category-screen">
+          <div class="cat-screen-header">
+            <div class="back-btn"><i data-lucide="chevron-left" style="width:18px;height:18px"></i></div>
+            <div class="cat-screen-header-body">
+              <div class="cat-screen-title">きゅうきゅう・ひなん</div>
+              <div class="cat-screen-subtitle">5 レッスン</div>
+            </div>
+            <div class="cat-screen-icon"><i data-lucide="heart-pulse" style="width:20px;height:20px"></i></div>
+          </div>
+          <div class="cat-progress-bar-wrap">
+            <div class="cat-progress-bar-top">
+              <div class="cat-progress-bar-label">しんちょく</div>
+              <div class="cat-progress-bar-count">2 / 5 おわった</div>
+            </div>
+            <div class="cat-progress-bar-track">
+              <div class="cat-progress-bar-fill"></div>
+            </div>
+          </div>
+          <div class="cat-item-list">
+            <div class="cat-item-row done-item">
+              <div class="cat-item-state done"><i data-lucide="check" style="width:16px;height:16px"></i></div>
+              <div class="cat-item-body">
+                <div class="cat-item-title">119 に でんわ する</div>
+                <div class="cat-item-meta">かんりょう</div>
+              </div>
+              <div class="cat-item-arrow"><i data-lucide="chevron-right" style="width:14px;height:14px"></i></div>
+            </div>
+            <div class="cat-item-row done-item">
+              <div class="cat-item-state done"><i data-lucide="check" style="width:16px;height:16px"></i></div>
+              <div class="cat-item-body">
+                <div class="cat-item-title">びょういん に いく</div>
+                <div class="cat-item-meta">かんりょう</div>
+              </div>
+              <div class="cat-item-arrow"><i data-lucide="chevron-right" style="width:14px;height:14px"></i></div>
+            </div>
+            <div class="cat-item-row">
+              <div class="cat-item-state pending"><i data-lucide="book-open" style="width:16px;height:16px"></i></div>
+              <div class="cat-item-body">
+                <div class="cat-item-title">じしん の とき</div>
+                <div class="cat-item-meta">3 ぷん</div>
+              </div>
+              <div class="cat-item-arrow"><i data-lucide="chevron-right" style="width:14px;height:14px"></i></div>
+            </div>
+            <div class="cat-item-row">
+              <div class="cat-item-state pending"><i data-lucide="book-open" style="width:16px;height:16px"></i></div>
+              <div class="cat-item-body">
+                <div class="cat-item-title">たいふう の とき</div>
+                <div class="cat-item-meta">3 ぷん</div>
+              </div>
+              <div class="cat-item-arrow"><i data-lucide="chevron-right" style="width:14px;height:14px"></i></div>
+            </div>
+            <div class="cat-item-row">
+              <div class="cat-item-state pending"><i data-lucide="book-open" style="width:16px;height:16px"></i></div>
+              <div class="cat-item-body">
+                <div class="cat-item-title">くすり を もらう</div>
+                <div class="cat-item-meta">4 ぷん</div>
+              </div>
+              <div class="cat-item-arrow"><i data-lucide="chevron-right" style="width:14px;height:14px"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /phone-frame category -->
+
+  <!-- ── PHONE 6: アイテム詳細 ── -->
+  <div class="phone-frame" id="frame-detail" style="display:none">
+    <div class="phone-label">アイテム詳細画面</div>
+    <div class="phone-shell" style="position:relative">
+      <div class="phone-notch"></div>
+      <div class="phone-content">
+        <div class="detail-screen">
+          <div class="detail-header">
+            <div class="back-btn"><i data-lucide="chevron-left" style="width:18px;height:18px"></i></div>
+            <div style="font-family:var(--font-h);font-size:15px;font-weight:700;flex:1;text-align:center">じしん の とき</div>
+            <div style="width:34px"></div>
+          </div>
+          <div class="detail-scroll">
+            <div class="detail-cat-tag">
+              <i data-lucide="heart-pulse" style="width:12px;height:12px;color:var(--success)"></i>
+              <div class="detail-cat-tag-text">きゅうきゅう・ひなん</div>
+            </div>
+            <div class="detail-title">じしん が きた とき は どうする？</div>
+            <div class="success-card">
+              <div class="success-card-icon"><i data-lucide="check" style="width:20px;height:20px;color:white"></i></div>
+              <div class="success-card-body">
+                <div class="success-card-title">まなびおわった</div>
+                <div class="success-card-sub">+20 XP かくとく</div>
+              </div>
+            </div>
+            <div class="detail-section-head">やさしい にほんご</div>
+            <div class="detail-text-block">じしん が きたら、まず <strong>あたま</strong> を まもります。<br><br>テーブルの <strong>した</strong> に はいります。テーブルが ない とき は、かべの そば に います。</div>
+            <div class="tip-card">
+              <div class="tip-card-icon"><i data-lucide="lightbulb" style="width:15px;height:15px;color:white"></i></div>
+              <div class="tip-card-body">
+                <div class="tip-card-label">ポイント</div>
+                <div class="tip-card-text">ガス・でんき・みず は じしん の あと すぐ きれる ことが あります。ペットボトルの みず を よういして おきましょう。</div>
+              </div>
+            </div>
+            <div class="detail-section-head">にほんご</div>
+            <div class="detail-text-block" style="font-size:14px;color:var(--muted)">地震が来たら、まず頭を守ります。テーブルの下に入り、揺れが収まるまで待ちます。</div>
+          </div>
+          <button class="detail-complete-btn done-state">
+            <i data-lucide="check" style="width:16px;height:16px"></i>
+            <span>かんりょう</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /phone-frame detail -->
+
+  <!-- ── PHONE 7: クイズ ── -->
+  <div class="phone-frame" id="frame-quiz" style="display:none">
+    <div class="phone-label">クイズ画面</div>
+    <div class="phone-shell" style="position:relative">
+      <div class="phone-notch"></div>
+      <div class="phone-content">
+        <div class="quiz-screen">
+          <div class="quiz-header">
+            <div class="quiz-progress-wrap">
+              <div class="quiz-progress-top">
+                <div class="quiz-progress-label">しつもん 3 / 5</div>
+                <div class="quiz-progress-count">60%</div>
+              </div>
+              <div class="quiz-progress-track">
+                <div class="quiz-progress-fill"></div>
+              </div>
+            </div>
+            <div class="quiz-close-btn"><i data-lucide="x" style="width:18px;height:18px"></i></div>
+          </div>
+          <div class="quiz-body">
+            <div class="quiz-question-num">Q3</div>
+            <div class="quiz-question">じしん が きた とき、さいしょに する こと は なに ですか？</div>
+            <div class="quiz-choices">
+              <div class="quiz-choice correct">
+                <div class="quiz-choice-num">A</div>
+                <div class="quiz-choice-text">あたま を まもる</div>
+              </div>
+              <div class="quiz-choice wrong">
+                <div class="quiz-choice-num">B</div>
+                <div class="quiz-choice-text">そとに はしって でる</div>
+              </div>
+              <div class="quiz-choice">
+                <div class="quiz-choice-num">C</div>
+                <div class="quiz-choice-text">エレベーター に のる</div>
+              </div>
+              <div class="quiz-choice">
+                <div class="quiz-choice-num">D</div>
+                <div class="quiz-choice-text">でんわ を かける</div>
+              </div>
+            </div>
+            <div class="quiz-feedback correct-fb">
+              <i data-lucide="check-circle" style="width:18px;height:18px;color:var(--success)"></i>
+              <div class="quiz-feedback-text">せいかい！まず あたま を まもります。テーブルの した に はいりましょう。</div>
+            </div>
+          </div>
+          <button class="quiz-next-btn">
+            <span>つぎへ</span>
+            <i data-lucide="arrow-right" style="width:16px;height:16px"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /phone-frame quiz -->
+
+  <!-- ── PHONE 8: クイズ結果 ── -->
+  <div class="phone-frame" id="frame-quizresult" style="display:none">
+    <div class="phone-label">クイズ結果画面</div>
+    <div class="phone-shell">
+      <div class="phone-notch"></div>
+      <div class="phone-content">
+        <div class="quiz-result-screen">
+          <div class="quiz-result-badge"><i data-lucide="trophy" style="width:42px;height:42px;color:var(--navy)"></i></div>
+          <div class="quiz-result-label">クイズ かんりょう</div>
+          <div class="quiz-result-title">すばらしい！</div>
+          <div class="quiz-result-sub">きゅうきゅう・ひなん クイズ</div>
+          <div class="quiz-xp-pill">
+            <i data-lucide="zap" style="width:14px;height:14px;color:var(--accent)"></i>
+            <div class="quiz-xp-text">+50 XP かくとく</div>
+          </div>
+          <div class="quiz-score-grid">
+            <div class="quiz-score-cell">
+              <div class="quiz-score-value">4/5</div>
+              <div class="quiz-score-label">せいかい</div>
+            </div>
+            <div class="quiz-score-cell">
+              <div class="quiz-score-value">80%</div>
+              <div class="quiz-score-label">せいかいりつ</div>
+            </div>
+            <div class="quiz-score-cell">
+              <div class="quiz-score-value">1:42</div>
+              <div class="quiz-score-label">タイム</div>
+            </div>
+          </div>
+          <div class="quiz-result-btns">
+            <button class="quiz-result-btn-primary">つぎの レッスン へ</button>
+            <button class="quiz-result-btn-secondary">もう いちど やる</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /phone-frame quizresult -->
+
+  <!-- ── PHONE 9: 統計 ── -->
+  <div class="phone-frame" id="frame-stats" style="display:none">
+    <div class="phone-label">統計・成長画面</div>
+    <div class="phone-shell">
+      <div class="phone-notch"></div>
+      <div class="phone-content">
+        <div class="stats-screen">
+          <div class="stats-header">
+            <div class="stats-header-title">せいちょう</div>
+          </div>
+          <div class="stats-scroll">
+            <div class="level-card">
+              <div class="level-card-top">
+                <div class="level-badge">
+                  <i data-lucide="star" style="width:13px;height:13px;color:var(--accent)"></i>
+                  <div class="level-badge-text">レベル 5</div>
+                </div>
+                <div class="level-num">680 / 1000 XP</div>
+              </div>
+              <div class="level-name">にほんご けんきゅうせい</div>
+              <div class="level-xp-text">あと 320 XP で レベル 6</div>
+              <div class="level-xp-bar-track">
+                <div class="level-xp-bar-fill"></div>
+              </div>
+              <div class="level-xp-bar-labels">
+                <div class="level-xp-bar-label">Lv.5</div>
+                <div class="level-xp-bar-label">Lv.6</div>
+              </div>
+            </div>
+            <div class="stats-grid">
+              <div class="stats-cell">
+                <div class="stats-cell-icon"><i data-lucide="calendar-check" style="width:16px;height:16px;color:var(--navy)"></i></div>
+                <div class="stats-cell-value">23</div>
+                <div class="stats-cell-label">がくしゅう した ひ</div>
+              </div>
+              <div class="stats-cell">
+                <div class="stats-cell-icon"><i data-lucide="book-open-check" style="width:16px;height:16px;color:var(--navy)"></i></div>
+                <div class="stats-cell-value">34</div>
+                <div class="stats-cell-label">かんりょう レッスン</div>
+              </div>
+              <div class="stats-cell">
+                <div class="stats-cell-icon"><i data-lucide="target" style="width:16px;height:16px;color:var(--navy)"></i></div>
+                <div class="stats-cell-value">78%</div>
+                <div class="stats-cell-label">クイズ せいかいりつ</div>
+              </div>
+              <div class="stats-cell">
+                <div class="stats-cell-icon"><i data-lucide="flame" style="width:16px;height:16px;color:var(--navy)"></i></div>
+                <div class="stats-cell-value">7</div>
+                <div class="stats-cell-label">れんぞく きろく</div>
+              </div>
+            </div>
+            <div style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--muted);letter-spacing:0.06em;margin-bottom:12px">バッジ</div>
+            <div class="badge-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                <div style="width:52px;height:52px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(251,174,23,0.35)"><i data-lucide="flame" style="width:24px;height:24px;color:var(--navy)"></i></div>
+                <div style="font-size:10px;text-align:center;font-family:var(--font-h);font-weight:700;color:var(--text)">7にち<br>れんぞく</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                <div style="width:52px;height:52px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(39,174,96,0.3)"><i data-lucide="book-open" style="width:24px;height:24px;color:white"></i></div>
+                <div style="font-size:10px;text-align:center;font-family:var(--font-h);font-weight:700;color:var(--text)">はじめての<br>レッスン</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                <div style="width:52px;height:52px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(30,45,78,0.3)"><i data-lucide="trophy" style="width:24px;height:24px;color:var(--accent)"></i></div>
+                <div style="font-size:10px;text-align:center;font-family:var(--font-h);font-weight:700;color:var(--text)">クイズ<br>マスター</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                <div style="width:52px;height:52px;background:var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center"><i data-lucide="lock" style="width:24px;height:24px;color:var(--muted-light)"></i></div>
+                <div style="font-size:10px;text-align:center;font-family:var(--font-h);font-weight:700;color:var(--muted-light)">???</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /phone-frame stats -->
+
+</div><!-- /preview-wrapper -->
+
+<script>
+  const ALL_FRAMES = ['lang','home','job','search','category','detail','quiz','quizresult','stats'];
+
+  function showScreen(which) {
+    const annoPanel = document.getElementById('annotation-panel');
+    const btns = document.querySelectorAll('.tab-btn');
+
+    btns.forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    ALL_FRAMES.forEach(id => {
+      const el = document.getElementById('frame-' + id);
+      if (el) el.style.display = 'none';
+    });
+
+    const target = document.getElementById('frame-' + which);
+    if (target) target.style.display = 'block';
+
+    // アノテーションパネルは言語選択・ホームのみ表示
+    annoPanel.style.display = (which === 'lang' || which === 'home') ? 'block' : 'none';
+  }
+
+  // Interactive: lang button selection
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+</script>
+
+</body>
+</html>

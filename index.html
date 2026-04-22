@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>JapanLife — トモスマ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans:wght@400;700&family=Zen+Maru+Gothic:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent:#fbae17; --accent-light:#fff3d6; --navy:#1e2d4e;
+      --text:#1C1C1C; --muted:#6B6B6B; --border:#E8E8E4;
+      --surface:#FFFFFF; --bg:#FAFAF7;
+      --success:#27ae60; --success-light:#e6f9ee;
+      --danger:#e74c3c; --danger-light:#fde8e8;
+      --radius-sm:8px; --radius-md:16px; --radius-lg:32px;
+      --font-h:'Zen Maru Gothic',sans-serif;
+      --font-b:'Noto Sans JP','Noto Sans',sans-serif;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    html,body{height:100%;background:#d8d5cf;font-family:var(--font-b);color:var(--text);}
+    #app{max-width:390px;margin:0 auto;height:100vh;display:flex;flex-direction:column;background:var(--bg);overflow:hidden;}
+    #screen{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+
+    /* NAV */
+    #nav{display:none;background:var(--surface);border-top:1px solid var(--border);padding:4px 0 10px;}
+    #nav.on{display:flex;}
+    .ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;cursor:pointer;color:var(--muted);font-size:9px;font-weight:700;border:none;background:none;font-family:var(--font-h);}
+    .ni.active{color:var(--accent);}
+    .ni svg{width:21px;height:21px;}
+
+    /* LANG SCREEN */
+    .ls{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 28px;background:var(--navy);}
+    .ls-logo{font-family:var(--font-h);font-size:34px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+    .ls-tag{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:40px;text-align:center;line-height:1.7;white-space:pre-line;}
+    .lb{width:100%;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);border-radius:var(--radius-md);padding:14px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;margin-bottom:8px;color:white;transition:all .2s;}
+    .lb:active,.lb.sel{background:rgba(251,174,23,0.2);border-color:var(--accent);}
+    .lb-flag{font-size:24px;}
+    .lb-name{font-family:var(--font-h);font-size:15px;font-weight:700;}
+    .lb-native{font-size:11px;color:rgba(255,255,255,0.45);margin-top:1px;}
+    .lb-tag{font-size:10px;font-weight:700;background:var(--accent);color:var(--text);padding:2px 8px;border-radius:100px;margin-left:auto;font-family:var(--font-h);}
+
+    /* ONBOARD */
+    .ob{min-height:100vh;padding:48px 20px 32px;}
+    .ob-step{font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.12em;margin-bottom:8px;}
+    .ob-ttl{font-family:var(--font-h);font-size:22px;font-weight:700;line-height:1.3;margin-bottom:6px;}
+    .ob-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
+    .job-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px;}
+    .jc{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius-md);padding:16px 12px;cursor:pointer;text-align:center;transition:all .15s;}
+    .jc.sel{border-color:var(--accent);background:var(--accent-light);}
+    .jc-e{font-size:28px;margin-bottom:5px;}
+    .jc-n{font-family:var(--font-h);font-size:12px;font-weight:700;}
+    .btn-p{width:100%;background:var(--accent);color:var(--text);font-size:15px;font-weight:700;padding:14px;border:none;border-radius:var(--radius-lg);cursor:pointer;font-family:var(--font-h);}
+    .btn-p:disabled{opacity:.35;pointer-events:none;}
+    .btn-s{width:100%;background:var(--surface);color:var(--text);font-size:14px;font-weight:700;padding:13px;border:1.5px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;font-family:var(--font-h);margin-top:10px;}
+    .btn-danger{width:100%;background:var(--danger-light);color:var(--danger);font-size:14px;font-weight:700;padding:13px;border:1.5px solid var(--danger);border-radius:var(--radius-lg);cursor:pointer;font-family:var(--font-h);}
+
+    /* HOME */
+    .hh{padding:16px 20px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:10;}
+    .hlogo{font-family:var(--font-h);font-size:20px;font-weight:700;}
+    .hlogo span{color:var(--accent);}
+    .hright{display:flex;align-items:center;gap:8px;}
+    .streak-pill{display:flex;align-items:center;gap:4px;background:var(--accent-light);border-radius:100px;padding:4px 10px;font-size:13px;font-weight:700;font-family:var(--font-h);}
+    .lang-pill{display:flex;align-items:center;gap:5px;background:var(--bg);border:1.5px solid var(--border);border-radius:100px;padding:5px 10px 5px 8px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-h);transition:border-color .2s;}
+    .lang-pill:active{border-color:var(--accent);}
+    .lang-pill-flag{font-size:16px;line-height:1;}
+    .lang-pill svg{width:12px;height:12px;color:var(--muted);}
+    .hcont{padding:16px 20px 24px;}
+    .sb{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:12px 14px;margin-bottom:20px;cursor:pointer;}
+    .sb svg{color:var(--muted);flex-shrink:0;width:16px;height:16px;}
+    .sb-ph{font-size:14px;color:var(--muted);}
+    .sec-ttl{font-family:var(--font-h);font-size:15px;font-weight:700;margin-bottom:10px;}
+    .daily{background:var(--navy);border-radius:var(--radius-md);padding:20px;margin-bottom:24px;cursor:pointer;position:relative;overflow:hidden;}
+    .daily::after{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.04);border-radius:50%;pointer-events:none;}
+    .daily-lbl{font-family:var(--font-h);font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.1em;margin-bottom:4px;}
+    .daily-ttl{font-family:var(--font-h);font-size:17px;font-weight:700;color:white;margin-bottom:3px;}
+    .daily-sub{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:14px;}
+    .daily-btn{display:inline-block;background:var(--accent);color:var(--text);font-family:var(--font-h);font-size:12px;font-weight:700;padding:6px 14px;border-radius:var(--radius-lg);}
+    /* filter chips */
+    .filter-row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:16px;}
+    .filter-row::-webkit-scrollbar{display:none;}
+    .fchip{padding:6px 16px;border-radius:100px;flex-shrink:0;font-family:var(--font-h);font-size:12px;font-weight:700;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .15s;}
+    .fchip.active{background:var(--navy);color:white;border-color:var(--navy);}
+    .search-icon-btn{width:32px;height:32px;background:var(--surface);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+    .search-icon-btn svg{width:15px;height:15px;}
+    /* category list */
+    .cat-list{display:flex;flex-direction:column;gap:8px;}
+    .cc{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;cursor:pointer;transition:transform .1s;display:flex;align-items:center;gap:14px;}
+    .cc:active{transform:scale(.98);}
+    .cc-icon{font-size:24px;flex-shrink:0;}
+    .cc-body{flex:1;min-width:0;}
+    .cc-name{font-family:var(--font-h);font-size:14px;font-weight:700;margin-bottom:6px;}
+    .cc-row{display:flex;align-items:center;gap:8px;}
+    .cc-cnt{font-size:11px;color:var(--muted);flex-shrink:0;}
+    .cc-arr{display:flex;align-items:center;flex-shrink:0;}
+    .cc-arr svg{width:14px;height:14px;color:var(--muted);}
+    .prog-bar{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+    .prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s;}
+    /* quiz review hint */
+    .qz-review{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;padding:8px 12px;background:var(--accent-light);border-radius:8px;}
+
+    /* SCREEN HEADER */
+    .sh{padding:13px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:10;}
+    .back{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--bg);border-radius:50%;cursor:pointer;border:none;flex-shrink:0;}
+    .back svg{width:17px;height:17px;}
+    .sh-ttl{font-family:var(--font-h);font-size:16px;font-weight:700;flex:1;}
+    .share-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--accent-light);border-radius:50%;cursor:pointer;border:none;flex-shrink:0;}
+    .share-btn svg{width:16px;height:16px;color:var(--accent);}
+
+    /* ITEM LIST */
+    .il{padding:8px 20px;}
+    .ic{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+    .ic:last-child{border-bottom:none;}
+    .ic-dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .ic-dot.done{background:var(--accent);border-color:var(--accent);}
+    .ic-dot svg{width:13px;height:13px;}
+    .ic-ttl{font-family:var(--font-h);font-size:14px;font-weight:700;}
+    .ic-arr svg{width:15px;height:15px;color:var(--muted);}
+
+    /* ITEM DETAIL */
+    .id{padding:20px;}
+    .cb{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:15px;margin-bottom:10px;}
+    .cb-lbl{font-family:var(--font-h);font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--accent);margin-bottom:7px;}
+    .cb-txt{font-size:14px;line-height:1.9;white-space:pre-line;}
+    .tip{background:var(--accent-light);border-left:4px solid var(--accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:12px 14px;margin-bottom:20px;}
+    .tip-lbl{font-family:var(--font-h);font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.1em;margin-bottom:4px;}
+    .tip-txt{font-size:13px;line-height:1.7;}
+    .done-btn{width:100%;background:var(--text);color:white;font-size:15px;font-weight:700;padding:14px;border:none;border-radius:var(--radius-lg);cursor:pointer;font-family:var(--font-h);}
+
+    /* COMPLETION */
+    .comp{background:var(--success-light);border:2px solid var(--success);border-radius:var(--radius-md);padding:22px 20px;margin-bottom:14px;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;}
+    .comp-circle{width:52px;height:52px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:6px;}
+    .comp-circle svg{width:26px;height:26px;stroke:white;}
+    .comp-pts{font-family:var(--font-h);font-size:19px;font-weight:700;color:var(--success);}
+    .comp-stat{font-size:12px;color:var(--muted);}
+    .comp-badge{margin-top:4px;background:var(--accent);color:var(--text);font-family:var(--font-h);font-size:12px;font-weight:700;padding:4px 12px;border-radius:100px;}
+    .comp-hint{font-family:var(--font-h);font-size:11px;color:var(--accent);font-weight:700;margin-top:2px;}
+    .back-link{display:block;text-align:center;margin-top:12px;font-size:13px;color:var(--muted);cursor:pointer;text-decoration:underline;}
+
+    /* STATS / GROWTH */
+    .stats-wrap{padding:20px;}
+    .lv-card{background:var(--navy);border-radius:var(--radius-md);padding:22px;margin-bottom:16px;}
+    .lv-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .lv-badge{background:var(--accent);color:var(--text);font-family:var(--font-h);font-size:11px;font-weight:700;padding:4px 12px;border-radius:100px;}
+    .lv-name{font-family:var(--font-h);font-size:22px;font-weight:700;color:white;}
+    .lv-pts{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px;}
+    .xp-track{height:8px;background:rgba(255,255,255,.15);border-radius:4px;overflow:hidden;margin-bottom:6px;}
+    .xp-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .5s;}
+    .xp-label{font-size:11px;color:rgba(255,255,255,.45);text-align:right;}
+    .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px;}
+    .stat-cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;}
+    .stat-cell-lbl{font-family:var(--font-h);font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:4px;}
+    .stat-cell-val{font-family:var(--font-h);font-size:24px;font-weight:700;color:var(--text);}
+    .stat-cell-unit{font-size:11px;color:var(--muted);font-weight:400;}
+    .badge-ttl{font-family:var(--font-h);font-size:15px;font-weight:700;margin-bottom:12px;}
+    .badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .bi{text-align:center;padding:14px 8px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);}
+    .bi.earned{border-color:var(--accent);background:var(--accent-light);}
+    .bi-e{font-size:26px;margin-bottom:5px;}
+    .bi-n{font-family:var(--font-h);font-size:10px;font-weight:700;line-height:1.3;}
+    .bi:not(.earned) .bi-e{filter:grayscale(1);opacity:.35;}
+    .bi:not(.earned) .bi-n{color:var(--muted);}
+
+    /* QUIZ */
+    .qz{padding:20px;}
+    .qz-prog{height:5px;background:var(--border);border-radius:3px;margin-bottom:24px;overflow:hidden;}
+    .qz-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s;}
+    .qz-num{font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.1em;margin-bottom:8px;}
+    .qz-q{font-family:var(--font-h);font-size:17px;font-weight:700;line-height:1.45;margin-bottom:22px;}
+    .qz-choices{display:flex;flex-direction:column;gap:10px;}
+    .qz-c{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius-md);padding:13px 16px;cursor:pointer;font-size:14px;font-weight:700;color:var(--text);text-align:left;font-family:var(--font-b);transition:all .15s;}
+    .qz-c.correct{background:var(--success-light);border-color:var(--success);color:var(--success);}
+    .qz-c.wrong{background:var(--danger-light);border-color:var(--danger);color:var(--danger);}
+    .qz-exp{margin-top:14px;padding:13px;background:var(--bg);border-radius:var(--radius-sm);font-size:13px;line-height:1.7;border:1px solid var(--border);}
+    .qz-res{text-align:center;padding:48px 20px 32px;}
+    .qz-res-ttl{font-family:var(--font-h);font-size:22px;font-weight:700;margin-bottom:20px;}
+    .qz-res-score{font-family:var(--font-h);font-size:52px;font-weight:700;color:var(--accent);line-height:1;}
+    .qz-res-sub{font-size:13px;color:var(--muted);margin-bottom:32px;}
+
+    /* SETTINGS */
+    .set-wrap{padding:16px 20px 32px;}
+    .set-sec{margin-bottom:24px;}
+    .set-sec-ttl{font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.12em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+    .set-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
+    .set-row:last-child{border-bottom:none;}
+    .set-row-lbl{font-family:var(--font-h);font-size:14px;font-weight:700;}
+    .set-row-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+    .toggle{width:44px;height:26px;background:var(--border);border-radius:13px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
+    .toggle.on{background:var(--accent);}
+    .toggle::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+    .toggle.on::after{transform:translateX(18px);}
+    .time-input{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:14px;font-family:var(--font-b);color:var(--text);cursor:pointer;}
+    .time-input:focus{outline:none;border-color:var(--accent);}
+    .set-lang-grid{display:flex;flex-direction:column;gap:8px;}
+    .slb{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);cursor:pointer;transition:all .15s;}
+    .slb.sel{border-color:var(--accent);background:var(--accent-light);}
+    .slb-flag{font-size:22px;}
+    .slb-name{font-family:var(--font-h);font-size:14px;font-weight:700;}
+    .slb-check{width:18px;height:18px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-left:auto;flex-shrink:0;}
+    .slb-check svg{width:10px;height:10px;stroke:white;}
+
+    /* SEARCH */
+    .sw{padding:16px 20px;}
+    .si-wrap{display:flex;align-items:center;gap:10px;background:var(--surface);border:2px solid var(--accent);border-radius:var(--radius-md);padding:11px 14px;margin-bottom:14px;}
+    .si-wrap svg{color:var(--muted);flex-shrink:0;width:16px;height:16px;}
+    .si{flex:1;border:none;background:none;font-size:15px;font-family:var(--font-b);outline:none;color:var(--text);}
+    .sr{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+    .sr-tag{display:inline-block;font-family:var(--font-h);font-size:10px;font-weight:700;background:var(--accent-light);color:var(--accent);padding:2px 8px;border-radius:100px;margin-top:3px;}
+    .no-res{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--text);color:white;font-family:var(--font-h);font-size:13px;font-weight:700;padding:10px 20px;border-radius:var(--radius-lg);z-index:999;pointer-events:none;opacity:1;transition:opacity .4s;}
+    .toast.hide{opacity:0;}
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="screen"></div>
+  <nav id="nav">
+    <button class="ni" data-nav="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span id="nl-home">ホーム</span>
+    </button>
+    <button class="ni" data-nav="quiz">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span id="nl-quiz">クイズ</span>
+    </button>
+    <button class="ni" data-nav="stats">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span id="nl-stats">成長</span>
+    </button>
+    <button class="ni" data-nav="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span id="nl-settings">設定</span>
+    </button>
+  </nav>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const CATS = [
+  { id:'workplace', emoji:'💼',
+    titles:{ja:'職場のルール',ja_easy:'しごとのルール',vi:'Quy tắc nơi làm việc',en:'Workplace Rules',km:'ច្បាប់ការងារ'},
+    items:[
+      {id:'w1',
+       titles:{ja:'残業について',ja_easy:'ざんぎょうについて',vi:'Về làm thêm giờ',en:'About Overtime'},
+       body:{ja:'日本の多くの職場では、定時になっても上司が残っている場合、一言声をかけてから帰るのが一般的なマナーです。「お先に失礼します」という言葉を添えてから帰りましょう。',
+             ja_easy:'時間になっても、上司(うえの人)がいるときは\n「お先に失礼します」と言ってから帰ります。\nこれが日本の会社のルールです。',
+             vi:'Ở nhiều nơi làm việc tại Nhật, khi đến giờ tan ca nhưng cấp trên vẫn còn lại, bạn nên chào hỏi trước khi về. Hãy nói "Osaki ni shitsurei shimasu".',
+             en:'In many Japanese workplaces, say goodbye to your supervisor before leaving even at closing time. Use "Osaki ni shitsurei shimasu".'},
+       tip:{ja:'「お先に失礼します」+軽いお辞儀で丁寧な印象になります。',ja_easy:'「お先に失礼します」と少しお辞儀をするといいです。',vi:'Nói kèm cúi đầu nhẹ sẽ tạo ấn tượng lịch sự.',en:'Say the phrase with a slight bow for a polite impression.'}},
+      {id:'w2',
+       titles:{ja:'ほうれんそう（報連相）',ja_easy:'ほうれんそう',vi:'Báo cáo – Liên lạc – Tham khảo',en:'Report, Contact, Consult'},
+       body:{ja:'「報告・連絡・相談（ほうれんそう）」は日本の職場で最も重視されるルールです。\n• 報告：作業が終わったら必ず上司に報告する\n• 連絡：問題が起きたら即連絡する\n• 相談：迷ったら自己判断せずに相談する',
+             ja_easy:'ほうれんそう は大切なルールです。\n\n報告(ほうこく) → 仕事が終わったら上司に言います\n連絡(れんらく) → 問題があったらすぐ言います\n相談(そうだん) → わからないとき一人で決めません',
+             vi:'"Horenso" là quy tắc quan trọng nhất:\n• Báo cáo: Sau khi xong việc báo cáo cấp trên\n• Liên lạc: Khi có vấn đề liên lạc ngay\n• Tham khảo: Khi không chắc hãy hỏi ý kiến',
+             en:'"Horenso" (Report-Contact-Consult) is the most important rule:\n• Report: Tell boss when work is done\n• Contact: Report problems immediately\n• Consult: Ask when unsure, never decide alone'},
+       tip:{ja:'悪いニュースほど早く報告すること。隠すと後で大きな問題になります。',ja_easy:'悪いことほど、早く言うことが大切です。',vi:'Tin xấu càng cần báo cáo sớm.',en:'Bad news should be reported even faster.'}},
+      {id:'w3',
+       titles:{ja:'ミスをした時の対応',ja_easy:'ミスをしたとき',vi:'Xử lý khi mắc lỗi',en:'Handling Mistakes'},
+       body:{ja:'日本では、ミスをした時は「謝罪してから説明する」順番が重要です。\n\n✓ 正しい：「すみません、私のミスでした。原因は〜です」\n✗ 悪い例：言い訳から始める\n\n言い訳を先に言うと、責任逃れと受け取られます。',
+             ja_easy:'ミスをしたとき、まず謝(あやま)ります。その後で理由を言います。\n\nよい：「すみません、私のミスでした。理由は〜です」\nよくない：理由・言い訳を先に言う',
+             vi:'Ở Nhật, "xin lỗi trước rồi giải thích" là thứ tự quan trọng.\n✓ Đúng: "Xin lỗi, đó là lỗi của tôi. Nguyên nhân là..."\n✗ Sai: Bắt đầu bằng lý do biện hộ',
+             en:'In Japan, "apologize first, then explain" is the correct order.\n✓ Correct: "I\'m sorry, that was my mistake. The reason was..."\n✗ Wrong: Starting with excuses'},
+       tip:{ja:'丁寧な謝り方：「申し訳ありません」（フォーマル）／「すみません」（一般）',ja_easy:'「申し訳ありません」はていねい。「すみません」は普通の場面です。',vi:'"Mōshiwake arimasen" (trang trọng) / "Sumimasen" (thông thường)',en:'"Mōshiwake arimasen" (formal) / "Sumimasen" (general)'}},
+      {id:'w4',
+       titles:{ja:'否定・断り方',ja_easy:'ことわり方',vi:'Cách từ chối lịch sự',en:'How to Decline Politely'},
+       body:{ja:'日本では「できません」と直接言わないことが多いです。\n\n• 「難しいです」→ できない\n• 「確認が必要です」→ おそらく無理\n• 「少し時間をください」→ 断りたい',
+             ja_easy:'日本では「できません」と直接言いません。\n\n「難しいです」→ できません\n「確認(かくにん)します」→ たぶん無理\n「少し時間をください」→ ことわりたい',
+             vi:'Ở Nhật, người ta thường không nói thẳng "Không":\n• "Muzukashii desu" → Không thể\n• "Kakunin ga hitsuyō" → Không được\n• "Sukoshi jikan wo" → Muốn từ chối',
+             en:'In Japan, people rarely say "I can\'t" directly:\n• "Muzukashii desu" → Can\'t do it\n• "Kakunin ga hitsuyō" → Likely no\n• "Sukoshi jikan wo" → Want to decline'},
+       tip:{ja:'日本語の「曖昧な表現」は文化です。額面通りに受け取らないようにしましょう。',ja_easy:'はっきり言わない表現は日本の文化です。',vi:'Biểu đạt mơ hồ là văn hóa Nhật. Đừng hiểu nghĩa đen.',en:'Ambiguous expressions are part of Japanese culture.'}},
+      {id:'w5',
+       titles:{ja:'席を離れる時のマナー',ja_easy:'せきをはなれるとき',vi:'Khi rời khỏi chỗ ngồi',en:'Leaving Your Seat'},
+       body:{ja:'席を離れる時は、周囲に一言伝えるのがマナーです。\n\n• 短時間：「少し席を外します」\n• 外出：「〇〇へ行ってきます。△時頃戻ります」',
+             ja_easy:'トイレや外出のとき、みんなに一言言います。\n\n短い時間：「少し席(せき)を外します」\n外に出るとき：「〇〇へ行ってきます。△時に戻ります」',
+             vi:'Khi rời chỗ ngồi, hãy thông báo:\n• Ngắn: "Chotto seki wo hazushimasu"\n• Ra ngoài: "〇〇e ittekimasu. △-ji goro modorimasu"',
+             en:'When leaving your seat, always inform others:\n• Briefly: "Stepping away for a moment"\n• Going out: "Heading to 〇〇, back around △"'},
+       tip:{ja:'「行ってきます」「戻りました」の一言で職場での信頼が積み上がります。',ja_easy:'「行ってきます」「戻りました」の一言が大切です。',vi:'"Ittekimasu" và "Modorimashita" giúp xây dựng niềm tin.',en:'"Ittekimasu" and "Modorimashita" build workplace trust.'}}
+    ]
+  },
+  { id:'garbage', emoji:'♻️',
+    titles:{ja:'ゴミの分別',ja_easy:'ゴミのわけ方',vi:'Phân loại rác',en:'Garbage Sorting',km:'ការចោលសំរាម'},
+    items:[
+      {id:'g1',
+       titles:{ja:'燃えるゴミ',ja_easy:'もえるゴミ',vi:'Rác có thể đốt',en:'Burnable Garbage'},
+       body:{ja:'生ゴミ・紙くず・布などが「燃えるゴミ」です。\n\n• 週2回収集が多い\n• 自治体指定のゴミ袋が必要\n• 袋はコンビニ・スーパーで購入可能',
+             ja_easy:'食べ物のゴミ・紙・布などは「もえるゴミ」です。\n\n・週に2回 集める地域が多いです\n・市(まち)が決めたゴミ袋を使います\n・コンビニやスーパーで袋を買えます',
+             vi:'Thức ăn thừa, giấy, vải... là "rác có thể đốt".\n• Thường thu gom 2 lần/tuần\n• Cần dùng túi rác quy định',
+             en:'Food scraps, paper, cloth are "burnable garbage."\n• Usually collected twice a week\n• Use designated garbage bags'},
+       tip:{ja:'住む自治体のゴミ収集カレンダーを必ず確認しましょう。',ja_easy:'住んでいる市(まち)のゴミの日を確認しましょう。',vi:'Kiểm tra lịch thu gom rác của địa phương.',en:'Always check the garbage collection calendar.'}},
+      {id:'g2',
+       titles:{ja:'ペットボトルの捨て方',ja_easy:'ペットボトルの捨て方',vi:'Cách vứt chai nhựa PET',en:'PET Bottle Disposal'},
+       body:{ja:'ペットボトルを捨てる前に3ステップ：\n\n① キャップを外す（別に捨てる）\n② ラベルを剥がす（別に捨てる）\n③ 軽くすすぐ',
+             ja_easy:'ペットボトルを捨てる前に3つやります：\n\n① ふたを外す（別に捨てる）\n② シールをはがす（別に捨てる）\n③ 中を少し洗う',
+             vi:'Trước khi vứt chai PET, thực hiện 3 bước:\n① Tháo nắp (vứt riêng)\n② Bóc nhãn (vứt riêng)\n③ Tráng sơ bên trong',
+             en:'Before disposing of PET bottles, 3 steps:\n① Remove cap (dispose separately)\n② Remove label (dispose separately)\n③ Rinse lightly'},
+       tip:{ja:'キャップとラベルは別のゴミとして捨てます。',ja_easy:'ふたとシールは「もえるゴミ」として別に捨てます。',vi:'Nắp và nhãn vứt riêng.',en:'Caps and labels are disposed of separately.'}},
+      {id:'g3',
+       titles:{ja:'粗大ゴミの捨て方',ja_easy:'そだいゴミの捨て方',vi:'Cách vứt rác cồng kềnh',en:'Bulky Garbage Disposal'},
+       body:{ja:'家具・家電などの大きなゴミは「粗大ゴミ」です。\n\n手順：\n① 市役所に電話して事前申請\n② 有料（500〜2,000円程度）\n③ 指定された日時・場所に出す',
+             ja_easy:'大きい家具や家電は「そだいゴミ」です。\nふつうのゴミと一緒に出せません。\n\n① 市役所(しやくしょ)に電話して申し込みます\n② お金がかかります（500〜2,000円）\n③ 決められた日・場所に出します',
+             vi:'Đồ nội thất lớn là "rác cồng kềnh".\n① Đăng ký trước với tòa thị chính\n② Phải trả phí (500-2,000 yên)\n③ Đặt ra đúng ngày, đúng nơi',
+             en:'Large furniture/appliances are "bulky garbage."\n① Register with city hall in advance\n② Pay the fee (¥500-2,000)\n③ Put out on the designated date/location'},
+       tip:{ja:'「粗大ゴミ 申込」で市区町村ウェブサイトを検索してください。',ja_easy:'市(まち)のウェブサイトで「粗大ゴミ 申込」と探してください。',vi:'Tìm "粗大ゴミ 申込" trên website của địa phương.',en:'Search "粗大ゴミ 申込" on your city\'s website.'}}
+    ]
+  },
+  { id:'greeting', emoji:'🙏',
+    titles:{ja:'あいさつ・敬語',ja_easy:'あいさつ',vi:'Chào hỏi & Kính ngữ',en:'Greetings & Keigo',km:'ការសួរសុខទុក្ខ'},
+    items:[
+      {id:'gr1',
+       titles:{ja:'職場の基本フレーズ5選',ja_easy:'よく使う5つの言葉',vi:'5 cụm từ cơ bản',en:'5 Essential Phrases'},
+       body:{ja:'• おはようございます — 朝のあいさつ\n• お疲れ様です — 同僚・上司へのあいさつ\n• よろしくお願いします — お願いする時・初対面\n• お先に失礼します — 先に帰る時\n• ありがとうございます — お礼',
+             ja_easy:'毎日使う5つの言葉です：\n\nおはようございます → 朝のあいさつ\nお疲れ様です → 同僚(どうりょう)・上司へのあいさつ\nよろしくお願いします → お願いするとき\nお先に失礼します → 自分が先に帰るとき\nありがとうございます → お礼',
+             vi:'• Ohayō gozaimasu — Chào buổi sáng\n• Otsukaresama desu — Chào đồng nghiệp/cấp trên\n• Yoroshiku onegaishimasu — Khi nhờ vả\n• Osaki ni shitsurei shimasu — Khi về trước\n• Arigatō gozaimasu — Cảm ơn',
+             en:'• Ohayō gozaimasu — Good morning\n• Otsukaresama desu — Greeting colleagues\n• Yoroshiku onegaishimasu — Making requests\n• Osaki ni shitsurei shimasu — Leaving before others\n• Arigatō gozaimasu — Thank you'},
+       tip:{ja:'まずこの5フレーズを毎日使ってみましょう。',ja_easy:'まずこの5つを毎日使ってみましょう。',vi:'Hãy thử dùng 5 câu này mỗi ngày.',en:'Try using these 5 phrases every day.'}},
+      {id:'gr2',
+       titles:{ja:'お辞儀の種類',ja_easy:'お辞儀(おじぎ)の種類',vi:'Các loại cúi đầu',en:'Types of Bowing'},
+       body:{ja:'• 会釈（15°）：廊下ですれ違う / 軽いお礼\n• 普通礼（30°）：挨拶 / お願いをする時\n• 深礼（45°）：謝罪 / 深いお礼',
+             ja_easy:'お辞儀(おじぎ)は3種類あります：\n\n15度：廊下(ろうか)ですれ違うとき\n30度：あいさつするとき（これが普通）\n45度：謝(あやま)るとき\n\nスマートフォンを持ちながらお辞儀しません。',
+             vi:'• 15°: Đi ngang nhau / Cảm ơn nhẹ\n• 30°: Chào hỏi / Khi nhờ vả\n• 45°: Xin lỗi / Cảm ơn sâu sắc',
+             en:'• 15° bow: Passing in corridor / Light thanks\n• 30° bow: Greetings / Making requests\n• 45° bow: Apologies / Deep gratitude'},
+       tip:{ja:'迷ったら30°のお辞儀をすれば失礼にはなりません。',ja_easy:'迷ったとき、30度のお辞儀をすれば大丈夫です。',vi:'Nếu không chắc, cúi 30° là an toàn nhất.',en:'When in doubt, a 30° bow is always appropriate.'}}
+    ]
+  },
+  { id:'safety', emoji:'🚨',
+    titles:{ja:'安全・緊急対応',ja_easy:'きゅうきゅう・ひなん',vi:'An toàn & Khẩn cấp',en:'Safety & Emergency',km:'សុវត្ថិភាព'},
+    items:[
+      {id:'s1',
+       titles:{ja:'119番・110番の使い方',ja_easy:'119・110のかけ方',vi:'Cách gọi 119 và 110',en:'Calling 119 & 110'},
+       body:{ja:'• 119番：火事・救急（ケガ・急病）\n• 110番：警察（事件・事故）\n\n日本語が話せなくても大丈夫。\n「Fire」「Ambulance」「Police」と言えば対応してもらえます。\n\n必ず伝えること：あなたの住所・場所',
+             ja_easy:'119番：火事(かじ)・救急(けが・病気)\n110番：警察(けいさつ)（事件・事故）\n\n日本語が話せなくても大丈夫。\n「Fire」「Ambulance」「Police」と言えます。\n\n必ず言うこと：あなたの住所(じゅうしょ)',
+             vi:'• 119: Cứu hỏa & Cấp cứu\n• 110: Cảnh sát\n\nDù không nói được tiếng Nhật cũng không sao.\nNói "Fire", "Ambulance", "Police" là được.',
+             en:'• 119: Fire & Ambulance\n• 110: Police\n\nEven if you can\'t speak Japanese, say "Fire," "Ambulance," or "Police."\nAlways provide your address.'},
+       tip:{ja:'#7119に電話すると多言語で救急相談できます。',ja_easy:'#7119 に電話すると多言語で聞けます。',vi:'Gọi #7119 để hỏi bằng nhiều ngôn ngữ.',en:'Call #7119 for multilingual ambulance consultation.'}},
+      {id:'s2',
+       titles:{ja:'地震が起きた時',ja_easy:'じしんのとき',vi:'Khi xảy ra động đất',en:'During an Earthquake'},
+       body:{ja:'①頭を守る — テーブルの下 / クッション\n②火を消す — 揺れが収まったらガス消す\n③ドアを開ける — 出口を確保\n④外に出ない — 揺れが収まるまで待機\n⑤避難場所へ — 事前に確認',
+             ja_easy:'①頭(あたま)を守る → テーブルの下・クッション\n②ガスを消す → ゆれが止まってから\n③ドアを開ける → 出口を確保\n④外に出ない → ゆれが止まるまで待つ\n⑤避難場所(ひなんばしょ)へ → 事前に確認',
+             vi:'①Bảo vệ đầu — Chui dưới bàn / Dùng gối\n②Tắt gas — Sau khi rung động dừng\n③Mở cửa — Đảm bảo lối thoát\n④Không ra ngoài — Ở trong nhà\n⑤Đến nơi sơ tán — Xác nhận trước',
+             en:'①Protect head — Under table / Use cushion\n②Turn off gas — After shaking stops\n③Open door — Secure exit\n④Stay inside — Until shaking stops\n⑤Go to evacuation point — Confirm in advance'},
+       tip:{ja:'避難経路の確認は必ず初日にやっておきましょう。',ja_easy:'避難場所を最初の日に確認しましょう。',vi:'Kiểm tra đường thoát hiểm ngay ngày đầu tiên.',en:'Always check evacuation routes on your first day.'}}
+    ]
+  },
+  { id:'daily', emoji:'🏠',
+    titles:{ja:'生活のヒント',ja_easy:'せいかつのヒント',vi:'Mẹo cuộc sống',en:'Daily Life Tips',km:'គន្លឹះជីវិត'},
+    items:[
+      {id:'d1',
+       titles:{ja:'ゴミ出しのルール',ja_easy:'ゴミを出すルール',vi:'Quy tắc đổ rác',en:'Garbage Rules'},
+       body:{ja:'• 収集日の朝8時までに指定場所に出す\n• 前日夜に出すのは禁止の地域が多い\n• ゴミ置き場のネットは使った後に必ず戻す\n• カレンダーは市区町村から配布される',
+             ja_easy:'・収集日の朝8時までに出します\n・前の日の夜に出してはいけない地域が多いです\n・ゴミ置き場のネットは使った後に戻します\n\n間違った日に出すと、1週間取ってもらえません。',
+             vi:'• Đổ rác trước 8 giờ sáng vào ngày thu gom\n• Nhiều khu vực cấm đổ rác vào tối hôm trước\n• Luôn trả lại lưới chắn quạ sau khi dùng',
+             en:'• Put garbage out by 8:00 AM on collection day\n• Many areas prohibit putting it out the night before\n• Always return the anti-crow net after use'},
+       tip:{ja:'引越した日に近所の方にゴミカレンダーを聞くと親切にしてもらえます。',ja_easy:'引越し(ひっこし)した日に、近所の人にゴミの日を聞くといいです。',vi:'Ngày chuyển đến, hỏi hàng xóm về lịch thu gom rác.',en:'Ask neighbors about the garbage schedule on moving day.'}},
+      {id:'d2',
+       titles:{ja:'コンビニでできること',ja_easy:'コンビニでできること',vi:'Những gì bạn có thể làm ở tiện ích',en:'What You Can Do at Convenience Stores'},
+       body:{ja:'コンビニ（24時間営業）では：\n\n• 公共料金の支払い\n• ATM（引き出し・振込）\n• 宅配便の発送・受け取り\n• 住民票などの行政書類の印刷\n• コピー機・チケット購入',
+             ja_easy:'コンビニ（24時間あいています）でできること：\n\n・電気・ガス・水道の支払い(しはらい)\n・ATM（現金を引き出す・送金）\n・荷物(にもつ)を送る・受け取る\n・住民票(じゅうみんひょう)などを印刷\n・コピー機・チケットの購入',
+             vi:'Cửa hàng tiện lợi (mở 24 giờ):\n• Thanh toán điện, gas, nước\n• ATM rút/chuyển tiền\n• Gửi và nhận bưu kiện\n• In giấy tờ hành chính\n• Photocopy và mua vé',
+             en:'Convenience stores (open 24/7):\n• Pay utility bills\n• ATM cash withdrawal/transfer\n• Send/receive parcels\n• Print administrative documents\n• Copy machine and tickets'},
+       tip:{ja:'セブン-イレブン・ローソン・ファミリーマートが三大チェーン。全国どこにでもあります。',ja_easy:'セブン-イレブン・ローソン・ファミリーマートが大きなコンビニです。',vi:'Seven-Eleven, Lawson, FamilyMart là 3 chuỗi lớn.',en:'Seven-Eleven, Lawson, and FamilyMart. Found everywhere nationwide.'}}
+    ]
+  }
+];
+
+const QUIZZES=[
+  // ── Set 1 ──
+  {id:'q1',catId:'workplace',question:{ja:'定時になったが上司がいる。帰る時に何と言う？',vi:'Đến giờ tan ca nhưng cấp trên còn. Bạn nói gì?',en:'Closing time but boss is still there. What do you say?'},choices:{ja:['お先に失礼します','さようなら','帰ります','何も言わずに帰る'],vi:['Osaki ni shitsurei shimasu','Sayōnara','Kaerimasu','Về không nói gì'],en:['Osaki ni shitsurei shimasu','Sayōnara','Kaerimasu (I\'m leaving)','Leave without a word']},answer:0,explanation:{ja:'「お先に失礼します」は先に帰る時の正式な挨拶です。',vi:'"Osaki ni shitsurei shimasu" là câu chào chính thức khi về trước.',en:'"Osaki ni shitsurei shimasu" is the formal farewell when leaving first.'}},
+  {id:'q2',catId:'garbage',question:{ja:'ペットボトルを捨てる前にしてはいけないことは？',vi:'Điều KHÔNG nên làm trước khi vứt chai PET?',en:'What should you NOT do before disposing of a PET bottle?'},choices:{ja:['キャップとラベルをつけたまま捨てる','キャップを外す','ラベルを剥がす','軽くすすぐ'],vi:['Vứt nguyên nắp và nhãn','Tháo nắp','Bóc nhãn','Tráng sơ'],en:['Throw it with cap and label on','Remove the cap','Remove the label','Rinse it lightly']},answer:0,explanation:{ja:'キャップとラベルは外して別のゴミとして捨てます。',vi:'Nắp và nhãn phải tháo ra và vứt riêng.',en:'The cap and label must be removed and disposed of separately.'}},
+  {id:'q3',catId:'workplace',question:{ja:'「ほうれんそう」の「ほう」は何の略？',vi:'"Horenso" – "Ho" là viết tắt của gì?',en:'In "Horenso," what does "Ho" stand for?'},choices:{ja:['報告','方法','方向','奉仕'],vi:['Báo cáo (Hōkoku)','Phương pháp','Hướng đi','Phục vụ'],en:['Report (Hōkoku)','Method (Hōhō)','Direction (Hōkō)','Service (Hōshi)']},answer:0,explanation:{ja:'ほうれんそう = 報告・連絡・相談の頭文字です。',vi:'Horenso = Báo cáo・Liên lạc・Tham khảo',en:'Horenso = Report・Contact・Consult — first letters.'}},
+  {id:'q4',catId:'safety',question:{ja:'地震が起きたらまず何をする？',vi:'Động đất xảy ra, làm gì đầu tiên?',en:'Earthquake! What do you do FIRST?'},choices:{ja:['頭を守る','外に逃げる','119番に電話する','窓を開ける'],vi:['Bảo vệ đầu','Chạy ra ngoài','Gọi 119','Mở cửa sổ'],en:['Protect your head','Run outside','Call 119','Open the windows']},answer:0,explanation:{ja:'まず頭を守ること。テーブルの下かクッションで保護しましょう。',vi:'Đầu tiên hãy bảo vệ đầu.',en:'First, protect your head. Get under a table or use a cushion.'}},
+  {id:'q5',catId:'daily',question:{ja:'ゴミは何時までに出す？',vi:'Rác cần đổ trước mấy giờ?',en:'By what time must garbage be put out?'},choices:{ja:['朝8時まで','朝10時まで','前日夜21時まで','いつでもOK'],vi:['Trước 8 giờ sáng','Trước 10 giờ sáng','Tối hôm trước 21 giờ','Bất cứ lúc nào'],en:['By 8:00 AM','By 10:00 AM','By 9 PM the night before','Anytime is fine']},answer:0,explanation:{ja:'ほとんどの地域で朝8時までにゴミを出すルールです。',vi:'Hầu hết các khu vực: trước 8 giờ sáng.',en:'In most areas, garbage must be out by 8:00 AM.'}},
+  // ── Set 2 ──
+  {id:'q6',catId:'greeting',question:{ja:'上司に「ご苦労様です」と言うのはなぜNGか？',vi:'Tại sao không nên nói "Gokurōsama" với cấp trên?',en:'Why is "Gokurōsama" wrong to say to a boss?'},choices:{ja:['目上から目下に使う言葉だから','古い言葉だから','英語だから','意味がないから'],vi:['Đây là từ dùng với cấp dưới','Từ cổ','Từ tiếng Anh','Vô nghĩa'],en:['It\'s used by superiors to subordinates','It\'s an old word','It\'s an English word','It\'s meaningless']},answer:0,explanation:{ja:'「ご苦労様です」は上から下へ使う言葉。上司には「お疲れ様です」が正解です。',vi:'"Gokurōsama" là từ dùng từ trên xuống dưới. Với cấp trên hãy dùng "Otsukaresama".',en:'"Gokurōsama" flows downward (boss→staff). Use "Otsukaresama" with superiors.'}},
+  {id:'q7',catId:'workplace',question:{ja:'有給休暇はいつ申請するのが基本？',vi:'Khi nào nên xin nghỉ phép có lương?',en:'When is the basic rule for applying for paid leave?'},choices:{ja:['当日朝','前日まで','1週間前まで','2週間以上前'],vi:['Sáng hôm đó','Đến hôm trước','Đến 1 tuần trước','Hơn 2 tuần trước'],en:['Morning of the day','By the day before','At least 1 week in advance','2+ weeks in advance']},answer:2,explanation:{ja:'多くの職場で「1週間前まで」が基本ルールです。緊急時は前日でも可能な場合があります。',vi:'Nhiều nơi làm việc yêu cầu xin trước 1 tuần. Khẩn cấp có thể xin hôm trước.',en:'Most workplaces require at least 1 week in advance. Urgent cases may allow the day before.'}},
+  {id:'q8',catId:'garbage',question:{ja:'缶・瓶は捨てる前にどうする？',vi:'Cần làm gì với lon và chai trước khi vứt?',en:'What must you do with cans and bottles before disposing?'},choices:{ja:['中を軽くすすいでキャップを外す','そのまま捨てる','燃えるゴミの袋に入れる','コンビニに持っていく'],vi:['Tráng sơ và tháo nắp','Vứt nguyên','Bỏ vào túi rác hữu cơ','Mang đến cửa hàng tiện lợi'],en:['Rinse lightly and remove caps','Throw as-is','Put in burnable garbage bag','Take to convenience store']},answer:0,explanation:{ja:'缶・瓶は軽くすすいで、キャップを外して「資源ゴミ」の日に出します。',vi:'Lon và chai cần tráng sơ, tháo nắp và bỏ vào ngày "rác tái chế".',en:'Rinse cans/bottles lightly, remove caps, then put out on "resource garbage" day.'}},
+  {id:'q9',catId:'safety',question:{ja:'火事・救急に電話する番号は？',vi:'Số điện thoại gọi khi có hỏa hoạn hoặc cấp cứu?',en:'Which number to call for fire or ambulance?'},choices:{ja:['119','110','118','117'],vi:['119','110','118','117'],en:['119','110','118','117']},answer:0,explanation:{ja:'119番は救急・火事。110番は警察。118番は海上保安庁です。',vi:'119: cứu thương/chữa cháy. 110: cảnh sát. 118: bảo vệ biển.',en:'119 = ambulance/fire. 110 = police. 118 = coast guard.'}},
+  {id:'q10',catId:'daily',question:{ja:'コンビニのコピー機で住民票を取れる条件は？',vi:'Điều kiện để lấy giấy thường trú tại máy photocopy cửa hàng tiện lợi?',en:'What do you need to get a residence certificate at a convenience store?'},choices:{ja:['マイナンバーカードが必要','運転免許証があればOK','パスポートのみ','何も不要'],vi:['Cần thẻ số cá nhân (My Number)','Bằng lái xe là đủ','Chỉ hộ chiếu','Không cần gì'],en:['Need a My Number card','Driver\'s license is enough','Passport only','Nothing needed']},answer:0,explanation:{ja:'マイナンバーカードがあれば全国のコンビニで住民票などを取得できます。',vi:'Có thẻ My Number có thể in giấy tờ hành chính tại cửa hàng tiện lợi trên toàn quốc.',en:'With a My Number card you can obtain residence certificates at convenience stores nationwide.'}},
+  // ── Set 3 ──
+  {id:'q11',catId:'greeting',question:{ja:'初対面で名刺をもらった時、正しい扱い方は？',vi:'Khi nhận danh thiếp lần đầu, cách xử lý đúng là?',en:'When receiving a business card for the first time, what is correct?'},choices:{ja:['両手で受け取り丁寧に見る','すぐ財布にしまう','机の上に置いたまま','メモを書き込む'],vi:['Nhận bằng 2 tay và xem kỹ','Cất ngay vào ví','Để nguyên trên bàn','Ghi chú lên danh thiếp'],en:['Receive with both hands and look carefully','Put it in your wallet immediately','Leave it on the desk','Write notes on it']},answer:0,explanation:{ja:'名刺は両手で受け取り、すぐしまわず相手の名前・役職を確認するのがマナーです。',vi:'Nhận danh thiếp bằng 2 tay, không cất ngay mà xem tên và chức vụ của đối phương.',en:'Receive with both hands. Don\'t pocket it right away — read the name and title respectfully.'}},
+  {id:'q12',catId:'workplace',question:{ja:'「ほうれんそう」の「そう」は何の略？',vi:'"Horenso" – "So" là viết tắt của gì?',en:'In "Horenso," what does "So" stand for?'},choices:{ja:['相談','送別','総合','掃除'],vi:['Tham khảo (Sōdan)','Tiễn biệt','Tổng hợp','Dọn dẹp'],en:['Consult (Sōdan)','Farewell','Comprehensive','Cleaning']},answer:0,explanation:{ja:'ほうれんそう = 報（ほ）告・連（れん）絡・相（そ）談。職場の基本コミュニケーションです。',vi:'Horenso = Báo cáo・Liên lạc・Tham khảo — giao tiếp nền tảng tại nơi làm việc.',en:'Horenso = Report・Contact・Consult — the three pillars of workplace communication.'}},
+  {id:'q13',catId:'garbage',question:{ja:'粗大ゴミを捨てるには？',vi:'Cách vứt đồ gia dụng cỡ lớn?',en:'How do you dispose of large/bulky garbage?'},choices:{ja:['普通のゴミ収集日に出す','市区町村に申し込んで有料シールを貼る','コンビニに持っていく','夜中に出す'],vi:['Bỏ vào ngày thu gom thông thường','Đăng ký với thành phố và dán nhãn có phí','Mang đến cửa hàng tiện lợi','Để ra ban đêm'],en:['Put out on regular garbage day','Apply to city hall and attach paid sticker','Take to convenience store','Put it out at night']},answer:1,explanation:{ja:'粗大ゴミは事前申込が必要。有料の「粗大ゴミ処理券」をスーパー等で購入し貼って出します。',vi:'Rác cỡ lớn cần đăng ký trước. Mua "vé xử lý rác lớn" tại siêu thị, dán vào đồ rồi để ra.',en:'Bulky garbage requires advance registration. Buy a paid sticker at supermarkets and attach it.'}},
+  {id:'q14',catId:'safety',question:{ja:'アパートで火事が起きた時、まずすることは？',vi:'Khi có hỏa hoạn trong căn hộ, làm gì đầu tiên?',en:'Fire in your apartment — what do you do FIRST?'},choices:{ja:['大声で知らせて全員を避難させる','119番に電話する','消火活動をする','窓を全部開ける'],vi:['La lớn để mọi người sơ tán','Gọi 119','Dập lửa','Mở hết cửa sổ'],en:['Shout and ensure everyone evacuates','Call 119','Try to extinguish the fire','Open all windows']},answer:0,explanation:{ja:'まず大声で「火事だ！」と知らせ全員避難。119番は逃げながら、または外に出てからかけます。',vi:'Trước tiên la lớn "Kasai da!" để mọi người sơ tán. Gọi 119 khi chạy thoát hoặc ra ngoài.',en:'First shout "Fire!" to evacuate everyone. Call 119 while escaping or once safely outside.'}},
+  {id:'q15',catId:'daily',question:{ja:'日本で働く外国人が加入する医療保険は？',vi:'Bảo hiểm y tế nào người nước ngoài làm việc ở Nhật tham gia?',en:'Which health insurance must foreign workers in Japan join?'},choices:{ja:['国民健康保険か健康保険（会社員）','民間保険のみ','加入不要','出身国の保険のみ'],vi:['Bảo hiểm y tế quốc gia hoặc bảo hiểm công ty','Chỉ bảo hiểm tư nhân','Không cần tham gia','Chỉ bảo hiểm nước mình'],en:['National Health Insurance or company health insurance','Private insurance only','No insurance needed','Only home country insurance']},answer:0,explanation:{ja:'日本では外国人も国民健康保険（自営・無職）または健康保険（会社員）に加入義務があります。',vi:'Ở Nhật, người nước ngoài cũng có nghĩa vụ tham gia bảo hiểm y tế quốc gia hoặc bảo hiểm công ty.',en:'Foreign nationals in Japan must join either National Health Insurance or company health insurance.'}}
+];
+
+const BADGES=[
+  {id:'b_work',emoji:'💼',name:{ja:'職場マスター',ja_easy:'しごとマスター',vi:'Chuyên gia công sở',en:'Workplace Master'},catId:'workplace'},
+  {id:'b_garb',emoji:'♻️',name:{ja:'ゴミ分別名人',ja_easy:'ゴミ名人',vi:'Bậc thầy phân loại rác',en:'Recycling Expert'},catId:'garbage'},
+  {id:'b_greet',emoji:'🙏',name:{ja:'礼儀の達人',ja_easy:'あいさつ達人',vi:'Chuyên gia phép lịch sự',en:'Etiquette Pro'},catId:'greeting'},
+  {id:'b_safe',emoji:'🛡️',name:{ja:'安全の番人',ja_easy:'あんぜんの番人',vi:'Người bảo vệ an toàn',en:'Safety Guardian'},catId:'safety'},
+  {id:'b_life',emoji:'🏆',name:{ja:'生活エキスパート',ja_easy:'せいかつエキスパート',vi:'Chuyên gia cuộc sống',en:'Life Expert'},catId:'daily'},
+  {id:'b_str7',emoji:'🔥',name:{ja:'7日連続！',ja_easy:'7日(なのか)つづいた！',vi:'7 ngày liên tiếp!',en:'7-Day Streak!'},catId:null}
+];
+
+const LEVELS=[
+  {lv:1,name:{ja:'新人',ja_easy:'新人',vi:'Người mới',en:'Newcomer'},min:0,next:100},
+  {lv:2,name:{ja:'見習い',ja_easy:'見習い',vi:'Học việc',en:'Apprentice'},min:100,next:300},
+  {lv:3,name:{ja:'一人前',ja_easy:'一人前',vi:'Thành thục',en:'Capable'},min:300,next:600},
+  {lv:4,name:{ja:'ベテラン',ja_easy:'ベテラン',vi:'Lão luyện',en:'Veteran'},min:600,next:1000},
+  {lv:5,name:{ja:'エキスパート',ja_easy:'エキスパート',vi:'Chuyên gia',en:'Expert'},min:1000,next:null}
+];
+
+const LANG_META={
+  ja:     {flag:'🇯🇵',name:'日本語',short:'JA'},
+  ja_easy:{flag:'🇯🇵',name:'やさしい日本語',short:'やさしい'},
+  vi:     {flag:'🇻🇳',name:'Tiếng Việt',short:'VI'},
+  km:     {flag:'🇰🇭',name:'ភាសាខ្មែរ',short:'KM'},
+  en:     {flag:'🇺🇸',name:'English',short:'EN'}
+};
+
+// ── I18N ───────────────────────────────────────────────
+const TX={
+  'nav.home':{ja:'ホーム',ja_easy:'ホーム',vi:'Trang chủ',en:'Home',km:'ដើម'},
+  'nav.quiz':{ja:'クイズ',ja_easy:'クイズ',vi:'Quiz',en:'Quiz',km:'Quiz'},
+  'nav.stats':{ja:'成長',ja_easy:'成長',vi:'Tiến độ',en:'Growth',km:'ការលូតលាស់'},
+  'nav.settings':{ja:'設定',ja_easy:'設定',vi:'Cài đặt',en:'Settings',km:'ការកំណត់'},
+  'home.daily':{ja:'今日のレッスン',ja_easy:'今日のレッスン',vi:'Bài học hôm nay',en:"Today's Lesson",km:'មេរៀនថ្ងៃនេះ'},
+  'home.start':{ja:'始める',ja_easy:'始める',vi:'Bắt đầu',en:'Start',km:'ចាប់'},
+  'home.cats':{ja:'カテゴリ',ja_easy:'カテゴリ',vi:'Danh mục',en:'Categories',km:'ប្រភេទ'},
+  'home.search':{ja:'キーワードで検索...',ja_easy:'けんさく...',vi:'Tìm kiếm...',en:'Search...',km:'ស្វែងរក...'},
+  'item.native':{ja:'あなたの言語',ja_easy:'やさしい日本語',vi:'Ngôn ngữ của bạn',en:'Your Language',km:'ភាសា'},
+  'item.ja':{ja:'日本語',ja_easy:'標準語',vi:'Tiếng Nhật',en:'Japanese',km:'ភាសាជប៉ុន'},
+  'item.tip':{ja:'ポイント',ja_easy:'ポイント',vi:'Lưu ý',en:'Key Tip',km:'គន្លឹះ'},
+  'item.done':{ja:'読んだ！ +10pt',ja_easy:'読んだ！ +10pt',vi:'Đã đọc! +10pt',en:'Got it! +10pt',km:'យល់! +10pt'},
+  'item.next':{ja:'次のレッスンへ',ja_easy:'次のレッスンへ',vi:'Bài tiếp theo →',en:'Next Lesson →',km:'មេរៀនបន្ទាប់ →'},
+  'item.back':{ja:'カテゴリへ戻る',ja_easy:'一覧へ戻る',vi:'Quay lại',en:'Back to Category',km:'ត្រលប់'},
+  'item.allcat':{ja:'カテゴリ完了！',ja_easy:'全部できた！',vi:'Hoàn thành!',en:'Category Complete!',km:'បញ្ចប់!'},
+  'item.share':{ja:'シェアする',ja_easy:'シェアする',vi:'Chia sẻ',en:'Share',km:'ចែករំលែក'},
+  'share.copied':{ja:'コピーしました！',ja_easy:'コピーしました！',vi:'Đã sao chép!',en:'Copied!',km:'បានចម្លង!'},
+  'comp.pt':{ja:'+10pt 獲得！',ja_easy:'+10pt もらった！',vi:'+10pt đạt được!',en:'+10pt Earned!',km:'+10pt!'},
+  'comp.badge':{ja:'バッジゲット！',ja_easy:'バッジゲット！',vi:'Nhận huy hiệu!',en:'Badge Earned!',km:'ផ្លាក!'},
+  'comp.hint1':{ja:'あと1つでバッジ！',ja_easy:'あと1つでバッジ！',vi:'Còn 1 nữa là huy hiệu!',en:'1 more for a badge!',km:'1ទៀតរួច!'},
+  'items.of':{ja:'/',ja_easy:'/',vi:'/',en:'/',km:'/'},
+  'quiz.next':{ja:'次の問題 →',ja_easy:'次の問題 →',vi:'Câu tiếp →',en:'Next →',km:'បន្ទាប់ →'},
+  'quiz.result':{ja:'結果を見る',ja_easy:'結果を見る',vi:'Xem kết quả',en:'See Results',km:'មើលលទ្ធផល'},
+  'quiz.retry':{ja:'もう一度チャレンジ',ja_easy:'もう一度',vi:'Thử lại',en:'Try Again',km:'សាកម្ដងទៀត'},
+  'quiz.home':{ja:'ホームへ戻る',ja_easy:'ホームへ',vi:'Về trang chủ',en:'Back to Home',km:'ត្រលប់'},
+  'quiz.great':{ja:'素晴らしい！',ja_easy:'すごい！',vi:'Tuyệt vời!',en:'Excellent!',km:'អស្ចារ្យ!'},
+  'quiz.good':{ja:'よくできました！',ja_easy:'よくできました！',vi:'Làm tốt!',en:'Well done!',km:'ល្អ!'},
+  'quiz.keep':{ja:'もっと学ぼう！',ja_easy:'もっと学ぼう！',vi:'Hãy học thêm!',en:'Keep learning!',km:'រៀនបន្ថែម!'},
+  'quiz.score':{ja:'問正解',ja_easy:'問せいかい',vi:'câu đúng',en:'correct',km:'ត្រូវ'},
+  'stats.lv':{ja:'レベル',ja_easy:'レベル',vi:'Cấp độ',en:'Level',km:'កម្រិត'},
+  'stats.pts':{ja:'ポイント',ja_easy:'ポイント',vi:'Điểm',en:'Points',km:'ពិន្ទុ'},
+  'stats.read':{ja:'読んだ数',ja_easy:'読んだ数',vi:'Đã đọc',en:'Lessons Read',km:'អានហើយ'},
+  'stats.acc':{ja:'クイズ正解率',ja_easy:'クイズ正解率',vi:'Tỉ lệ đúng',en:'Quiz Accuracy',km:'ភាពត្រឹមត្រូវ'},
+  'stats.streak':{ja:'連続日数',ja_easy:'つづいた日',vi:'Ngày liên tiếp',en:'Day Streak',km:'ថ្ងៃ'},
+  'stats.badges':{ja:'バッジ',ja_easy:'バッジ',vi:'Huy hiệu',en:'Badges',km:'ផ្លាក'},
+  'stats.nxtlv':{ja:'次のレベルまで',ja_easy:'次のレベルまで',vi:'Lên cấp tiếp',en:'To next level',km:'ទៅកម្រិតបន្ទាប់'},
+  'set.lang':{ja:'言語',ja_easy:'言語',vi:'Ngôn ngữ',en:'Language',km:'ភាសា'},
+  'set.notif':{ja:'通知',ja_easy:'通知',vi:'Thông báo',en:'Notifications',km:'ការជូនដំណឹង'},
+  'set.notif_on':{ja:'毎日通知を受け取る',ja_easy:'毎日通知をもらう',vi:'Nhận thông báo mỗi ngày',en:'Receive daily reminder',km:'ជូនដំណឹងប្រចាំថ្ងៃ'},
+  'set.notif_time':{ja:'通知時間',ja_easy:'通知時間',vi:'Giờ thông báo',en:'Notification time',km:'ម៉ោងជូនដំណឹង'},
+  'set.job':{ja:'職種',ja_easy:'仕事の種類',vi:'Nghề nghiệp',en:'Job Type',km:'ប្រភេទការងារ'},
+  'set.reset':{ja:'進捗をリセット',ja_easy:'進捗をリセット',vi:'Đặt lại tiến độ',en:'Reset Progress',km:'កំណត់ឡើងវិញ'},
+  'set.dual':{ja:'日本語と母国語を両方表示',ja_easy:'日本語と母国語を両方見る',vi:'Hiện cả tiếng Nhật và tiếng mẹ đẻ',en:'Show both Japanese and native language',km:'បង្ហាញទាំងភាសាជប៉ុននិងភាសាមេ'},
+  'onb.step':{ja:'STEP 2 / 2',ja_easy:'STEP 2 / 2',vi:'BƯỚC 2 / 2',en:'STEP 2 / 2',km:'ជំហាន 2/2'},
+  'onb.title':{ja:'あなたの職種は？',ja_easy:'あなたの仕事は？',vi:'Nghề nghiệp của bạn?',en:'What is your job type?',km:'តើការងាររបស់អ្នក?'},
+  'onb.sub':{ja:'職種に合ったコンテンツを優先表示します',ja_easy:'あなたの仕事に合った内容を先に表示します',vi:'Nội dung phù hợp với nghề của bạn',en:'Content relevant to your job first',km:'មាតិកាសម្រាប់ការងាររបស់អ្នក'},
+  'onb.btn':{ja:'始める →',ja_easy:'始める →',vi:'Bắt đầu →',en:'Get Started →',km:'ចាប់ផ្តើម →'},
+  'search.none':{ja:'見つかりませんでした',ja_easy:'見つかりませんでした',vi:'Không tìm thấy',en:'No results found',km:'រកមិនឃើញ'},
+  'notif.body':{ja:'今日のレッスンを始めよう！',ja_easy:'今日のレッスンを始めよう！',vi:'Hãy bắt đầu bài học hôm nay!',en:'Time for today\'s lesson!',km:'ចាប់ផ្តើមមេរៀនថ្ងៃនេះ!'},
+};
+function t(k){return(TX[k]&&(TX[k][S.lang]||TX[k].en))||k;}
+function tc(o){if(!o)return'';if(S.lang==='ja_easy')return o.ja_easy||o.ja||o.en||'';return o[S.lang]||o.en||'';}
+function tc_arr(a){if(S.lang==='ja_easy')return a.ja_easy||a.ja||a.en||[];return a[S.lang]||a.en||[];}
+
+// ── STATE ─────────────────────────────────────────────
+let S=load();
+let quizOrders={};
+function getQuizOrder(qi){
+  if(!quizOrders[qi]){
+    const n=QUIZZES[qi]?tc_arr(QUIZZES[qi].choices).length:4;
+    quizOrders[qi]=Array.from({length:n},(_,i)=>i).sort(()=>Math.random()-.5);
+  }
+  return quizOrders[qi];
+}
+function load(){
+  const def={screen:'language',lang:'ja',jobType:null,tab:'home',catId:null,itemId:null,
+    progress:{},streak:0,lastVisit:null,points:0,badges:[],
+    quizIdx:0,quizAns:[],quizHistory:[],quizSetStart:0,catFilter:'all',
+    searchQ:'',notifEnabled:false,notifTime:'09:00',lastNotif:null,
+    firstUse:new Date().toDateString(),dualLang:true};
+  try{const d=localStorage.getItem('jl2');if(d)return Object.assign(def,JSON.parse(d));}catch(e){}
+  return def;
+}
+function save(){try{localStorage.setItem('jl2',JSON.stringify(S));}catch(e){}}
+
+// ── HELPERS ───────────────────────────────────────────
+function getDone(cid){const c=CATS.find(x=>x.id===cid);return c?c.items.filter(i=>S.progress[i.id]).length:0;}
+function getPct(cid){const c=CATS.find(x=>x.id===cid);return(c&&c.items.length)?getDone(cid)/c.items.length:0;}
+function getLevel(){for(let i=LEVELS.length-1;i>=0;i--)if(S.points>=LEVELS[i].min)return LEVELS[i];return LEVELS[0];}
+function getNextItem(cid,iid){const c=CATS.find(x=>x.id===cid);if(!c)return null;const i=c.items.findIndex(x=>x.id===iid);return(i>=0&&i<c.items.length-1)?c.items[i+1]:null;}
+function getDailyItem(){
+  const all=CATS.flatMap(c=>c.items.map(i=>({...i,catId:c.id})));
+  const unread=all.filter(i=>!S.progress[i.id]);
+  if(unread.length)return unread[0];
+  return all[Math.floor(Date.now()/86400000)%all.length];
+}
+function totalItems(){return CATS.reduce((a,c)=>a+c.items.length,0);}
+function doneItems(){return CATS.reduce((a,c)=>a+getDone(c.id),0);}
+function quizAcc(){const h=S.quizHistory;if(!h.length)return null;const tot=h.reduce((a,x)=>a+x.total,0);const cor=h.reduce((a,x)=>a+x.correct,0);return tot?Math.round(cor/tot*100):null;}
+function checkBadges(){
+  BADGES.forEach(b=>{
+    if(S.badges.includes(b.id))return;
+    if(b.catId&&getPct(b.catId)>=1){S.badges.push(b.id);S.points+=50;}
+    if(b.id==='b_str7'&&S.streak>=7){S.badges.push(b.id);S.points+=100;}
+  });
+}
+function updateStreak(){
+  const today=new Date().toDateString();
+  if(S.lastVisit===today)return;
+  const y=new Date();y.setDate(y.getDate()-1);
+  S.streak=(S.lastVisit===y.toDateString())?S.streak+1:1;
+  S.lastVisit=today;
+}
+function srch(q){
+  if(!q.trim())return[];
+  const lo=q.toLowerCase();
+  return CATS.flatMap(c=>c.items.filter(i=>tc(i.titles).toLowerCase().includes(lo)||tc(i.body).toLowerCase().includes(lo)).map(i=>({...i,catId:c.id,catName:tc(c.titles)})));
+}
+function showToast(msg){
+  const el=document.createElement('div');el.className='toast';el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(()=>{el.classList.add('hide');setTimeout(()=>el.remove(),400);},2000);
+}
+async function shareItem(item,cat){
+  const ja=item.titles.ja;
+  const nativeTip=tc(item.tip);
+  const jaTip=item.tip.ja;
+  let text=`📚 JapanLife｜${ja}\n\n`;
+  if(S.lang!=='ja')text+=`${nativeTip}\n`;
+  text+=`💡 ${jaTip}\n\n#JapanLife #技能実習生 #TOMOSUMA`;
+  try{
+    if(navigator.share)await navigator.share({title:`JapanLife｜${ja}`,text});
+    else{await navigator.clipboard.writeText(text);showToast(t('share.copied'));}
+  }catch(e){try{await navigator.clipboard.writeText(text);showToast(t('share.copied'));}catch(e2){}}
+}
+function checkNotif(){
+  if(!S.notifEnabled||!S.notifTime)return;
+  if(!('Notification'in window)||Notification.permission!=='granted')return;
+  const now=new Date();
+  const [h,m]=S.notifTime.split(':').map(Number);
+  const today=now.toDateString();
+  if(S.lastNotif===today)return;
+  if(now.getHours()===h&&now.getMinutes()===m){
+    S.lastNotif=today;save();
+    const d=getDailyItem();
+    new Notification('JapanLife',{body:tc(d.titles)+' — '+t('notif.body')});
+  }
+}
+async function enableNotif(){
+  if(!('Notification'in window)){showToast('この端末は非対応です');return;}
+  const p=await Notification.requestPermission();
+  if(p==='granted'){S.notifEnabled=true;save();render();}
+  else{showToast('通知が許可されていません');}
+}
+
+// ── ICONS ─────────────────────────────────────────────
+const I={
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>',
+  share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>',
+  chevron:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+};
+
+// ── RENDER ────────────────────────────────────────────
+function render(){
+  const nav=document.getElementById('nav');
+  const showNav=['home','search','category','item','quiz','stats','settings'].includes(S.screen);
+  nav.classList.toggle('on',showNav&&S.screen!=='language'&&S.screen!=='jobtype');
+  document.querySelectorAll('.ni').forEach(el=>el.classList.toggle('active',el.dataset.nav===S.tab));
+  ['home','quiz','stats','settings'].forEach(k=>{const el=document.getElementById('nl-'+k);if(el)el.textContent=t('nav.'+k);});
+  document.getElementById('screen').innerHTML=renderScreen();
+  bindInputs();
+}
+function renderScreen(){
+  switch(S.screen){
+    case 'language': return rLang();
+    case 'jobtype':  return rJob();
+    case 'home':     return rHome();
+    case 'search':   return rSearch();
+    case 'category': return rCat();
+    case 'item':     return rItem();
+    case 'quiz': {const ss=S.quizSetStart||0;const sz=Math.min(5,QUIZZES.length-ss);return S.quizAns.length===sz?rQuizRes():rQuiz();}
+    case 'stats':    return rStats();
+    case 'settings': return rSettings();
+    default:         return rHome();
+  }
+}
+
+function rLang(){
+  const langs=[
+    {code:'ja',flag:'🇯🇵',name:'日本語',native:'Japanese'},
+    {code:'ja_easy',flag:'🇯🇵',name:'やさしい日本語',native:'かんたんな にほんご',easy:true},
+    {code:'vi',flag:'🇻🇳',name:'Tiếng Việt',native:'Vietnamese'},
+    {code:'km',flag:'🇰🇭',name:'ភាសាខ្មែរ',native:'Khmer'},
+    {code:'en',flag:'🇺🇸',name:'English',native:'English'},
+  ];
+  return`<div class="ls">
+    <div class="ls-logo">JapanLife</div>
+    <div class="ls-tag">トモスマ × 技能実習生向けガイド\n日本での生活をサポートします</div>
+    ${langs.map(l=>`<button class="lb" data-a="setLang" data-v="${l.code}">
+      <span class="lb-flag">${l.flag}</span>
+      <div style="flex:1"><div class="lb-name">${l.name}</div><div class="lb-native">${l.native}</div></div>
+      ${l.easy?'<span class="lb-tag">やさしい</span>':''}
+    </button>`).join('')}
+  </div>`;
+}
+
+function rJob(){
+  const jobs=[
+    {id:'factory',emoji:'🏭',name:{ja:'製造・工場',ja_easy:'製造・工場',vi:'Sản xuất',en:'Factory'}},
+    {id:'agri',emoji:'🌾',name:{ja:'農業・漁業',ja_easy:'農業・漁業',vi:'Nông/Ngư nghiệp',en:'Agriculture'}},
+    {id:'construction',emoji:'🔨',name:{ja:'建設',ja_easy:'建設',vi:'Xây dựng',en:'Construction'}},
+    {id:'care',emoji:'❤️',name:{ja:'介護',ja_easy:'介護',vi:'Điều dưỡng',en:'Caregiving'}},
+    {id:'food',emoji:'🍱',name:{ja:'飲食',ja_easy:'飲食',vi:'Ẩm thực',en:'Food Service'}},
+    {id:'other',emoji:'💼',name:{ja:'その他',ja_easy:'その他',vi:'Khác',en:'Other'}},
+  ];
+  return`<div class="ob">
+    <div class="ob-step">${t('onb.step')}</div>
+    <div class="ob-ttl">${t('onb.title')}</div>
+    <div class="ob-sub">${t('onb.sub')}</div>
+    <div class="job-grid">
+      ${jobs.map(j=>`<div class="jc${S.jobType===j.id?' sel':''}" data-a="selJob" data-v="${j.id}">
+        <div class="jc-e">${j.emoji}</div><div class="jc-n">${tc(j.name)}</div>
+      </div>`).join('')}
+    </div>
+    <button class="btn-p" data-a="startApp"${!S.jobType?' disabled':''}>${t('onb.btn')}</button>
+  </div>`;
+}
+
+function rHome(){
+  const daily=getDailyItem();
+  const dailyCat=CATS.find(c=>c.items.some(i=>i.id===daily.id));
+  const lm=LANG_META[S.lang]||LANG_META.en;
+  return`
+    <div class="hh">
+      <div class="hlogo">Japan<span>Life</span></div>
+      <div class="hright">
+        <div class="streak-pill">🔥 ${S.streak}</div>
+        <button class="lang-pill" data-a="goSettings">
+          <span class="lang-pill-flag">${lm.flag}</span>
+          <span>${lm.short}</span>
+          ${I.chevron}
+        </button>
+      </div>
+    </div>
+    <div class="hcont">
+      <div class="sec-ttl">${t('home.daily')}</div>
+      <div class="daily" data-a="goItem" data-cat="${daily.catId}" data-item="${daily.id}">
+        <div class="daily-lbl">${t('home.daily')}</div>
+        <div class="daily-ttl">${tc(daily.titles)}</div>
+        <div class="daily-sub">${dailyCat?tc(dailyCat.titles):''}</div>
+        <div class="daily-btn">${t('home.start')} →</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div class="sec-ttl" style="margin-bottom:0">${t('home.cats')}</div>
+        <button class="search-icon-btn" data-a="goSearch">${I.search}</button>
+      </div>
+      <div class="filter-row">
+        <button class="fchip${(S.catFilter||'all')==='all'?' active':''}" data-a="setFilter" data-v="all">全て</button>
+        <button class="fchip${(S.catFilter||'all')==='unread'?' active':''}" data-a="setFilter" data-v="unread">未読</button>
+        <button class="fchip${(S.catFilter||'all')==='done'?' active':''}" data-a="setFilter" data-v="done">完了</button>
+      </div>
+      <div class="cat-list">
+        ${CATS.filter(c=>{const f=S.catFilter||'all';if(f==='unread')return getDone(c.id)<c.items.length;if(f==='done')return getPct(c.id)>=1;return true;}).map(c=>{const pct=getPct(c.id);return`<div class="cc" data-a="goCat" data-v="${c.id}">
+          <div class="cc-icon">${c.emoji}</div>
+          <div class="cc-body">
+            <div class="cc-name">${tc(c.titles)}</div>
+            <div class="cc-row">
+              <div class="prog-bar"><div class="prog-fill" style="width:${pct*100}%"></div></div>
+              <span class="cc-cnt">${getDone(c.id)}/${c.items.length}</span>
+            </div>
+          </div>
+          <span class="cc-arr">${I.arrow}</span>
+        </div>`;}).join('')}
+      </div>
+    </div>`;
+}
+
+function rSearch(){
+  const res=srch(S.searchQ);
+  return`<div class="sw">
+    <div class="si-wrap">${I.search}<input class="si" id="si" type="text" placeholder="${t('home.search')}" value="${S.searchQ}" autocomplete="off"></div>
+    ${S.searchQ?(res.length?res.map(i=>`
+      <div class="sr" data-a="goItem" data-cat="${i.catId}" data-item="${i.id}">
+        <div><div class="ic-ttl">${tc(i.titles)}</div><span class="sr-tag">${i.catName}</span></div>${I.arrow}
+      </div>`).join(''):`<div class="no-res">${t('search.none')}</div>`):''}
+  </div>`;
+}
+
+function rCat(){
+  const c=CATS.find(x=>x.id===S.catId);if(!c)return'';
+  return`
+    <div class="sh"><button class="back" data-a="back">${I.back}</button><span class="sh-ttl">${c.emoji} ${tc(c.titles)}</span></div>
+    <div class="il">
+      ${c.items.map(i=>{const d=S.progress[i.id];return`
+        <div class="ic" data-a="goItem" data-cat="${c.id}" data-item="${i.id}">
+          <div class="ic-dot${d?' done':''}">${d?I.check:''}</div>
+          <div style="flex:1"><div class="ic-ttl">${tc(i.titles)}</div></div>
+          <div class="ic-arr">${I.arrow}</div>
+        </div>`;}).join('')}
+    </div>`;
+}
+
+function rItem(){
+  const cat=CATS.find(x=>x.id===S.catId);
+  const item=cat&&cat.items.find(x=>x.id===S.itemId);
+  if(!item)return'';
+  const done=S.progress[item.id];
+  const isJa=S.lang==='ja'||S.lang==='ja_easy';
+  const showDual=S.dualLang&&!isJa;
+  const showEasyDual=S.dualLang&&S.lang==='ja_easy';
+  const nextItem=getNextItem(S.catId,item.id);
+  const catDone=getDone(S.catId);
+  const catTotal=cat.items.length;
+  const catComplete=catDone>=catTotal;
+  const badgeForCat=BADGES.find(b=>b.catId===S.catId);
+  const rem=catTotal-catDone;
+
+  // content blocks
+  let blocks='';
+  if(showDual){
+    blocks=`
+      <div class="cb"><div class="cb-lbl">${t('item.native')}</div><div class="cb-txt">${tc(item.body)}</div></div>
+      <div class="cb"><div class="cb-lbl">${t('item.ja')}</div><div class="cb-txt">${item.body.ja}</div></div>`;
+  }else if(showEasyDual){
+    blocks=`
+      <div class="cb"><div class="cb-lbl">${t('item.native')}</div><div class="cb-txt">${tc(item.body)}</div></div>
+      <div class="cb"><div class="cb-lbl">${t('item.ja')}</div><div class="cb-txt">${item.body.ja}</div></div>`;
+  }else{
+    blocks=`<div class="cb"><div class="cb-lbl">${isJa?t('item.ja'):t('item.native')}</div><div class="cb-txt">${tc(item.body)}</div></div>`;
+  }
+
+  // tip
+  const tipBlock=`<div class="tip"><div class="tip-lbl">💡 ${t('item.tip')}</div><div class="tip-txt">${tc(item.tip)}</div></div>`;
+
+  // action
+  let action='';
+  if(!done){
+    action=`<button class="done-btn" data-a="markDone" data-v="${item.id}">${t('item.done')}</button>`;
+  }else{
+    const badgeRow=catComplete&&badgeForCat
+      ?`<div class="comp-badge">${t('comp.badge')} ${cat.emoji}</div>`
+      :rem===1?`<div class="comp-hint">${t('comp.hint1')}</div>`:'';
+    action=`
+      <div class="comp">
+        <div class="comp-circle">${I.check}</div>
+        <div class="comp-pts">${t('comp.pt')}</div>
+        <div class="comp-stat">${catDone} / ${catTotal} 完了</div>
+        ${badgeRow}
+      </div>
+      ${nextItem
+        ?`<button class="btn-p" data-a="goNextItem" data-cat="${S.catId}" data-item="${nextItem.id}">${t('item.next')}</button>`
+        :`<button class="btn-p" data-a="back">${catComplete?t('item.allcat'):t('item.back')}</button>`}
+      ${nextItem?`<span class="back-link" data-a="back">${t('item.back')}</span>`:''}`;
+  }
+
+  return`
+    <div class="sh">
+      <button class="back" data-a="back">${I.back}</button>
+      <span class="sh-ttl">${tc(item.titles)}</span>
+      <button class="share-btn" data-a="shareItem" data-cat="${S.catId}" data-item="${item.id}">${I.share}</button>
+    </div>
+    <div class="id">${blocks}${tipBlock}${action}</div>`;
+}
+
+function rQuiz(){
+  const ss=S.quizSetStart||0;
+  const sz=Math.min(5,QUIZZES.length-ss);
+  const pos=S.quizIdx-ss;
+  const q=QUIZZES[S.quizIdx];
+  const pct=pos/sz*100;
+  const setNum=Math.floor(ss/5)+1;
+  const totalSets=Math.ceil(QUIZZES.length/5);
+  return`
+    <div class="sh"><button class="back" data-a="goHome">${I.back}</button><span class="sh-ttl">Quiz ${pos+1}/${sz}${totalSets>1?' · Set '+setNum+'/'+totalSets:''}</span></div>
+    <div class="qz">
+      <div class="qz-prog"><div class="qz-fill" style="width:${pct}%"></div></div>
+      <div class="qz-num">Q${pos+1} / ${sz}</div>
+      <div class="qz-q">${tc(q.question)}</div>
+      <div class="qz-choices">
+        ${(()=>{const order=getQuizOrder(S.quizIdx);const choices=tc_arr(q.choices);return order.map(origIdx=>`<button class="qz-c" data-a="answer" data-qi="${S.quizIdx}" data-ci="${origIdx}">${choices[origIdx]}</button>`).join('');})()}
+      </div>
+    </div>`;
+}
+
+function rQuizRes(){
+  const ss=S.quizSetStart||0;
+  const sz=Math.min(5,QUIZZES.length-ss);
+  const cor=S.quizAns.filter(a=>a.ok).length;
+  const p=cor/sz;
+  const hasMore=ss+sz<QUIZZES.length;
+  return`<div class="qz-res">
+    <div style="font-size:56px;margin-bottom:14px">${p>=.8?'🎉':p>=.6?'👍':'📚'}</div>
+    <div class="qz-res-ttl">${p>=.8?t('quiz.great'):p>=.6?t('quiz.good'):t('quiz.keep')}</div>
+    <div class="qz-res-score">${cor}/${sz}</div>
+    <div class="qz-res-sub">${t('quiz.score')}</div>
+    ${hasMore?`<button class="btn-p" data-a="nextQuizSet">次の5問へ →</button>`:''}
+    <button class="${hasMore?'btn-s':'btn-p'}" data-a="retryQuiz">${t('quiz.retry')}</button>
+    <button class="btn-s" data-a="goHome">${t('quiz.home')}</button>
+  </div>`;
+}
+
+function rStats(){
+  const lv=getLevel();
+  const xpMin=lv.min;
+  const xpNext=lv.next;
+  const xpPct=xpNext?Math.min((S.points-xpMin)/(xpNext-xpMin)*100,100):100;
+  const acc=quizAcc();
+  return`<div class="stats-wrap">
+    <div class="lv-card">
+      <div class="lv-row">
+        <div class="lv-badge">LV.${lv.lv}</div>
+        <div style="text-align:right">
+          <div class="lv-name">${tc(lv.name)}</div>
+          <div class="lv-pts">${S.points} pt</div>
+        </div>
+      </div>
+      <div class="xp-track"><div class="xp-fill" style="width:${xpPct}%"></div></div>
+      <div class="xp-label">${xpNext?`${t('stats.nxtlv')} ${xpNext-S.points}pt`:'MAX LEVEL'}</div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-cell">
+        <div class="stat-cell-lbl">${t('stats.read')}</div>
+        <div class="stat-cell-val">${doneItems()}<span class="stat-cell-unit"> / ${totalItems()}</span></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-cell-lbl">${t('stats.acc')}</div>
+        <div class="stat-cell-val">${acc!==null?acc+'%':'—'}</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-cell-lbl">${t('stats.streak')}</div>
+        <div class="stat-cell-val">${S.streak}<span class="stat-cell-unit"> 日</span></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-cell-lbl">${t('stats.badges')}</div>
+        <div class="stat-cell-val">${S.badges.length}<span class="stat-cell-unit"> / ${BADGES.length}</span></div>
+      </div>
+    </div>
+    <div class="badge-ttl">${t('stats.badges')}</div>
+    <div class="badge-grid">
+      ${BADGES.map(b=>`<div class="bi${S.badges.includes(b.id)?' earned':''}">
+        <div class="bi-e">${b.emoji}</div><div class="bi-n">${tc(b.name)}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function rSettings(){
+  const langs=[
+    {code:'ja',flag:'🇯🇵',name:'日本語'},
+    {code:'ja_easy',flag:'🇯🇵',name:'やさしい日本語'},
+    {code:'vi',flag:'🇻🇳',name:'Tiếng Việt'},
+    {code:'km',flag:'🇰🇭',name:'ភាសាខ្មែរ'},
+    {code:'en',flag:'🇺🇸',name:'English'},
+  ];
+  const jobs=[
+    {id:'factory',emoji:'🏭',name:{ja:'製造・工場',vi:'Sản xuất',en:'Factory'}},
+    {id:'agri',emoji:'🌾',name:{ja:'農業・漁業',vi:'Nông/Ngư nghiệp',en:'Agriculture'}},
+    {id:'construction',emoji:'🔨',name:{ja:'建設',vi:'Xây dựng',en:'Construction'}},
+    {id:'care',emoji:'❤️',name:{ja:'介護',vi:'Điều dưỡng',en:'Caregiving'}},
+    {id:'food',emoji:'🍱',name:{ja:'飲食',vi:'Ẩm thực',en:'Food Service'}},
+    {id:'other',emoji:'💼',name:{ja:'その他',vi:'Khác',en:'Other'}},
+  ];
+  return`<div class="set-wrap">
+    <div class="sec-ttl" style="margin-bottom:16px">設定</div>
+
+    <div class="set-sec">
+      <div class="set-sec-ttl">${t('set.lang')}</div>
+      <div class="set-lang-grid">
+        ${langs.map(l=>`<div class="slb${S.lang===l.code?' sel':''}" data-a="setLang" data-v="${l.code}" data-stay="1">
+          <span class="slb-flag">${l.flag}</span>
+          <span class="slb-name">${l.name}</span>
+          ${S.lang===l.code?`<span class="slb-check">${I.check}</span>`:''}
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <div class="set-sec-ttl">${t('set.dual')}</div>
+      <div class="set-row">
+        <div><div class="set-row-lbl">${t('set.dual')}</div><div class="set-row-sub">日本語と母国語を同時表示</div></div>
+        <div class="toggle${S.dualLang?' on':''}" data-a="toggleDual"></div>
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <div class="set-sec-ttl">${t('set.notif')}</div>
+      <div class="set-row">
+        <div><div class="set-row-lbl">${t('set.notif_on')}</div></div>
+        <div class="toggle${S.notifEnabled?' on':''}" data-a="toggleNotif"></div>
+      </div>
+      ${S.notifEnabled?`<div class="set-row">
+        <div class="set-row-lbl">${t('set.notif_time')}</div>
+        <input class="time-input" id="notif-time" type="time" value="${S.notifTime}">
+      </div>`:''}
+    </div>
+
+    <div class="set-sec">
+      <div class="set-sec-ttl">${t('set.job')}</div>
+      <div class="job-grid">
+        ${jobs.map(j=>`<div class="jc${S.jobType===j.id?' sel':''}" data-a="selJob" data-v="${j.id}" data-stay="1">
+          <div class="jc-e">${j.emoji}</div><div class="jc-n">${tc(j.name)}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <div class="set-sec-ttl">データ</div>
+      <button class="btn-danger" data-a="resetProgress">${t('set.reset')}</button>
+    </div>
+  </div>`;
+}
+
+// ── EVENTS ────────────────────────────────────────────
+function bindInputs(){
+  const inp=document.getElementById('si');
+  if(inp){inp.addEventListener('input',e=>{S.searchQ=e.target.value;document.getElementById('screen').innerHTML=renderScreen();bindInputs();});inp.focus();}
+  const nt=document.getElementById('notif-time');
+  if(nt){nt.addEventListener('change',e=>{S.notifTime=e.target.value;save();});}
+}
+
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-a]');if(!el)return;
+  const a=el.dataset.a,v=el.dataset.v;
+
+  if(a==='setLang'){
+    S.lang=v;
+    if(!el.dataset.stay){S.screen='jobtype';}
+    save();render();
+  }
+  if(a==='selJob'){
+    S.jobType=v;
+    if(!el.dataset.stay){
+      document.querySelectorAll('.jc').forEach(c=>c.classList.toggle('sel',c.dataset.v===v));
+      const btn=document.querySelector('[data-a="startApp"]');if(btn)btn.disabled=false;
+    }else{save();render();}
+  }
+  if(a==='startApp'&&S.jobType){updateStreak();S.screen='home';S.tab='home';save();render();}
+  if(a==='goSearch'){S.screen='search';save();render();}
+  if(a==='goCat'){S.catId=v;S.screen='category';save();render();}
+  if(a==='goItem'){S.catId=el.dataset.cat;S.itemId=el.dataset.item;S.screen='item';save();render();}
+  if(a==='goNextItem'){S.catId=el.dataset.cat;S.itemId=el.dataset.item;save();render();}
+  if(a==='goHome'){S.screen='home';S.tab='home';S.quizIdx=0;S.quizAns=[];S.quizSetStart=0;save();render();}
+  if(a==='goSettings'){S.screen='settings';S.tab='settings';save();render();}
+  if(a==='back'){
+    if(S.screen==='item')S.screen='category';
+    else if(S.screen==='category'){S.screen='home';S.tab='home';}
+    else{S.screen='home';S.tab='home';}
+    save();render();
+  }
+  if(a==='markDone'){
+    if(!S.progress[v]){S.progress[v]=true;S.points+=10;checkBadges();save();render();}
+  }
+  if(a==='shareItem'){
+    const cat=CATS.find(x=>x.id===el.dataset.cat);
+    const item=cat&&cat.items.find(x=>x.id===el.dataset.item);
+    if(item)shareItem(item,cat);
+  }
+  if(a==='answer'){
+    const qi=parseInt(el.dataset.qi),ci=parseInt(el.dataset.ci);
+    const q=QUIZZES[qi];const ok=ci===q.answer;
+    document.querySelectorAll('.qz-c').forEach(c=>{const origIdx=parseInt(c.dataset.ci);c.disabled=true;if(origIdx===q.answer)c.classList.add('correct');else if(origIdx===ci&&!ok)c.classList.add('wrong');});
+    S.quizAns.push({qi,ci,ok});if(ok)S.points+=20;save();
+    const exp=document.createElement('div');exp.className='qz-exp';exp.textContent=tc(q.explanation);
+    document.querySelector('.qz-choices').after(exp);
+    if(!ok&&q.catId){const cat=CATS.find(c=>c.id===q.catId);if(cat){const hint=document.createElement('div');hint.className='qz-review';hint.textContent='📚 復習: '+tc(cat.titles)+' カテゴリを確認しよう';exp.after(hint);}}
+    const ss=S.quizSetStart||0;const sz=Math.min(5,QUIZZES.length-ss);
+    const btn=document.createElement('button');btn.className='btn-p';btn.style.marginTop='14px';
+    btn.textContent=S.quizAns.length===sz?t('quiz.result'):t('quiz.next');
+    btn.setAttribute('data-a','nextQ');
+    const hintEl=document.querySelector('.qz-review');hintEl?hintEl.after(btn):exp.after(btn);
+  }
+  if(a==='nextQ'){S.quizIdx=Math.min(S.quizIdx+1,QUIZZES.length-1);save();render();}
+  if(a==='nextQuizSet'){
+    const ss=S.quizSetStart||0;const sz=Math.min(5,QUIZZES.length-ss);
+    const cor=S.quizAns.filter(x=>x.ok).length;
+    S.quizHistory.push({date:new Date().toDateString(),correct:cor,total:sz});
+    S.quizSetStart=ss+sz;S.quizIdx=ss+sz;S.quizAns=[];quizOrders={};save();render();
+  }
+  if(a==='retryQuiz'){
+    const ss=S.quizSetStart||0;const sz=Math.min(5,QUIZZES.length-ss);
+    const cor=S.quizAns.filter(x=>x.ok).length;
+    S.quizHistory.push({date:new Date().toDateString(),correct:cor,total:sz});
+    S.quizIdx=ss;S.quizAns=[];quizOrders={};save();render();
+  }
+  if(a==='setFilter'){S.catFilter=v;save();render();}
+  if(a==='toggleNotif'){
+    if(!S.notifEnabled){enableNotif();}
+    else{S.notifEnabled=false;save();render();}
+  }
+  if(a==='toggleDual'){S.dualLang=!S.dualLang;save();render();}
+  if(a==='resetProgress'){
+    if(confirm('進捗をリセットしますか？')){
+      S.progress={};S.points=0;S.badges=[];S.quizHistory=[];S.streak=0;S.lastVisit=null;S.quizIdx=0;S.quizAns=[];S.quizSetStart=0;
+      save();render();showToast('リセットしました');
+    }
+  }
+});
+
+document.getElementById('nav').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-nav]');if(!btn)return;
+  const n=btn.dataset.nav;S.tab=n;
+  if(n==='home')S.screen='home';
+  if(n==='quiz'){S.screen='quiz';S.quizIdx=0;S.quizAns=[];S.quizSetStart=0;}
+  if(n==='stats')S.screen='stats';
+  if(n==='settings')S.screen='settings';
+  save();render();
+});
+
+// ── INIT ──────────────────────────────────────────────
+updateStreak();render();
+setInterval(checkNotif,30000);
+checkNotif();
+</script>
+</body>
+</html>
