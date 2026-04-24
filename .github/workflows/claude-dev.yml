@@ -1,0 +1,82 @@
+name: Claude Code 自律開発
+
+on:
+  schedule:
+    # 週3回（月・水・金）朝9時JST（UTC 0時）に実行
+    - cron: '0 0 * * 1,3,5'
+  workflow_dispatch:
+    # 手動実行も可能
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  develop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run Claude Code — タスク実装
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          claude --dangerously-skip-permissions --max-turns 5 -p "
+          あなたはJapanLifeアプリのやさしい日本語AI機能を開発するエンジニアです。
+
+          ## 指示
+          1. まず TASKS.md を読んで、未完了（[ ]）のタスクを確認してください
+          2. 最初の未完了タスクを1つ選んで実装してください
+          3. 実装が完了したらそのタスクを [x] にマークしてください
+          4. 変更内容を簡潔にまとめてください
+
+          ## 制約
+          - index.html を直接編集します（ビルドシステムなし）
+          - Gemini APIキーは環境変数 GEMINI_API_KEY から読みます
+          - やさしい日本語ルール：短文・和語優先・全漢字にふりがな（括弧表記）
+          - 絵文字は使わない
+          - 1回の実行で1タスクのみ完了させる（品質優先）
+
+          ## few-shot変換例（プロンプトに組み込む用）
+          原文：就労ビザの更新手続きについて教えてください
+          変換：はたらく ための ビザ（びざ）を、もう いちど もらう てつづき を おしえて ください
+
+          原文：在留資格変更許可申請書を提出する必要があります
+          変換：にほんに いる ための しかく（資格）を かえる もうしこみしょ（申請書）を だして ください
+
+          原文：健康保険の加入義務があります
+          変換：けんこう ほけん（健康保険）に はいら なけれ ば なりません
+
+          まず TASKS.md を Read ツールで読んでから作業を開始してください。
+          "
+
+      - name: Git設定
+        run: |
+          git config user.name "Claude Code Bot"
+          git config user.email "claude-bot@anthropic.com"
+
+      - name: 変更をコミット・プッシュ
+        run: |
+          git add -A
+          if git diff --staged --quiet; then
+            echo "変更なし。スキップします。"
+          else
+            git commit -m "feat: Claude Code 自律実装 $(date +'%Y-%m-%d')
+
+            Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+            git push origin main
+          fi
