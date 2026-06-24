@@ -4,36 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>いってら — トモスマ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans:wght@400;700&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
   <style>
     /* ─── DESIGN TOKENS ─────────────────────────────── */
     :root {
       --accent: #8CC63F;
+      --accent-dark: #5E8A1F;
       --accent-light: #EEF5EC;
-      --accent-dim: rgba(140,198,63,0.16);
+      --accent-dim: rgba(140,198,63,0.14);
       --navy: #2D4A10;
       --navy-light: #3A5F18;
       --navy-deep: #1E3209;
       --text: #2D4A10;
       --muted: #5A7A30;
       --muted-light: #9B9B9B;
-      --border: #E8E8E4;
-      --border-light: #EFF5EF;
+      --border: #D0DCC4;
+      --border-ink: #2D4A10;
+      --border-light: #D6E8C8;
       --surface: #FFFFFF;
-      --bg: #EFF7EC;
+      --bg: #FAFAF5;
       --success: #27ae60;
       --success-light: #e6f9ee;
       --danger: #e74c3c;
       --danger-light: #fde8e8;
       --radius-sm: 10px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
-      --radius-xl: 32px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
       --font-h: 'Zen Maru Gothic', sans-serif;
       --font-b: 'Noto Sans JP', 'Noto Sans', sans-serif;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
-      --shadow-lg: 0 8px 24px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06);
+      --gold: #F5C518;
+      --gold-light: #FFF8DC;
+      --shadow-card: 3px 3px 0 #2D4A10;
+      --shadow-btn: 0 4px 0 #5E8A1F;
+      --shadow-sm: 0 2px 6px rgba(45,74,16,0.1);
+      --shadow-md: 0 4px 14px rgba(45,74,16,0.13);
+      --shadow-lg: 0 8px 24px rgba(45,74,16,0.16);
     }
 
     /* ─── RESET & BASE ──────────────────────────────── */
@@ -138,7 +144,7 @@
     }
     .ls-logo-sub {
       font-size: 11px; color: rgba(255,255,255,0.35);
-      letter-spacing: 0.12em; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.12em; font-weight: 700; text-transform: uppercase;
       position: relative; z-index: 1;
     }
     .ls-divider {
@@ -248,16 +254,18 @@
     .jc-n { font-family: var(--font-h); font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3; }
     .btn-p {
       width: 100%; background: var(--accent); color: #2D4A10;
-      font-size: 15px; font-weight: 700; padding: 16px;
-      border: none; border-radius: var(--radius-md);
+      font-size: 16px; font-weight: 900; padding: 16px;
+      border: 2px solid var(--accent-dark);
+      border-radius: 14px;
       cursor: pointer; font-family: var(--font-h);
       display: flex; align-items: center; justify-content: center; gap: 8px;
       margin-top: 24px;
-      box-shadow: 0 4px 14px rgba(140,198,63,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 5px 0 var(--accent-dark);
+      transition: transform 80ms, box-shadow 80ms;
     }
-    .btn-p:active { transform: scale(0.97); box-shadow: none; }
-    .btn-p:disabled { opacity: .35; pointer-events: none; box-shadow: none; }
+    .btn-p:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--accent-dark); }
+    .btn-p:hover { filter: brightness(1.04); }
+    .btn-p:disabled { opacity: .4; pointer-events: none; box-shadow: 0 2px 0 var(--accent-dark); }
     .btn-s {
       width: 100%; background: var(--surface); color: var(--text);
       font-size: 14px; font-weight: 700; padding: 14px;
@@ -277,47 +285,35 @@
 
     /* ─── SCREEN: HOME ──────────────────────────────── */
     .hh {
-      padding: 12px 20px 12px;
+      padding: 11px 20px;
       display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border);
       position: sticky; top: 0;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: white;
       z-index: 10;
     }
-    .hlogo { font-family: var(--font-h); font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+    .hlogo { font-family: var(--font-h); font-size: 18px; font-weight: 900; letter-spacing: -0.02em; }
     .hlogo span { color: var(--accent); }
     .hright { display: flex; align-items: center; gap: 8px; }
     .streak-pill {
-      display: flex; align-items: center; gap: 5px;
-      background: var(--accent-light);
-      border: 1px solid rgba(140,198,63,0.4);
-      border-radius: 100px; padding: 5px 11px;
-      font-size: 13px; font-weight: 700; font-family: var(--font-h); cursor: pointer;
-      transition: transform 0.15s;
+      display: flex; align-items: center; gap: 4px;
+      font-size: 14px; font-weight: 900; font-family: var(--font-h); cursor: pointer;
+      color: var(--gold);
     }
-    .streak-pill:active { transform: scale(0.94); }
-    .streak-pill svg { width: 13px; height: 13px; color: var(--accent); flex-shrink: 0; }
+    .streak-pill svg { width: 14px; height: 14px; color: var(--gold); flex-shrink: 0; }
     .lang-pill {
-      display: flex; align-items: center; gap: 6px;
-      background: var(--bg); border: 1.5px solid var(--border);
-      border-radius: 100px; padding: 5px 11px 5px 9px;
-      font-size: 11px; font-weight: 700; cursor: pointer;
-      font-family: var(--font-h); transition: border-color .2s;
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      font-family: var(--font-h); color: var(--muted);
     }
-    .lang-pill:active { border-color: var(--accent); }
-    .lang-pill-flag { font-size: 16px; line-height: 1; }
-    .lang-pill svg { width: 12px; height: 12px; color: var(--muted-light); }
+    .lang-pill-flag { display: none; }
+    .lang-pill svg { width: 11px; height: 11px; color: var(--muted-light); }
     .hcont { padding: 20px 20px 100px; }
     .search-icon-btn {
-      width: 34px; height: 34px; background: var(--bg);
-      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      width: 34px; height: 34px;
       display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
-      transition: border-color 0.15s, background 0.15s;
     }
-    .search-icon-btn:active { background: var(--border-light); }
-    .search-icon-btn svg { width: 15px; height: 15px; color: var(--muted); }
+    .search-icon-btn svg { width: 16px; height: 16px; color: var(--muted); }
     /* Filter chips */
     .filter-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-bottom: 16px; padding-bottom: 2px; }
     .filter-row::-webkit-scrollbar { display: none; }
@@ -335,15 +331,15 @@
 
     /* Daily card */
     .daily {
-      background: var(--accent);
-      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #8CC63F 0%, #6EB028 100%);
+      border-radius: 22px;
       padding: 22px 20px 20px;
       margin-bottom: 24px; cursor: pointer;
       position: relative; overflow: hidden;
-      box-shadow: var(--shadow-lg);
+      box-shadow: 4px 6px 0 var(--accent-dark);
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-    .daily:active { transform: scale(0.985); box-shadow: var(--shadow-md); }
+    .daily:active { transform: scale(0.985); box-shadow: 0 4px 12px rgba(140,198,63,0.25); }
     .daily::before {
       content: '';
       position: absolute; top: -80px; right: -60px;
@@ -371,8 +367,8 @@
       color: #2D4A10; letter-spacing: 0.14em; text-transform: uppercase;
     }
     .daily-ttl {
-      font-family: var(--font-h); font-size: 19px; font-weight: 700;
-      color: #2D4A10; line-height: 1.35; margin-bottom: 4px;
+      font-family: var(--font-h); font-size: 22px; font-weight: 900;
+      color: #2D4A10; line-height: 1.3; margin-bottom: 4px;
       position: relative; z-index: 1;
     }
     .daily-sub { font-size: 12px; color: rgba(45,74,16,0.55); margin-bottom: 18px; position: relative; z-index: 1; }
@@ -392,20 +388,21 @@
     .daily-progress-text { font-size: 10px; color: rgba(45,74,16,0.5); font-family: var(--font-h); }
 
     /* Category grid */
-    .cat-list { display: flex; flex-direction: column; gap: 10px; }
+    .cat-list { display: flex; flex-direction: column; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .cc {
       background: var(--surface);
-      border: 1.5px solid var(--border-light);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      cursor: pointer; transition: all 0.15s ease;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+      padding: 16px 16px 16px 20px;
+      cursor: pointer; transition: background 0.12s ease;
       display: flex; align-items: center; gap: 14px;
-      box-shadow: var(--shadow-sm);
+      box-shadow: none;
       position: relative; overflow: hidden;
     }
     .cc::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 3px; background: var(--border); border-radius: 3px 0 0 3px;
+      content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+      width: 4px; border-radius: 4px;
       transition: background 0.2s;
     }
     .cc.ic-workplace-card::before { background: #16A34A; }
@@ -413,18 +410,19 @@
     .cc.ic-greeting-card::before  { background: #059669; }
     .cc.ic-safety-card::before    { background: #BE123C; }
     .cc.ic-daily-card::before     { background: #65A30D; }
-    .cc:active { transform: scale(0.98); box-shadow: none; }
-    .cc:hover  { border-color: var(--border); box-shadow: var(--shadow-md); }
+    .cc:last-child { border-bottom: none; }
+    .cc:active { background: var(--bg); }
+    .cc:hover  { background: rgba(140,198,63,0.04); }
     .cc-body { flex: 1; min-width: 0; }
     .cc-name { font-family: var(--font-h); font-size: 14px; font-weight: 700; margin-bottom: 3px; line-height: 1.3; }
     .cc-desc { font-size: 11px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; }
     .cc-row  { display: flex; align-items: center; gap: 8px; }
-    .cc-cnt  { font-size: 11px; color: var(--muted-light); flex-shrink: 0; font-weight: 600; }
+    .cc-cnt  { font-size: 11px; color: var(--muted-light); flex-shrink: 0; font-weight: 700; }
     .cc-time { font-size: 10px; color: var(--muted-light); flex-shrink: 0; font-family: var(--font-h); font-weight: 700;
                background: var(--bg); border: 1px solid var(--border); border-radius: 100px; padding: 1px 8px; }
-    .prog-bar { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
-    .prog-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s ease; }
-    .cc.done .prog-fill { background: var(--success); }
+    .prog-bar { flex: 1; height: 6px; background: rgba(232,232,228,0.8); border-radius: 4px; overflow: hidden; }
+    .prog-fill { height: 100%; background: linear-gradient(to right, var(--accent), #72C020); border-radius: 4px; transition: width 0.4s cubic-bezier(0.34,1.2,0.64,1); box-shadow: 0 0 6px rgba(140,198,63,0.45); }
+    .cc.done .prog-fill { background: linear-gradient(to right, var(--success), #1db954); }
     .cc-done-badge {
       width: 24px; height: 24px;
       background: var(--success); border-radius: 50%;
@@ -436,14 +434,17 @@
 
     /* Home progress strip */
     .home-prog-strip {
-      display: flex; align-items: center; gap: 12px;
-      background: #E8F4E0; border-bottom: 1px solid rgba(140,198,63,0.25);
-      padding: 10px 20px;
+      display: flex; align-items: center;
+      background: #E2F1D8; border-bottom: 1px solid rgba(140,198,63,0.2);
+      padding: 10px 0;
     }
-    .hps-item { display: flex; align-items: center; gap: 6px; }
-    .hps-val { font-family: var(--font-h); font-size: 15px; font-weight: 700; color: #2D4A10; }
-    .hps-lbl { font-size: 11px; color: var(--muted); }
-    .hps-div { width: 1px; height: 20px; background: var(--border); }
+    .hps-item { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center; }
+    .hps-icon { display: flex; align-items: center; }
+    .hps-icon svg { width: 13px; height: 13px; }
+    .hps-val { font-family: var(--font-h); font-size: 16px; font-weight: 900; color: #2D4A10; }
+    .hps-val.gold { color: var(--gold); }
+    .hps-lbl { font-size: 9px; font-weight: 700; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
+    .hps-div { width: 1px; height: 28px; background: rgba(140,198,63,0.25); }
     .cc-body { flex: 1; min-width: 0; }
     .cc-name { font-family: var(--font-h); font-size: 14px; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
     .cc-row { display: flex; align-items: center; gap: 8px; }
@@ -746,50 +747,71 @@
       height: 5px; background: var(--border);
       border-radius: 4px; margin-bottom: 24px; overflow: hidden;
     }
-    .qz-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width .5s cubic-bezier(0.22,1,0.36,1); }
+    .qz-fill { height: 100%; background: linear-gradient(to right, var(--accent), #72C020); border-radius: 4px; transition: width .5s cubic-bezier(0.22,1,0.36,1); box-shadow: 0 0 6px rgba(140,198,63,0.4); }
     .qz-num {
       font-family: var(--font-h); font-size: 11px; font-weight: 700;
       color: var(--accent); letter-spacing: .12em; text-transform: uppercase;
       margin-bottom: 10px;
     }
     .qz-q { font-family: var(--font-h); font-size: 21px; font-weight: 700; line-height: 1.5; margin-bottom: 28px; }
-    .qz-choices { display: flex; flex-direction: column; gap: 10px; }
+    .qz-choices { display: flex; flex-direction: column; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .qz-c {
-      background: var(--surface); border: 2px solid var(--border);
-      border-radius: var(--radius-md);
+      background: var(--surface); border: none;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
       padding: 16px;
       display: flex; align-items: center; gap: 14px;
-      cursor: pointer; transition: all 0.15s ease;
+      cursor: pointer; transition: background 0.12s ease;
       text-align: left; font-family: var(--font-b);
-      box-shadow: var(--shadow-sm);
     }
-    .qz-c:hover { border-color: rgba(140,198,63,0.4); box-shadow: var(--shadow-md); }
-    .qz-c:active { transform: scale(0.985); }
+    .qz-c:last-child { border-bottom: none; }
+    .qz-c:hover { background: rgba(140,198,63,0.05); }
+    .qz-c:active { background: var(--bg); }
     .qz-c-num {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: var(--bg); border: 1.5px solid var(--border);
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--bg); border: 2px solid var(--border);
       display: flex; align-items: center; justify-content: center;
       font-family: var(--font-h); font-size: 13px; font-weight: 700;
       color: var(--muted); flex-shrink: 0;
-      transition: all 0.15s;
+      transition: all 0.2s cubic-bezier(0.34,1.5,0.64,1);
     }
-    .qz-c-txt { font-size: 14px; color: var(--text); line-height: 1.5; font-weight: 500; }
-    .qz-c.correct { background: rgba(39,174,96,0.06); border-color: var(--success); }
-    .qz-c.correct .qz-c-num { background: var(--success); border-color: var(--success); color: white; }
-    .qz-c.wrong { background: rgba(231,76,60,0.06); border-color: #e74c3c; }
+    .qz-c-txt { font-size: 15px; color: var(--text); line-height: 1.5; font-weight: 700; }
+    .qz-c.correct {
+      background: var(--success-light);
+      animation: correctPulse 0.35s cubic-bezier(0.34,1.5,0.64,1);
+    }
+    .qz-c.correct .qz-c-num { background: var(--success); border-color: var(--success); color: white; transform: scale(1.15); }
+    .qz-c.wrong {
+      background: var(--danger-light);
+      animation: wrongShake 0.4s ease;
+    }
     .qz-c.wrong .qz-c-num { background: #e74c3c; border-color: #e74c3c; color: white; }
+    @keyframes correctPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+    @keyframes wrongShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
     .qz-exp {
-      margin-top: 16px; border-radius: var(--radius-md);
-      padding: 14px 16px; display: flex; gap: 10px;
-      background: rgba(39,174,96,0.08);
-      border: 1.5px solid rgba(39,174,96,0.2);
+      margin-top: 16px; border-radius: 14px;
+      padding: 16px 18px; display: flex; gap: 12px;
+      background: linear-gradient(135deg, rgba(39,174,96,0.1), rgba(39,174,96,0.04));
+      border: 1.5px solid rgba(39,174,96,0.25);
       font-size: 13px; line-height: 1.6; color: #1a7040;
-      animation: slideInUp 0.2s ease both;
+      animation: slideInUp 0.25s cubic-bezier(0.34,1.2,0.64,1) both;
+      box-shadow: 0 4px 12px rgba(39,174,96,0.1);
     }
     .qz-exp.wrong-fb {
-      background: rgba(231,76,60,0.06);
-      border: 1.5px solid rgba(231,76,60,0.2);
+      background: linear-gradient(135deg, rgba(231,76,60,0.08), rgba(231,76,60,0.03));
+      border: 1.5px solid rgba(231,76,60,0.25);
       color: #9b2519;
+      box-shadow: 0 4px 12px rgba(231,76,60,0.08);
     }
     .qz-res {
       min-height: var(--sim-h, 100dvh);
@@ -1197,24 +1219,101 @@ const CATS = [
 ];
 
 const QUIZZES=[
-  // ── Set 1 ──
-  {id:'q1',catId:'workplace',question:{ja:'定時になったが上司がいる。帰る時に何と言う？',vi:'Đến giờ tan ca nhưng cấp trên còn. Bạn nói gì?',en:'Closing time but boss is still there. What do you say?'},choices:{ja:['お先に失礼します','さようなら','帰ります','何も言わずに帰る'],vi:['Osaki ni shitsurei shimasu','Sayōnara','Kaerimasu','Về không nói gì'],en:['Osaki ni shitsurei shimasu','Sayōnara','Kaerimasu (I\'m leaving)','Leave without a word']},answer:0,explanation:{ja:'「お先に失礼します」は先に帰る時の正式な挨拶です。',vi:'"Osaki ni shitsurei shimasu" là câu chào chính thức khi về trước.',en:'"Osaki ni shitsurei shimasu" is the formal farewell when leaving first.'}},
-  {id:'q2',catId:'garbage',question:{ja:'ペットボトルを捨てる前にしてはいけないことは？',vi:'Điều KHÔNG nên làm trước khi vứt chai PET?',en:'What should you NOT do before disposing of a PET bottle?'},choices:{ja:['キャップとラベルをつけたまま捨てる','キャップを外す','ラベルを剥がす','軽くすすぐ'],vi:['Vứt nguyên nắp và nhãn','Tháo nắp','Bóc nhãn','Tráng sơ'],en:['Throw it with cap and label on','Remove the cap','Remove the label','Rinse it lightly']},answer:0,explanation:{ja:'キャップとラベルは外して別のゴミとして捨てます。',vi:'Nắp và nhãn phải tháo ra và vứt riêng.',en:'The cap and label must be removed and disposed of separately.'}},
-  {id:'q3',catId:'workplace',question:{ja:'「ほうれんそう」の「ほう」は何の略？',vi:'"Horenso" – "Ho" là viết tắt của gì?',en:'In "Horenso," what does "Ho" stand for?'},choices:{ja:['報告','方法','方向','奉仕'],vi:['Báo cáo (Hōkoku)','Phương pháp','Hướng đi','Phục vụ'],en:['Report (Hōkoku)','Method (Hōhō)','Direction (Hōkō)','Service (Hōshi)']},answer:0,explanation:{ja:'ほうれんそう = 報告・連絡・相談の頭文字です。',vi:'Horenso = Báo cáo・Liên lạc・Tham khảo',en:'Horenso = Report・Contact・Consult — first letters.'}},
-  {id:'q4',catId:'safety',question:{ja:'地震が起きたらまず何をする？',vi:'Động đất xảy ra, làm gì đầu tiên?',en:'Earthquake! What do you do FIRST?'},choices:{ja:['頭を守る','外に逃げる','119番に電話する','窓を開ける'],vi:['Bảo vệ đầu','Chạy ra ngoài','Gọi 119','Mở cửa sổ'],en:['Protect your head','Run outside','Call 119','Open the windows']},answer:0,explanation:{ja:'まず頭を守ること。テーブルの下かクッションで保護しましょう。',vi:'Đầu tiên hãy bảo vệ đầu.',en:'First, protect your head. Get under a table or use a cushion.'}},
-  {id:'q5',catId:'daily',question:{ja:'ゴミは何時までに出す？',vi:'Rác cần đổ trước mấy giờ?',en:'By what time must garbage be put out?'},choices:{ja:['朝8時まで','朝10時まで','前日夜21時まで','いつでもOK'],vi:['Trước 8 giờ sáng','Trước 10 giờ sáng','Tối hôm trước 21 giờ','Bất cứ lúc nào'],en:['By 8:00 AM','By 10:00 AM','By 9 PM the night before','Anytime is fine']},answer:0,explanation:{ja:'ほとんどの地域で朝8時までにゴミを出すルールです。',vi:'Hầu hết các khu vực: trước 8 giờ sáng.',en:'In most areas, garbage must be out by 8:00 AM.'}},
-  // ── Set 2 ──
-  {id:'q6',catId:'greeting',question:{ja:'上司に「ご苦労様です」と言うのはなぜNGか？',vi:'Tại sao không nên nói "Gokurōsama" với cấp trên?',en:'Why is "Gokurōsama" wrong to say to a boss?'},choices:{ja:['目上から目下に使う言葉だから','古い言葉だから','英語だから','意味がないから'],vi:['Đây là từ dùng với cấp dưới','Từ cổ','Từ tiếng Anh','Vô nghĩa'],en:['It\'s used by superiors to subordinates','It\'s an old word','It\'s an English word','It\'s meaningless']},answer:0,explanation:{ja:'「ご苦労様です」は上から下へ使う言葉。上司には「お疲れ様です」が正解です。',vi:'"Gokurōsama" là từ dùng từ trên xuống dưới. Với cấp trên hãy dùng "Otsukaresama".',en:'"Gokurōsama" flows downward (boss→staff). Use "Otsukaresama" with superiors.'}},
-  {id:'q7',catId:'workplace',question:{ja:'有給休暇はいつ申請するのが基本？',vi:'Khi nào nên xin nghỉ phép có lương?',en:'When is the basic rule for applying for paid leave?'},choices:{ja:['当日朝','前日まで','1週間前まで','2週間以上前'],vi:['Sáng hôm đó','Đến hôm trước','Đến 1 tuần trước','Hơn 2 tuần trước'],en:['Morning of the day','By the day before','At least 1 week in advance','2+ weeks in advance']},answer:2,explanation:{ja:'多くの職場で「1週間前まで」が基本ルールです。緊急時は前日でも可能な場合があります。',vi:'Nhiều nơi làm việc yêu cầu xin trước 1 tuần. Khẩn cấp có thể xin hôm trước.',en:'Most workplaces require at least 1 week in advance. Urgent cases may allow the day before.'}},
-  {id:'q8',catId:'garbage',question:{ja:'缶・瓶は捨てる前にどうする？',vi:'Cần làm gì với lon và chai trước khi vứt?',en:'What must you do with cans and bottles before disposing?'},choices:{ja:['中を軽くすすいでキャップを外す','そのまま捨てる','燃えるゴミの袋に入れる','コンビニに持っていく'],vi:['Tráng sơ và tháo nắp','Vứt nguyên','Bỏ vào túi rác hữu cơ','Mang đến cửa hàng tiện lợi'],en:['Rinse lightly and remove caps','Throw as-is','Put in burnable garbage bag','Take to convenience store']},answer:0,explanation:{ja:'缶・瓶は軽くすすいで、キャップを外して「資源ゴミ」の日に出します。',vi:'Lon và chai cần tráng sơ, tháo nắp và bỏ vào ngày "rác tái chế".',en:'Rinse cans/bottles lightly, remove caps, then put out on "resource garbage" day.'}},
-  {id:'q9',catId:'safety',question:{ja:'火事・救急に電話する番号は？',vi:'Số điện thoại gọi khi có hỏa hoạn hoặc cấp cứu?',en:'Which number to call for fire or ambulance?'},choices:{ja:['119','110','118','117'],vi:['119','110','118','117'],en:['119','110','118','117']},answer:0,explanation:{ja:'119番は救急・火事。110番は警察。118番は海上保安庁です。',vi:'119: cứu thương/chữa cháy. 110: cảnh sát. 118: bảo vệ biển.',en:'119 = ambulance/fire. 110 = police. 118 = coast guard.'}},
-  {id:'q10',catId:'daily',question:{ja:'コンビニのコピー機で住民票を取れる条件は？',vi:'Điều kiện để lấy giấy thường trú tại máy photocopy cửa hàng tiện lợi?',en:'What do you need to get a residence certificate at a convenience store?'},choices:{ja:['マイナンバーカードが必要','運転免許証があればOK','パスポートのみ','何も不要'],vi:['Cần thẻ số cá nhân (My Number)','Bằng lái xe là đủ','Chỉ hộ chiếu','Không cần gì'],en:['Need a My Number card','Driver\'s license is enough','Passport only','Nothing needed']},answer:0,explanation:{ja:'マイナンバーカードがあれば全国のコンビニで住民票などを取得できます。',vi:'Có thẻ My Number có thể in giấy tờ hành chính tại cửa hàng tiện lợi trên toàn quốc.',en:'With a My Number card you can obtain residence certificates at convenience stores nationwide.'}},
-  // ── Set 3 ──
-  {id:'q11',catId:'greeting',question:{ja:'初対面で名刺をもらった時、正しい扱い方は？',vi:'Khi nhận danh thiếp lần đầu, cách xử lý đúng là?',en:'When receiving a business card for the first time, what is correct?'},choices:{ja:['両手で受け取り丁寧に見る','すぐ財布にしまう','机の上に置いたまま','メモを書き込む'],vi:['Nhận bằng 2 tay và xem kỹ','Cất ngay vào ví','Để nguyên trên bàn','Ghi chú lên danh thiếp'],en:['Receive with both hands and look carefully','Put it in your wallet immediately','Leave it on the desk','Write notes on it']},answer:0,explanation:{ja:'名刺は両手で受け取り、すぐしまわず相手の名前・役職を確認するのがマナーです。',vi:'Nhận danh thiếp bằng 2 tay, không cất ngay mà xem tên và chức vụ của đối phương.',en:'Receive with both hands. Don\'t pocket it right away — read the name and title respectfully.'}},
-  {id:'q12',catId:'workplace',question:{ja:'「ほうれんそう」の「そう」は何の略？',vi:'"Horenso" – "So" là viết tắt của gì?',en:'In "Horenso," what does "So" stand for?'},choices:{ja:['相談','送別','総合','掃除'],vi:['Tham khảo (Sōdan)','Tiễn biệt','Tổng hợp','Dọn dẹp'],en:['Consult (Sōdan)','Farewell','Comprehensive','Cleaning']},answer:0,explanation:{ja:'ほうれんそう = 報（ほ）告・連（れん）絡・相（そ）談。職場の基本コミュニケーションです。',vi:'Horenso = Báo cáo・Liên lạc・Tham khảo — giao tiếp nền tảng tại nơi làm việc.',en:'Horenso = Report・Contact・Consult — the three pillars of workplace communication.'}},
-  {id:'q13',catId:'garbage',question:{ja:'粗大ゴミを捨てるには？',vi:'Cách vứt đồ gia dụng cỡ lớn?',en:'How do you dispose of large/bulky garbage?'},choices:{ja:['普通のゴミ収集日に出す','市区町村に申し込んで有料シールを貼る','コンビニに持っていく','夜中に出す'],vi:['Bỏ vào ngày thu gom thông thường','Đăng ký với thành phố và dán nhãn có phí','Mang đến cửa hàng tiện lợi','Để ra ban đêm'],en:['Put out on regular garbage day','Apply to city hall and attach paid sticker','Take to convenience store','Put it out at night']},answer:1,explanation:{ja:'粗大ゴミは事前申込が必要。有料の「粗大ゴミ処理券」をスーパー等で購入し貼って出します。',vi:'Rác cỡ lớn cần đăng ký trước. Mua "vé xử lý rác lớn" tại siêu thị, dán vào đồ rồi để ra.',en:'Bulky garbage requires advance registration. Buy a paid sticker at supermarkets and attach it.'}},
-  {id:'q14',catId:'safety',question:{ja:'アパートで火事が起きた時、まずすることは？',vi:'Khi có hỏa hoạn trong căn hộ, làm gì đầu tiên?',en:'Fire in your apartment — what do you do FIRST?'},choices:{ja:['大声で知らせて全員を避難させる','119番に電話する','消火活動をする','窓を全部開ける'],vi:['La lớn để mọi người sơ tán','Gọi 119','Dập lửa','Mở hết cửa sổ'],en:['Shout and ensure everyone evacuates','Call 119','Try to extinguish the fire','Open all windows']},answer:0,explanation:{ja:'まず大声で「火事だ！」と知らせ全員避難。119番は逃げながら、または外に出てからかけます。',vi:'Trước tiên la lớn "Kasai da!" để mọi người sơ tán. Gọi 119 khi chạy thoát hoặc ra ngoài.',en:'First shout "Fire!" to evacuate everyone. Call 119 while escaping or once safely outside.'}},
-  {id:'q15',catId:'daily',question:{ja:'日本で働く外国人が加入する医療保険は？',vi:'Bảo hiểm y tế nào người nước ngoài làm việc ở Nhật tham gia?',en:'Which health insurance must foreign workers in Japan join?'},choices:{ja:['国民健康保険か健康保険（会社員）','民間保険のみ','加入不要','出身国の保険のみ'],vi:['Bảo hiểm y tế quốc gia hoặc bảo hiểm công ty','Chỉ bảo hiểm tư nhân','Không cần tham gia','Chỉ bảo hiểm nước mình'],en:['National Health Insurance or company health insurance','Private insurance only','No insurance needed','Only home country insurance']},answer:0,explanation:{ja:'日本では外国人も国民健康保険（自営・無職）または健康保険（会社員）に加入義務があります。',vi:'Ở Nhật, người nước ngoài cũng có nghĩa vụ tham gia bảo hiểm y tế quốc gia hoặc bảo hiểm công ty.',en:'Foreign nationals in Japan must join either National Health Insurance or company health insurance.'}}
+  {id:'qi_w01',catId:'workplace',question:{ja:'定時になったが上司がいる。帰る時に言う言葉は？',vi:'Đến giờ tan ca nhưng cấp trên còn. Bạn nói gì?',en:'Closing time but boss is still there. What do you say?'},choices:{ja:['お先に失礼します','さようなら','帰ります','何も言わず帰る'],vi:['Osaki ni shitsurei shimasu','Sayōnara','Kaerimasu','Về không nói gì'],en:['Osaki ni shitsurei shimasu','Sayōnara','Kaerimasu','Leave without a word']},answer:0,explanation:{ja:'「お先に失礼します」は先に帰る時の正式な挨拶です。',vi:'\"Osaki ni shitsurei shimasu\" là câu chào chính thức khi về trước.',en:'\"Osaki ni shitsurei shimasu\" is the formal farewell when leaving first.'}},
+  {id:'qi_w02',catId:'workplace',question:{ja:'「お先に失礼します」と言われた側の返し方は？',vi:'Khi được nói \"Osaki ni shitsurei shimasu\", bạn trả lời gì?',en:'When someone says \"Osaki ni shitsurei shimasu\", how do you respond?'},choices:{ja:['お疲れ様でした','お先にどうぞ','さようなら','バイバイ'],vi:['Otsukaresama deshita','Osakini dōzo','Sayōnara','Bye bye'],en:['Otsukaresama deshita','Go ahead','Goodbye','Bye bye']},answer:0,explanation:{ja:'「お疲れ様でした」が自然な返し言葉です。',vi:'\"Otsukaresama deshita\" là câu trả lời tự nhiên.',en:'\"Otsukaresama deshita\" is the natural response.'}},
+  {id:'qi_w03',catId:'workplace',question:{ja:'連続残業で体調が悪い。まずすべきことは？',vi:'Tăng ca liên tục, sức khỏe kém. Làm gì đầu tiên?',en:'Feeling unwell after consecutive overtime. What do you do first?'},choices:{ja:['上司に相談する','黙って耐える','突然休む','友達に聞く'],vi:['Báo cáo cấp trên','Im lặng chịu đựng','Nghỉ đột ngột','Hỏi bạn bè'],en:['Talk to your supervisor','Endure silently','Call in sick suddenly','Ask friends']},answer:0,explanation:{ja:'体調不良は上司に早めに相談しましょう。黙って耐えると悪化します。',vi:'Hãy báo cáo cấp trên sớm khi sức khỏe kém.',en:'Report to your supervisor early when feeling unwell. Enduring silently makes it worse.'}},
+  {id:'qi_w04',catId:'workplace',question:{ja:'残業を断る時の適切な言い方は？',vi:'Cách từ chối tăng ca một cách phù hợp là gì?',en:'What is the appropriate way to decline overtime?'},choices:{ja:['「今日は先約がありまして…」','「嫌です」','「できません」','無視する'],vi:['\"Hôm nay tôi đã có hẹn trước...\"','\"Không thích\"','\"Không làm được\"','Phớt lờ'],en:['\"I have a prior engagement today...\"','\"I don\'t want to\"','\"I can\'t\"','Ignore']},answer:0,explanation:{ja:'断る時も丁寧に理由を添えて伝えることが大切です。「先約があります」のように具体的に伝えましょう。',vi:'Khi từ chối, hãy nói rõ lý do một cách lịch sự.',en:'When declining, always give a polite reason. Be specific, like mentioning a prior commitment.'}},
+  {id:'qi_w05',catId:'workplace',question:{ja:'残業依頼を断る前にすべきことは？',vi:'Trước khi từ chối yêu cầu tăng ca, bạn nên làm gì?',en:'What should you do before declining an overtime request?'},choices:{ja:['丁寧に理由を説明する','即断る','上司を避ける','別の人に任せる'],vi:['Giải thích lý do lịch sự','Từ chối ngay','Tránh mặt cấp trên','Nhờ người khác'],en:['Explain your reason politely','Refuse immediately','Avoid your supervisor','Pass it to someone else']},answer:0,explanation:{ja:'まず丁寧に理由を伝えることが基本マナーです。上司への信頼関係を守るためにも誠実な対応が重要です。',vi:'Giải thích lý do trước khi từ chối là nghi thức cơ bản. Điều này giúp duy trì lòng tin.',en:'Politely explaining your reason before refusing is basic etiquette that helps maintain trust.'}},
+  {id:'qi_w06',catId:'workplace',question:{ja:'「ほうれんそう」の「れ」は何の略？',vi:'\"Horenso\" – \"ren\" là viết tắt của gì?',en:'In \"Horenso,\" what does \"ren\" stand for?'},choices:{ja:['連絡','礼儀','例外','歴史'],vi:['Liên lạc (Renraku)','Phép lịch sự','Ngoại lệ','Lịch sử'],en:['Contact (Renraku)','Etiquette','Exception','History']},answer:0,explanation:{ja:'ほうれんそう = 報告・連絡・相談。「れ」は連絡です。',vi:'Horenso = Báo cáo・Liên lạc・Tham khảo. \"Ren\" là Liên lạc.',en:'Horenso = Report・Contact・Consult. \"Ren\" stands for Contact.'}},
+  {id:'qi_w07',catId:'workplace',question:{ja:'「ほうれんそう」の「そ」は何の略？',vi:'\"Horenso\" – \"so\" là viết tắt của gì?',en:'In \"Horenso,\" what does \"so\" stand for?'},choices:{ja:['相談','掃除','送別','操作'],vi:['Tham khảo (Sōdan)','Dọn dẹp','Tiễn biệt','Thao tác'],en:['Consult (Sōdan)','Cleaning','Farewell','Operation']},answer:0,explanation:{ja:'「そ」は相談。わからない時は自己判断せず相談しましょう。',vi:'\"So\" là Tham khảo. Khi không chắc, đừng tự quyết định.',en:'\"So\" stands for Consult. When unsure, don\'t decide alone.'}},
+  {id:'qi_w08',catId:'workplace',question:{ja:'仕事が終わった時にすべきことは？',vi:'Khi xong việc, cần làm gì?',en:'What should you do when you finish a task?'},choices:{ja:['上司に報告する','次の仕事を勝手に始める','休憩する','帰る'],vi:['Báo cáo cấp trên','Tự ý bắt đầu việc tiếp theo','Nghỉ ngơi','Về nhà'],en:['Report to your supervisor','Start the next task on your own','Take a break','Go home']},answer:0,explanation:{ja:'「ほうれんそう」の「ほ」= 報告。仕事が終わったら必ず上司に伝えましょう。',vi:'\"Ho\" trong Horenso = Báo cáo. Hãy báo cáo khi xong việc.',en:'\"Ho\" in Horenso = Report. Always tell your supervisor when a task is done.'}},
+  {id:'qi_w09',catId:'workplace',question:{ja:'問題が起きた。連絡はいつする？',vi:'Phát sinh vấn đề. Liên lạc khi nào?',en:'A problem occurred. When should you contact your supervisor?'},choices:{ja:['すぐ連絡する','解決してから','翌日','上司の機嫌が良い時'],vi:['Liên lạc ngay','Sau khi giải quyết xong','Ngày hôm sau','Khi cấp trên vui vẻ'],en:['Contact immediately','After solving it','The next day','When boss is in a good mood']},answer:0,explanation:{ja:'悪いニュースほど早く報告することが大切です。',vi:'Tin xấu càng cần báo cáo sớm.',en:'Bad news should be reported as soon as possible.'}},
+  {id:'qi_w10',catId:'workplace',question:{ja:'わからないことがあった。最もよくない行動は？',vi:'Có điều không hiểu. Hành động tệ nhất là gì?',en:'You don\'t understand something. What is the WORST action?'},choices:{ja:['自己判断で勝手に決める','上司に相談する','同僚に聞く','一度立ち止まる'],vi:['Tự quyết định','Hỏi cấp trên','Hỏi đồng nghiệp','Dừng lại suy nghĩ'],en:['Decide on your own','Consult your supervisor','Ask a colleague','Pause and think']},answer:0,explanation:{ja:'自己判断は大きなミスにつながります。ほうれんそうの「そ＝相談」を使いましょう。',vi:'Tự quyết định có thể dẫn đến sai lầm lớn. Hãy dùng \"So\" (Tham khảo) trong Horenso.',en:'Deciding alone can lead to big mistakes. Use the \"So\" (Consult) in Horenso.'}},
+  {id:'qi_w11',catId:'workplace',question:{ja:'悪いニュースの報告タイミングは？',vi:'Khi nào nên báo cáo tin xấu?',en:'When is the right time to report bad news?'},choices:{ja:['すぐ（早ければ早いほど良い）','解決してから','良いニュースと一緒に','翌日の朝'],vi:['Ngay lập tức (càng sớm càng tốt)','Sau khi giải quyết xong','Cùng với tin tốt','Sáng hôm sau'],en:['Immediately (the sooner the better)','After resolving','Along with good news','Next morning']},answer:0,explanation:{ja:'悪い情報ほど早く報告することが鉄則。隠したり遅らせたりすると問題が大きくなります。',vi:'Tin xấu nên báo cáo ngay. Giấu hoặc trì hoãn sẽ khiến vấn đề trở nên lớn hơn.',en:'Report bad news immediately. Hiding or delaying it makes problems worse.'}},
+  {id:'qi_w12',catId:'workplace',question:{ja:'ミスをした時の正しい順番は？',vi:'Khi mắc lỗi, thứ tự đúng là gì?',en:'When you make a mistake, what is the correct order?'},choices:{ja:['謝る→原因説明→再発防止','原因説明→謝る','隠す','黙る'],vi:['Xin lỗi→Giải thích→Ngăn tái phát','Giải thích→Xin lỗi','Giấu đi','Im lặng'],en:['Apologize→Explain→Prevent recurrence','Explain→Apologize','Hide it','Stay silent']},answer:0,explanation:{ja:'日本では「謝罪が先」が基本です。言い訳から始めると印象が悪くなります。',vi:'Ở Nhật, \"xin lỗi trước\" là nguyên tắc cơ bản.',en:'In Japan, \"apologize first\" is the basic rule. Starting with excuses leaves a bad impression.'}},
+  {id:'qi_w13',catId:'workplace',question:{ja:'ミスを隠し続けるとどうなる？',vi:'Nếu liên tục che giấu lỗi, điều gì xảy ra?',en:'What happens if you keep hiding your mistakes?'},choices:{ja:['後で大きな問題になる','誰も気づかない','自然に解決する','上司が喜ぶ'],vi:['Trở thành vấn đề lớn hơn','Không ai biết','Tự giải quyết','Cấp trên vui'],en:['Becomes a bigger problem later','No one notices','Resolves itself','Boss will be happy']},answer:0,explanation:{ja:'ミスを隠すと後で発覚した時に信頼を大きく損ないます。',vi:'Giấu lỗi sẽ làm mất lòng tin lớn hơn khi bị phát hiện.',en:'Hiding mistakes causes much greater loss of trust when discovered later.'}},
+  {id:'qi_w14',catId:'workplace',question:{ja:'同じミスを繰り返さないために大切なことは？',vi:'Để không lặp lại lỗi, điều quan trọng là gì?',en:'What is important to avoid repeating the same mistake?'},choices:{ja:['原因を理解して記録する','ひたすら謝り続ける','部署異動を申し出る','気にしない'],vi:['Hiểu nguyên nhân và ghi lại','Chỉ xin lỗi mãi','Xin chuyển bộ phận','Không để ý'],en:['Understand the cause and record it','Keep apologizing','Request a department transfer','Don\'t worry about it']},answer:0,explanation:{ja:'原因を理解して再発防止策を考えることが大切です。',vi:'Quan trọng là hiểu nguyên nhân và nghĩ cách phòng ngừa.',en:'It\'s important to understand the cause and think of ways to prevent recurrence.'}},
+  {id:'qi_w15',catId:'workplace',question:{ja:'「申し訳ありません」と「すみません」の違いは？',vi:'Sự khác biệt giữa \"Mōshiwake arimasen\" và \"Sumimasen\"?',en:'What is the difference between \"Mōshiwake arimasen\" and \"Sumimasen\"?'},choices:{ja:['「申し訳ありません」がより丁寧なフォーマル表現','同じ意味','「すみません」が丁寧','使い分け不要'],vi:['\"Mōshiwake arimasen\" trang trọng hơn','Cùng nghĩa','\"Sumimasen\" trang trọng hơn','Không cần phân biệt'],en:['\"Mōshiwake arimasen\" is more formal','Same meaning','\"Sumimasen\" is more polite','No need to distinguish']},answer:0,explanation:{ja:'「申し訳ありません」はより丁寧な謝罪表現で、上司・お客様に使います。',vi:'\"Mōshiwake arimasen\" là lời xin lỗi trang trọng hơn, dùng với cấp trên và khách hàng.',en:'\"Mōshiwake arimasen\" is a more formal apology, used with supervisors and customers.'}},
+  {id:'qi_w16',catId:'workplace',question:{ja:'ミスをした後の正しい態度は？',vi:'Thái độ đúng sau khi mắc lỗi là gì?',en:'What is the correct attitude after making a mistake?'},choices:{ja:['素直に認め、改善策を提案する','言い訳を並べる','他人のせいにする','落ち込んだまま何もしない'],vi:['Thành thật thừa nhận và đề xuất cải thiện','Đổ lỗi bằng nhiều lý do','Đổ lỗi cho người khác','Không làm gì cả'],en:['Honestly admit it and suggest improvements','Make excuses','Blame others','Do nothing and stay depressed']},answer:0,explanation:{ja:'ミスを認めて改善策を提案する姿勢が信頼構築に繋がります。言い訳や他責は逆効果です。',vi:'Thành thật nhận lỗi và đề xuất cải thiện giúp xây dựng lòng tin. Đổ lỗi thì phản tác dụng.',en:'Honestly admitting mistakes and suggesting improvements builds trust. Making excuses has the opposite effect.'}},
+  {id:'qi_w22',catId:'workplace',question:{ja:'短時間席を外す時の言葉は？',vi:'Khi rời chỗ ngồi một lúc, bạn nói gì?',en:'When leaving your seat briefly, what do you say?'},choices:{ja:['「少し席を外します」','「行ってきます」','「さようなら」','何も言わない'],vi:['\"Sukoshi seki wo hazushimasu\"','\"Ittekimasu\"','\"Sayōnara\"','Không nói gì'],en:['\"Sukoshi seki wo hazushimasu\"','\"Ittekimasu\"','\"Sayōnara\"','Say nothing']},answer:0,explanation:{ja:'短時間の離席は「少し席を外します」と一言伝えるのがマナーです。',vi:'Khi rời chỗ ngắn, nói \"Sukoshi seki wo hazushimasu\" là phép lịch sự.',en:'For brief absences, saying \"Sukoshi seki wo hazushimasu\" is proper manner.'}},
+  {id:'qi_w23',catId:'workplace',question:{ja:'外出する時に必ず伝えるべき2つのことは？',vi:'Khi ra ngoài, 2 điều bắt buộc phải thông báo là gì?',en:'When going out, what are the 2 things you must always tell?'},choices:{ja:['行き先と戻り時間','行き先のみ','戻り時間のみ','電話番号'],vi:['Điểm đến và giờ về','Chỉ điểm đến','Chỉ giờ về','Số điện thoại'],en:['Destination and return time','Destination only','Return time only','Phone number']},answer:0,explanation:{ja:'「〇〇へ行ってきます。△時頃戻ります」と行き先と戻り時間を伝えましょう。',vi:'Hãy nói \"Tôi đến ○○. Tôi về lúc △ giờ.\"',en:'Say \"I\'m going to ○○. I\'ll be back around △ o\'clock.\"'}},
+  {id:'qi_w24',catId:'workplace',question:{ja:'「行ってきます」への返し言葉は？',vi:'Khi nghe \"Ittekimasu\", bạn trả lời gì?',en:'When someone says \"Ittekimasu\", how do you respond?'},choices:{ja:['「行ってらっしゃい」','「バイバイ」','「さようなら」','「お疲れ様」'],vi:['\"Itterasshai\"','\"Bye bye\"','\"Sayōnara\"','\"Otsukaresama\"'],en:['\"Itterasshai\"','\"Bye bye\"','\"Goodbye\"','\"Good work\"']},answer:0,explanation:{ja:'「行ってらっしゃい」が正しい返し言葉です。',vi:'\"Itterasshai\" là câu trả lời đúng.',en:'\"Itterasshai\" is the correct response.'}},
+  {id:'qi_w25',catId:'workplace',question:{ja:'席に戻った時に言う言葉は？',vi:'Khi quay lại chỗ ngồi, bạn nói gì?',en:'When you return to your seat, what do you say?'},choices:{ja:['「ただいま戻りました」','「帰りました」','「行ってきました」','何も言わない'],vi:['\"Tadaima modorimashita\"','\"Kaerimashita\"','\"Ittekimashita\"','Không nói gì'],en:['\"Tadaima modorimashita\"','\"I came back\"','\"I went\"','Say nothing']},answer:0,explanation:{ja:'「ただいま戻りました」の一言で職場の信頼が積み上がります。',vi:'Một câu \"Tadaima modorimashita\" giúp xây dựng lòng tin.',en:'Saying \"Tadaima modorimashita\" builds workplace trust.'}},
+  {id:'qi_d01',catId:'daily',question:{ja:'ゴミは何時までに出す？',vi:'Rác cần đổ trước mấy giờ?',en:'By what time must garbage be put out?'},choices:{ja:['収集日の朝8時まで','夜ならいつでも','9時まで','前日の夜中OK'],vi:['Trước 8 giờ sáng ngày thu gom','Tối nào cũng được','Trước 9 giờ','OK đêm hôm trước'],en:['By 8 AM on collection day','Anytime at night','By 9 AM','Night before is OK']},answer:0,explanation:{ja:'ほとんどの地域で収集日の朝8時までにゴミを出すルールです。',vi:'Hầu hết các khu vực phải đổ rác trước 8 giờ sáng ngày thu gom.',en:'In most areas, garbage must be put out by 8:00 AM on collection day.'}},
+  {id:'qi_d02',catId:'daily',question:{ja:'前日夜にゴミを出してもいい？',vi:'Có được đổ rác vào tối hôm trước không?',en:'Is it OK to put out garbage the night before collection?'},choices:{ja:['多くの地域でNG','どこでもOK','必ず前日夜に出す','気にしなくていい'],vi:['Hầu hết là không được','OK ở đâu cũng được','Bắt buộc phải đổ tối hôm trước','Không cần để ý'],en:['Not OK in most areas','OK everywhere','Must put out the night before','Doesn\'t matter']},answer:0,explanation:{ja:'前日夜の排出は多くの地域で禁止されています。カラスや動物に荒らされる原因になります。',vi:'Hầu hết các khu vực cấm đổ rác tối hôm trước vì quạ và động vật sẽ phá.',en:'Most areas prohibit putting out garbage the night before because crows and animals will scatter it.'}},
+  {id:'qi_d03',catId:'daily',question:{ja:'カラスよけネットを使った後は？',vi:'Sau khi dùng lưới chắn quạ, làm gì?',en:'After using the anti-crow net, what should you do?'},choices:{ja:['元の場所に戻す','捨てる','次の人のためにそのまま','家に持ち帰る'],vi:['Đặt lại chỗ cũ','Vứt đi','Cứ để đó cho người sau','Mang về nhà'],en:['Put it back in its place','Throw it away','Leave it for the next person','Take it home']},answer:0,explanation:{ja:'ゴミ置き場のネットは使った後に必ず元に戻しましょう。みんなで使う共有物です。',vi:'Lưới chắn quạ là đồ dùng chung, hãy trả về chỗ cũ sau khi dùng.',en:'The anti-crow net is shared. Always return it to its place after use.'}},
+  {id:'qi_d04',catId:'daily',question:{ja:'間違った日にゴミを出すと？',vi:'Bỏ rác sai ngày thì sao?',en:'What happens if you put out trash on the wrong day?'},choices:{ja:['その週は収集されない','罰金が来る','翌日収集','特に問題ない'],vi:['Sẽ không được thu gom trong tuần đó','Bị phạt tiền','Thu gom ngày hôm sau','Không sao cả'],en:['Not collected that week','You get fined','Collected next day','No problem']},answer:0,explanation:{ja:'収集日以外に出したゴミは回収されません。次の収集日まで持ち帰るのがマナーです。',vi:'Rác bỏ sai ngày sẽ không được thu gom. Hãy mang về và đợi đến ngày thu gom tiếp theo.',en:'Trash put out on the wrong day won\'t be collected. Bring it back and wait for the next collection day.'}},
+  {id:'qi_d05',catId:'daily',question:{ja:'引越し初日のゴミ対応として最適なのは？',vi:'Ngày đầu chuyển đến, việc tốt nhất về rác là gì?',en:'On your first day after moving in, what is the best approach for garbage?'},choices:{ja:['近所の人にゴミカレンダーを聞く','すぐゴミを捨てる','市役所に行く','無視する'],vi:['Hỏi hàng xóm về lịch thu gom','Vứt rác ngay','Đến tòa thị chính','Bỏ qua'],en:['Ask neighbors about the garbage schedule','Throw garbage immediately','Go to city hall','Ignore it']},answer:0,explanation:{ja:'引越し初日に近所の方にゴミカレンダーを聞くと親切にしてもらえ、良い関係も作れます。',vi:'Ngày đầu chuyển đến, hỏi hàng xóm về lịch thu gom rác sẽ tạo mối quan hệ tốt.',en:'Asking neighbors about the garbage schedule on moving day builds good relations and gets you useful info.'}},
+  {id:'qi_d06',catId:'daily',question:{ja:'コンビニで支払えるものは？',vi:'Những gì có thể thanh toán ở cửa hàng tiện lợi?',en:'What can you pay for at a convenience store?'},choices:{ja:['電気・ガス・水道代','家賃','学費','不動産'],vi:['Điện, gas, nước','Tiền thuê nhà','Học phí','Bất động sản'],en:['Electricity, gas, water bills','Rent','Tuition','Real estate']},answer:0,explanation:{ja:'コンビニでは公共料金（電気・ガス・水道）の支払いができます。',vi:'Cửa hàng tiện lợi có thể thanh toán các hóa đơn điện, gas, nước.',en:'Convenience stores accept payment for public utilities (electricity, gas, water).'}},
+  {id:'qi_d07',catId:'daily',question:{ja:'コンビニのATMでできることは？',vi:'ATM cửa hàng tiện lợi làm được gì?',en:'What can you do at a convenience store ATM?'},choices:{ja:['現金の引き出し・振込','株の購入','外貨両替','保険申し込み'],vi:['Rút tiền mặt / chuyển khoản','Mua cổ phiếu','Đổi ngoại tệ','Đăng ký bảo hiểm'],en:['Cash withdrawal / transfer','Stock purchase','Currency exchange','Insurance signup']},answer:0,explanation:{ja:'コンビニATMは24時間利用可能で、引き出し・振込・残高照会などができます。',vi:'ATM cửa hàng tiện lợi mở 24/7, có thể rút tiền, chuyển khoản và kiểm tra số dư.',en:'Convenience store ATMs are available 24/7 for withdrawals, transfers, and balance checks.'}},
+  {id:'qi_d08',catId:'daily',question:{ja:'コンビニで入手できる行政書類は？',vi:'Giấy tờ hành chính nào có thể lấy ở cửa hàng tiện lợi?',en:'What administrative documents can you get at a convenience store?'},choices:{ja:['住民票などの印刷','パスポート申請','在留カード更新','戸籍謄本原本'],vi:['In sổ hộ khẩu v.v.','Xin cấp hộ chiếu','Gia hạn thẻ lưu trú','Bản gốc giấy tờ hộ tịch'],en:['Print residence certificate etc.','Passport application','Residence card renewal','Original family register']},answer:0,explanation:{ja:'コンビニのマルチコピー機で住民票などの証明書を印刷できます（マイナンバーカードが必要）。',vi:'Có thể in hồ sơ như sổ hộ khẩu tại máy đa chức năng của cửa hàng tiện lợi (cần thẻ số quốc dân).',en:'You can print residence certificates etc. at convenience store copy machines (My Number Card required).'}},
+  {id:'qi_d09',catId:'daily',question:{ja:'コンビニで荷物を送ることは？',vi:'Có thể gửi đồ tại cửa hàng tiện lợi không?',en:'Can you send packages from a convenience store?'},choices:{ja:['できる（宅配便）','できない','大きいものだけ','地域内のみ'],vi:['Được (chuyển phát nhanh)','Không được','Chỉ đồ to','Chỉ trong khu vực'],en:['Yes (delivery service)','No','Large items only','Within local area only']},answer:0,explanation:{ja:'コンビニでは宅急便・ゆうパックの発送が可能。サイズ・重量制限内であれば全国に送れます。',vi:'Cửa hàng tiện lợi cho phép gửi hàng qua dịch vụ chuyển phát nhanh trên toàn quốc.',en:'Convenience stores offer parcel delivery services. You can ship nationwide within size and weight limits.'}},
+  {id:'qi_d10',catId:'daily',question:{ja:'日本の三大コンビニチェーンは？',vi:'Ba chuỗi cửa hàng tiện lợi lớn nhất Nhật Bản là gì?',en:'What are Japan\'s three major convenience store chains?'},choices:{ja:['セブン・ローソン・ファミマ','セブン・イオン・ドンキ','セブン・マクドナルド・ローソン','セブン・吉野家・ローソン'],vi:['Seven, Lawson, FamilyMart','Seven, Aeon, Donki','Seven, McDonald\'s, Lawson','Seven, Yoshinoya, Lawson'],en:['Seven, Lawson, FamilyMart','Seven, Aeon, Donki','Seven, McDonald\'s, Lawson','Seven, Yoshinoya, Lawson']},answer:0,explanation:{ja:'セブン-イレブン・ローソン・ファミリーマートが三大チェーンです。全国どこにでもあります。',vi:'Seven-Eleven, Lawson, FamilyMart là 3 chuỗi lớn nhất, có mặt khắp nơi tại Nhật.',en:'Seven-Eleven, Lawson, and FamilyMart are the three biggest chains, found everywhere in Japan.'}},
+  {id:'qi_d11',catId:'daily',question:{ja:'日本で自転車に乗る時の基本ルールは？',vi:'Quy tắc cơ bản khi đi xe đạp tại Nhật là gì?',en:'What is the basic rule for cycling in Japan?'},choices:{ja:['原則車道の左側を走る','歩道を自由に走れる','右側でもOK','免許が必要'],vi:['Đi bên trái đường xe chạy (nguyên tắc)','Đi vỉa hè tự do','Bên phải cũng được','Cần bằng lái'],en:['Ride on the left side of the road (in principle)','Can freely ride on sidewalks','Right side is fine','License required']},answer:0,explanation:{ja:'自転車は原則車道の左端を走ります。歩道は例外的に許可された場合のみ。右側走行は違反です。',vi:'Xe đạp đi bên trái đường. Đi bên phải là vi phạm.',en:'Bicycles must ride on the left side of the road. Right-side riding is a violation.'}},
+  {id:'qi_d12',catId:'daily',question:{ja:'電車内でやってはいけないことは？',vi:'Điều không nên làm trong tàu điện là gì?',en:'What should you NOT do inside a train?'},choices:{ja:['大声で通話する','静かに座る','荷物を棚に置く','イヤホンで音楽'],vi:['Gọi điện to tiếng','Ngồi im lặng','Để hành lý lên kệ','Nghe nhạc bằng tai nghe'],en:['Make loud phone calls','Sit quietly','Put luggage on the rack','Listen to music with earphones']},answer:0,explanation:{ja:'電車内での通話は迷惑になります。「電車内ではマナーモードにして通話はご遠慮ください」が基本です。',vi:'Gọi điện to tiếng trong tàu điện làm phiền người khác. Hãy tắt tiếng điện thoại.',en:'Loud phone calls disturb others on trains. Set your phone to silent mode.'}},
+  {id:'qi_d13',catId:'daily',question:{ja:'日本で国民健康保険の加入義務は？',vi:'Có bắt buộc tham gia bảo hiểm y tế quốc dân Nhật không?',en:'Is joining Japan\'s National Health Insurance mandatory?'},choices:{ja:['会社の保険がない場合は外国人も含め全員','日本人のみ','希望者のみ','正社員のみ'],vi:['Tất cả mọi người kể cả người nước ngoài khi không có bảo hiểm công ty','Chỉ người Nhật','Chỉ người muốn','Chỉ nhân viên chính thức'],en:['Everyone including foreigners when not covered by company insurance','Japanese only','Voluntary','Full-time employees only']},answer:0,explanation:{ja:'日本に住む外国人も、職場の健康保険がない場合は国民健康保険への加入が義務です。',vi:'Người nước ngoài sống tại Nhật cũng bắt buộc tham gia bảo hiểm y tế quốc dân nếu không có bảo hiểm từ công ty.',en:'Foreign nationals living in Japan must also join National Health Insurance if not covered by company insurance.'}},
+  {id:'qi_d14',catId:'daily',question:{ja:'銀行口座を作るのに必要なものは？',vi:'Cần gì để mở tài khoản ngân hàng?',en:'What do you need to open a bank account?'},choices:{ja:['在留カード・パスポート','会社の証明書のみ','何もいらない','日本語能力証明'],vi:['Thẻ lưu trú & Hộ chiếu','Chỉ giấy chứng nhận công ty','Không cần gì','Bằng năng lực tiếng Nhật'],en:['Residence card & Passport','Company certificate only','Nothing needed','Japanese proficiency certificate']},answer:0,explanation:{ja:'銀行口座開設には在留カードとパスポートが必要です。銀行によってはさらに書類が必要な場合もあります。',vi:'Cần thẻ lưu trú và hộ chiếu để mở tài khoản ngân hàng.',en:'You need a residence card and passport to open a bank account. Some banks may require additional documents.'}},
+  {id:'qi_d15',catId:'daily',question:{ja:'スーパーのレジ袋は？',vi:'Túi nhựa ở siêu thị Nhật như thế nào?',en:'What about plastic bags at supermarkets in Japan?'},choices:{ja:['原則有料（2020年〜）','どこでも無料','会員のみ有料','環境配慮品は無料'],vi:['Có phí (từ 2020)','Miễn phí ở mọi nơi','Chỉ thu phí hội viên','Sản phẩm thân thiện môi trường miễn phí'],en:['Paid (since 2020)','Free everywhere','Paid only for members','Eco-friendly ones are free']},answer:0,explanation:{ja:'2020年7月からコンビニ・スーパーのレジ袋は原則有料化。マイバッグを持参しましょう。',vi:'Từ tháng 7/2020, túi nhựa tại siêu thị và cửa hàng tiện lợi có tính phí. Hãy mang túi của riêng bạn.',en:'Since July 2020, plastic bags at convenience stores and supermarkets are charged. Bring your own bag.'}},
+  {id:'qi_d16',catId:'daily',question:{ja:'引越しの挨拶のマナーは？',vi:'Nghi thức chào hỏi khi chuyển nhà là gì?',en:'What is the etiquette for moving greetings?'},choices:{ja:['近隣に菓子折りを持って挨拶に行く','挨拶は不要','手紙を入れるだけ','管理会社に任せる'],vi:['Đến chào hàng xóm với quà bánh','Không cần chào','Chỉ bỏ thư','Nhờ công ty quản lý'],en:['Visit neighbors with sweets as a greeting gift','No greeting needed','Just leave a letter','Leave it to the management company']},answer:0,explanation:{ja:'引越し後は両隣・上下の部屋に菓子折りを持って挨拶するのが日本の習慣。良い関係の第一歩です。',vi:'Sau khi chuyển nhà, tập tục Nhật là đến chào hàng xóm hai bên và trên/dưới với quà bánh.',en:'After moving, it is Japanese custom to visit neighboring rooms with sweets as a greeting.'}},
+  {id:'qi_d17',catId:'daily',question:{ja:'日本の救急車の費用は？',vi:'Chi phí gọi xe cứu thương ở Nhật là bao nhiêu?',en:'How much does calling an ambulance in Japan cost?'},choices:{ja:['基本無料（入院費は別途）','1万円程度','距離によって変わる','外国人は有料'],vi:['Cơ bản miễn phí (viện phí tính riêng)','Khoảng 10,000 yên','Tùy khoảng cách','Người nước ngoài phải trả phí'],en:['Basically free (hospital fees separate)','About ¥10,000','Depends on distance','Foreign nationals must pay']},answer:0,explanation:{ja:'日本では救急車の出動自体は無料です。ただし病院での治療費は別途かかります。',vi:'Ở Nhật, gọi xe cứu thương cơ bản là miễn phí. Nhưng chi phí điều trị tại bệnh viện tính riêng.',en:'In Japan, calling an ambulance is basically free. Hospital treatment fees are charged separately.'}},
+  {id:'qi_d18',catId:'daily',question:{ja:'携帯電話の契約に必要なものは？',vi:'Cần gì để ký hợp đồng điện thoại di động?',en:'What do you need to sign a mobile phone contract?'},choices:{ja:['在留カード・銀行口座','日本語能力証明','会社の証明書','在留カードのみ'],vi:['Thẻ cư trú + tài khoản ngân hàng','Chứng chỉ năng lực tiếng Nhật','Giấy tờ của công ty','Chỉ cần thẻ cư trú'],en:['Residence card + bank account','Japanese language certificate','Company certificate','Residence card only']},answer:0,explanation:{ja:'スマートフォン契約には在留カードと銀行口座が基本的に必要。審査のため滞在期間も確認されます。',vi:'Để ký hợp đồng điện thoại cần thẻ cư trú và tài khoản ngân hàng. Thời hạn cư trú cũng được kiểm tra.',en:'A residence card and bank account are basically required for smartphone contracts.'}},
+  {id:'qi_d19',catId:'daily',question:{ja:'外国人も日本の年金に加入する義務は？',vi:'Người nước ngoài có bắt buộc tham gia bảo hiểm hưu trí Nhật không?',en:'Are foreign nationals required to join Japan\'s pension system?'},choices:{ja:['ある（20歳以上は全員）','ない','希望者のみ','5年以上在住の場合のみ'],vi:['Có (tất cả từ 20 tuổi trở lên)','Không','Chỉ người muốn','Chỉ khi ở trên 5 năm'],en:['Yes (everyone 20 and over)','No','Voluntary only','Only after 5 years of residence']},answer:0,explanation:{ja:'日本に住む20歳以上の外国人も年金加入義務があります。会社員は厚生年金、それ以外は国民年金です。',vi:'Người nước ngoài từ 20 tuổi sống tại Nhật cũng bắt buộc tham gia hệ thống lương hưu.',en:'Foreign nationals aged 20 and over living in Japan are required to join the pension system.'}},
+  {id:'qi_d20',catId:'daily',question:{ja:'困った時に相談できる外国人向け窓口は？',vi:'Khi gặp khó khăn, có thể tham khảo ở đâu?',en:'Where can foreigners get help when in trouble?'},choices:{ja:['外国人総合相談センター・市区町村の国際交流協会','警察のみ','法務省へ直接','相談できる窓口はない'],vi:['Trung tâm tư vấn tổng hợp cho người nước ngoài / Hiệp hội giao lưu quốc tế địa phương','Chỉ có cảnh sát','Trực tiếp tới Bộ Tư pháp','Không có nơi tư vấn'],en:['Foreign Residents Support Center / Local International Exchange Association','Police only','Directly to Ministry of Justice','No consultation services']},answer:0,explanation:{ja:'外国人向け相談窓口は各自治体の国際交流協会や外国人総合相談センターです。多言語対応している場合が多いです。',vi:'Người nước ngoài có thể tham khảo tại Trung tâm tư vấn hoặc Hiệp hội giao lưu quốc tế địa phương, thường hỗ trợ nhiều ngôn ngữ.',en:'Foreigners can consult the Foreign Residents Support Center or local International Exchange Association, often multilingual.'}},
+  {id:'qi_s01',catId:'safety',question:{ja:'救急車・消防を呼ぶ番号は？',vi:'Số điện thoại gọi xe cứu thương/cứu hỏa là gì?',en:'What number do you call for an ambulance or fire truck?'},choices:{ja:['119','110','118','117'],vi:['119','110','118','117'],en:['119','110','118','117']},answer:0,explanation:{ja:'119番は救急・火事の両方に使います。',vi:'119 dùng cho cả cứu thương và cứu hỏa.',en:'119 is used for both ambulances and fire trucks.'}},
+  {id:'qi_s02',catId:'safety',question:{ja:'警察を呼ぶ番号は？',vi:'Số điện thoại gọi cảnh sát là gì?',en:'What number do you call for police?'},choices:{ja:['110','119','118','117'],vi:['110','119','118','117'],en:['110','119','118','117']},answer:0,explanation:{ja:'110番は警察です。事件・事故の時に使います。',vi:'110 là cảnh sát, dùng khi có vụ án hoặc tai nạn.',en:'110 is the police number, used for crimes and accidents.'}},
+  {id:'qi_s03',catId:'safety',question:{ja:'火事が起きた。何番に電話する？',vi:'Khi có hỏa hoạn, gọi số mấy?',en:'There is a fire. What number do you call?'},choices:{ja:['119','110','115','119と110両方'],vi:['119','110','115','Cả 119 và 110'],en:['119','110','115','Both 119 and 110']},answer:0,explanation:{ja:'火事・救急はどちらも119番です。警察（事件・事故）は110番。',vi:'Hỏa hoạn và cấp cứu đều gọi 119. Cảnh sát (tai nạn/tội phạm) gọi 110.',en:'Both fire and ambulance are 119. Police (incidents/accidents) is 110.'}},
+  {id:'qi_s04',catId:'safety',question:{ja:'日本語が話せなくても救急で伝えられる言葉は？',vi:'Kể cả không biết tiếng Nhật, bạn có thể nói từ gì để gọi cứu thương?',en:'Even without Japanese, what word can you say to get an ambulance?'},choices:{ja:['「Ambulance」','「Help」','「Emergency」','「Doctor」'],vi:['\"Ambulance\"','\"Help\"','\"Emergency\"','\"Doctor\"'],en:['\"Ambulance\"','\"Help\"','\"Emergency\"','\"Doctor\"']},answer:0,explanation:{ja:'「Fire」「Ambulance」「Police」と英語で言えば対応してもらえます。',vi:'Nói \"Ambulance\", \"Fire\", hoặc \"Police\" bằng tiếng Anh cũng được chấp nhận.',en:'Saying \"Ambulance\", \"Fire\", or \"Police\" in English will get you help.'}},
+  {id:'qi_s05',catId:'safety',question:{ja:'多言語で救急相談できる番号は？',vi:'Số điện thoại có thể tư vấn cứu thương bằng nhiều ngôn ngữ là gì?',en:'What number offers multilingual ambulance consultation?'},choices:{ja:['#7119','#110','#9110','0120'],vi:['#7119','#110','#9110','0120'],en:['#7119','#110','#9110','0120']},answer:0,explanation:{ja:'#7119は救急安心センターです。多言語対応で「救急車を呼ぶべきか」を相談できます。',vi:'#7119 là Trung tâm cấp cứu an tâm, hỗ trợ nhiều ngôn ngữ.',en:'#7119 is the emergency consultation center, offering multilingual support.'}},
+  {id:'qi_s06',catId:'safety',question:{ja:'119番でまず伝えるべきことは？',vi:'Khi gọi 119, điều đầu tiên cần nói là gì?',en:'When calling 119, what should you say FIRST?'},choices:{ja:['住所・現在地','名前','年齢','電話番号'],vi:['Địa chỉ / Vị trí hiện tại','Tên','Tuổi','Số điện thoại'],en:['Address / Current location','Name','Age','Phone number']},answer:0,explanation:{ja:'119番では「場所（住所）」を最初に伝えましょう。場所がわからないと助けに来られません。',vi:'Khi gọi 119, hãy nói địa chỉ/vị trí hiện tại trước tiên.',en:'When calling 119, state your location first. Without it, help cannot reach you.'}},
+  {id:'qi_s07',catId:'safety',question:{ja:'地震が来た！まず何をする？',vi:'Động đất! Làm gì đầu tiên?',en:'Earthquake! What do you do FIRST?'},choices:{ja:['頭を守る','外に逃げる','ガスを止める','119に電話する'],vi:['Bảo vệ đầu','Chạy ra ngoài','Tắt gas','Gọi 119'],en:['Protect your head','Run outside','Turn off gas','Call 119']},answer:0,explanation:{ja:'まず頭を守ること。テーブルの下またはクッションで保護します。',vi:'Đầu tiên hãy bảo vệ đầu bằng cách chui xuống bàn hoặc dùng gối.',en:'First, protect your head. Get under a table or use a cushion.'}},
+  {id:'qi_s08',catId:'safety',question:{ja:'地震が収まってからすることは？',vi:'Sau khi rung động dừng, làm gì tiếp theo?',en:'After the shaking stops, what should you do?'},choices:{ja:['ガスを消して安全確認','すぐ外に出る','119に電話する','窓を閉める'],vi:['Tắt gas và kiểm tra an toàn','Chạy ra ngoài ngay','Gọi 119','Đóng cửa sổ'],en:['Turn off gas and check safety','Run outside immediately','Call 119','Close the windows']},answer:0,explanation:{ja:'揺れが収まったらガスを消して安全を確認します。急いで外に出ると落下物の危険があります。',vi:'Sau khi rung dừng, tắt gas và kiểm tra an toàn. Chạy ra ngoài ngay có thể nguy hiểm do đồ rơi.',en:'After shaking stops, turn off gas and check safety. Running out immediately risks falling objects.'}},
+  {id:'qi_s09',catId:'safety',question:{ja:'地震時に外に出るのが危険な理由は？',vi:'Tại sao nguy hiểm khi ra ngoài lúc động đất?',en:'Why is it dangerous to go outside during an earthquake?'},choices:{ja:['落下物がある','地面が必ず割れる','人が多くて危ない','交通規制'],vi:['Có vật rơi từ trên cao','Mặt đất chắc chắn nứt','Quá đông người','Kiểm soát giao thông'],en:['Falling objects','The ground always cracks','Too many people','Traffic control']},answer:0,explanation:{ja:'外では看板・ガラス・外壁などが落下する危険があります。揺れが収まるまで建物内で安全を確保しましょう。',vi:'Ngoài đường có nguy cơ biển hiệu, kính và tường rơi xuống. Hãy ở trong tòa nhà cho đến khi hết rung.',en:'Outside there is danger from falling signs, glass, and walls. Stay inside until shaking stops.'}},
+  {id:'qi_s10',catId:'safety',question:{ja:'避難場所はいつ確認するべき？',vi:'Nơi sơ tán nên được kiểm tra khi nào?',en:'When should you confirm your evacuation site?'},choices:{ja:['来る前に事前確認','地震が来てから','地震後に','市役所に後で聞く'],vi:['Kiểm tra trước khi có động đất','Khi xảy ra động đất','Sau động đất','Hỏi tòa thị chính sau'],en:['Check before any earthquake','When earthquake happens','After earthquake','Ask city hall later']},answer:0,explanation:{ja:'避難場所は事前に確認しておきましょう。いざという時に迷わないためです。',vi:'Hãy kiểm tra nơi sơ tán từ trước. Khi xảy ra sẽ không kịp tìm.',en:'Confirm evacuation sites in advance. It\'s too late to look during an emergency.'}},
+  {id:'qi_s11',catId:'safety',question:{ja:'地震時にドアを開ける理由は？',vi:'Tại sao mở cửa khi có động đất?',en:'Why do you open doors during an earthquake?'},choices:{ja:['ドアが歪んで出口がふさがれるのを防ぐ','換気のため','隣に知らせるため','風を入れるため'],vi:['Tránh cửa bị vênh khóa lại','Để thông gió','Để báo hàng xóm','Để đón gió'],en:['Prevent door warping from blocking the exit','For ventilation','To alert neighbors','To let in wind']},answer:0,explanation:{ja:'地震でドア枠が歪み、ドアが開かなくなることがあります。揺れ始めたらすぐドアを開けて逃げ道を確保しましょう。',vi:'Động đất có thể làm biến dạng khung cửa khiến cửa không mở được. Hãy mở cửa ngay khi rung để đảm bảo lối thoát.',en:'Earthquakes can warp door frames making them impossible to open. Open doors immediately when shaking starts.'}},
+  {id:'qi_s12',catId:'safety',question:{ja:'職場でケガをした。まず何をする？',vi:'Bị thương ở nơi làm việc. Làm gì đầu tiên?',en:'You got injured at work. What do you do FIRST?'},choices:{ja:['上司に報告・応急処置','黙って帰宅','医者に行くだけ','翌日報告'],vi:['Báo cáo cấp trên & sơ cứu','Im lặng về nhà','Chỉ đi khám bác sĩ','Báo cáo hôm sau'],en:['Report to supervisor & first aid','Go home quietly','Just go to a doctor','Report the next day']},answer:0,explanation:{ja:'職場でのケガは必ず上司に報告し、応急処置を受けましょう。労災対応にも必要です。',vi:'Bị thương ở nơi làm việc phải báo cáo cấp trên và sơ cứu ngay. Cần thiết cho thủ tục tai nạn lao động.',en:'Always report workplace injuries to your supervisor and get first aid. It\'s also needed for workers\' compensation.'}},
+  {id:'qi_s13',catId:'safety',question:{ja:'熱中症になったらまずすることは？',vi:'Khi bị say nắng, việc đầu tiên cần làm là gì?',en:'When someone has heatstroke, what is the first thing to do?'},choices:{ja:['涼しい場所へ移動し水分補給','辛抱して働く','走って帰る','そのまま寝る'],vi:['Di chuyển đến nơi mát và bổ sung nước','Cố chịu và tiếp tục làm việc','Chạy về nhà','Nằm ngay tại chỗ'],en:['Move to a cool place and hydrate','Endure and keep working','Run home','Lie down where you are']},answer:0,explanation:{ja:'まず日陰や冷房のある場所に移動し、水分・塩分を補給します。意識がない場合は119番へ。',vi:'Trước tiên di chuyển đến nơi mát, uống nước và bổ sung muối. Nếu mất ý thức, gọi 119.',en:'First move to a cool place and hydrate with water and salt. If unconscious, call 119.'}},
+  {id:'qi_s14',catId:'safety',question:{ja:'「AED」は何に使う？',vi:'\"AED\" dùng để làm gì?',en:'What is an \"AED\" used for?'},choices:{ja:['心停止への対応','骨折の処置','火事の消火','熱中症治療'],vi:['Xử lý ngừng tim','Xử lý gãy xương','Dập tắt đám cháy','Điều trị say nắng'],en:['Cardiac arrest response','Fracture treatment','Fire extinguishing','Heatstroke treatment']},answer:0,explanation:{ja:'AED（自動体外式除細動器）は心停止・心室細動に対応する機器。駅・コンビニ・公共施設に設置されています。',vi:'AED (máy khử rung tim) dùng khi tim ngừng đập. Được đặt ở ga tàu, cửa hàng tiện lợi và các cơ sở công cộng.',en:'AED (Automated External Defibrillator) is used for cardiac arrest. Found in stations, convenience stores, and public facilities.'}},
+  {id:'qi_s15',catId:'safety',question:{ja:'緊急ではない警察への相談は何番？',vi:'Số điện thoại tư vấn cảnh sát không khẩn cấp là gì?',en:'What is the non-emergency police consultation number?'},choices:{ja:['#9110','110','119','#7119'],vi:['#9110','110','119','#7119'],en:['#9110','110','119','#7119']},answer:0,explanation:{ja:'#9110は警察の相談専用窓口です。緊急でない相談に使います。110は緊急専用です。',vi:'#9110 là số tư vấn cảnh sát không khẩn cấp. 110 chỉ dùng khi khẩn cấp.',en:'#9110 is for non-emergency police consultations. 110 is for emergencies only.'}},
+  {id:'qi_g01',catId:'garbage',question:{ja:'生ゴミは何ゴミ？',vi:'Thức ăn thừa là loại rác gì?',en:'What type of garbage are food scraps?'},choices:{ja:['燃えるゴミ','燃えないゴミ','資源ゴミ','粗大ゴミ'],vi:['Rác đốt được','Rác không đốt được','Rác tái chế','Rác cồng kềnh'],en:['Burnable garbage','Non-burnable garbage','Recyclable','Bulky garbage']},answer:0,explanation:{ja:'生ゴミ・紙くず・布などは「燃えるゴミ」です。',vi:'Thức ăn thừa, giấy vụn, vải là \"rác đốt được\".',en:'Food scraps, paper scraps, and cloth are \"burnable garbage\".'}},
+  {id:'qi_g02',catId:'garbage',question:{ja:'燃えるゴミの収集は一般的に週何回？',vi:'Rác đốt được thường được thu gom mấy lần một tuần?',en:'How many times a week is burnable garbage usually collected?'},choices:{ja:['2回','1回','3回','毎日'],vi:['2 lần','1 lần','3 lần','Hàng ngày'],en:['2 times','1 time','3 times','Every day']},answer:0,explanation:{ja:'多くの地域で週2回収集されます。地域によって異なるので確認しましょう。',vi:'Hầu hết thu gom 2 lần/tuần. Hãy kiểm tra lịch của địa phương bạn.',en:'Most areas collect 2 times a week. Check your local schedule.'}},
+  {id:'qi_g03',catId:'garbage',question:{ja:'指定ゴミ袋はどこで買える？',vi:'Mua túi rác quy định ở đâu?',en:'Where can you buy designated garbage bags?'},choices:{ja:['コンビニ・スーパー','市役所のみ','収集日の朝にもらう','ゴミ置き場'],vi:['Cửa hàng tiện lợi / Siêu thị','Chỉ ở tòa thị chính','Nhận vào sáng thu gom','Bãi rác'],en:['Convenience stores / Supermarkets','City hall only','Receive on collection morning','At the garbage area']},answer:0,explanation:{ja:'指定ゴミ袋はコンビニやスーパーで購入できます。',vi:'Túi rác quy định có thể mua ở cửa hàng tiện lợi hoặc siêu thị.',en:'Designated garbage bags can be purchased at convenience stores or supermarkets.'}},
+  {id:'qi_g04',catId:'garbage',question:{ja:'指定ゴミ袋はどこで買える？',vi:'Túi rác quy định mua ở đâu?',en:'Where can you buy designated garbage bags?'},choices:{ja:['コンビニ・スーパー','市役所のみ','収集日の朝にもらう','ゴミ置き場'],vi:['Cửa hàng tiện lợi / siêu thị','Chỉ tại văn phòng thành phố','Nhận vào sáng ngày thu gom','Tại điểm đặt rác'],en:['Convenience store / supermarket','Only at city hall','Receive on collection day morning','At the garbage spot']},answer:0,explanation:{ja:'指定袋はコンビニやスーパーで購入できます。サイズ別に料金が異なります。',vi:'Túi rác quy định có thể mua tại cửa hàng tiện lợi hoặc siêu thị.',en:'Designated bags can be purchased at convenience stores or supermarkets.'}},
+  {id:'qi_g05',catId:'garbage',question:{ja:'布くず（古い服）は何ゴミ？',vi:'Quần áo cũ thuộc loại rác nào?',en:'What type of waste is old clothing?'},choices:{ja:['燃えるゴミ（多くの地域）','燃えないゴミ','資源ゴミ','粗大ゴミ'],vi:['Rác cháy được (hầu hết các vùng)','Rác không cháy','Rác tái chế','Rác cồng kềnh'],en:['Burnable waste (most areas)','Non-burnable','Recyclable','Oversized waste']},answer:0,explanation:{ja:'多くの地域で古い服は燃えるゴミです。地域によって回収日や袋が異なるので確認しましょう。',vi:'Ở hầu hết các khu vực, quần áo cũ là rác cháy được. Hãy kiểm tra quy định địa phương.',en:'In most areas, old clothing is burnable waste. Check your local rules as they vary.'}},
+  {id:'qi_g06',catId:'garbage',question:{ja:'ペットボトルを捨てる前の最初のステップは？',vi:'Bước đầu tiên trước khi vứt chai PET là gì?',en:'What is the FIRST step before disposing of a PET bottle?'},choices:{ja:['キャップを外す','ラベルを剥がす','すすぐ','そのまま捨てる'],vi:['Tháo nắp','Bóc nhãn','Tráng sơ','Vứt nguyên'],en:['Remove the cap','Remove the label','Rinse it','Throw it as is']},answer:0,explanation:{ja:'①キャップを外す ②ラベルを剥がす ③すすぐ の順番です。',vi:'① Tháo nắp ② Bóc nhãn ③ Tráng sơ — đúng thứ tự này.',en:'① Remove cap ② Remove label ③ Rinse — in this order.'}},
+  {id:'qi_g07',catId:'garbage',question:{ja:'ペットボトルを捨てる前にしてはいけないことは？',vi:'Điều KHÔNG được làm trước khi vứt chai PET?',en:'What should you NOT do before disposing of a PET bottle?'},choices:{ja:['キャップとラベルをつけたまま捨てる','キャップを外す','ラベルを剥がす','軽くすすぐ'],vi:['Vứt nguyên nắp và nhãn','Tháo nắp','Bóc nhãn','Tráng sơ'],en:['Throw it with cap and label on','Remove the cap','Remove the label','Rinse lightly']},answer:0,explanation:{ja:'キャップとラベルは必ず外してから捨てましょう。',vi:'Nắp và nhãn phải tháo ra trước khi vứt.',en:'Always remove the cap and label before disposing.'}},
+  {id:'qi_g08',catId:'garbage',question:{ja:'ペットボトルのラベルを剥がす理由は？',vi:'Tại sao phải bóc nhãn chai nhựa PET?',en:'Why do you peel the label off PET bottles?'},choices:{ja:['リサイクルしやすくするため','デザインが古いから','見た目がきれいだから','法律で義務だから'],vi:['Để tái chế dễ hơn','Vì thiết kế cũ','Để trông đẹp hơn','Vì luật bắt buộc'],en:['To make recycling easier','Because the design is old','To look cleaner','It is legally required']},answer:0,explanation:{ja:'ラベルを剥がすとリサイクル工程が効率化されます。素材が混ざらないようにすることが目的です。',vi:'Bóc nhãn giúp quá trình tái chế hiệu quả hơn, tránh lẫn lộn vật liệu.',en:'Peeling labels improves recycling efficiency by preventing material contamination.'}},
+  {id:'qi_g09',catId:'garbage',question:{ja:'ペットボトルを軽くすすぐのはなぜ？',vi:'Tại sao phải tráng nhẹ chai nhựa PET?',en:'Why do you lightly rinse PET bottles?'},choices:{ja:['衛生・リサイクルのため','再利用するため','きれいに見せるため','ルールだから'],vi:['Vì vệ sinh và tái chế','Để tái sử dụng','Để trông sạch hơn','Vì là quy định'],en:['For hygiene and recycling','To reuse','To look cleaner','Because it\'s a rule']},answer:0,explanation:{ja:'中身の残りが腐敗したり異臭の原因になるため、軽くすすいでから捨てましょう。',vi:'Tráng nhẹ để tránh cặn bã bên trong gây mùi hôi hoặc ô nhiễm khi tái chế.',en:'Rinse lightly to prevent residue from causing odor or contamination during recycling.'}},
+  {id:'qi_g10',catId:'garbage',question:{ja:'ペットボトルと一緒に捨てていいものは？',vi:'Có thể bỏ chung với chai nhựa PET không?',en:'What can you throw away together with PET bottles?'},choices:{ja:['何もない（すべて分けて捨てる）','キャップだけいい','ラベルはそのまま','全部まとめてOK'],vi:['Không gì cả (bỏ riêng tất cả)','Chỉ nắp chai','Giữ nguyên nhãn','Bỏ tất cả vào cùng'],en:['Nothing (separate everything)','Caps only','Keep labels on','Everything together is fine']},answer:0,explanation:{ja:'キャップ・ラベル・本体はそれぞれ別のゴミとして分けて捨てるのが基本です。',vi:'Nắp, nhãn và thân chai cần bỏ riêng từng loại.',en:'Caps, labels, and the bottle body should each be disposed of separately.'}},
+  {id:'qi_g11',catId:'garbage',question:{ja:'粗大ゴミを捨てるには最初に何をする？',vi:'Để vứt rác cồng kềnh, làm gì đầu tiên?',en:'To dispose of bulky garbage, what do you do FIRST?'},choices:{ja:['市役所に申請する','ゴミ置き場にそのまま出す','コンビニで手続き','自分で処分場へ'],vi:['Đăng ký với tòa thị chính','Đặt trực tiếp ở bãi rác','Thủ tục ở cửa hàng tiện lợi','Tự chở đến bãi xử lý'],en:['Register with city hall','Put it at the garbage area directly','Procedure at convenience store','Take it to disposal site yourself']},answer:0,explanation:{ja:'粗大ゴミは事前に市役所に申請が必要です。無断で出すと違法になります。',vi:'Rác cồng kềnh cần đăng ký trước với tòa thị chính. Vứt tự ý là vi phạm.',en:'Bulky garbage requires advance registration with city hall. Disposing without permission is illegal.'}},
+  {id:'qi_g12',catId:'garbage',question:{ja:'粗大ゴミの処分費用は？',vi:'Chi phí xử lý rác cồng kềnh là bao nhiêu?',en:'How much does bulky garbage disposal cost?'},choices:{ja:['500〜2,000円程度','無料','10,000円以上','定額500円'],vi:['Khoảng 500〜2,000 yên','Miễn phí','Hơn 10,000 yên','Cố định 500 yên'],en:['Around ¥500–2,000','Free','Over ¥10,000','Fixed ¥500']},answer:0,explanation:{ja:'粗大ゴミは有料で500〜2,000円程度かかります。品目によって異なります。',vi:'Rác cồng kềnh mất phí khoảng 500〜2,000 yên tùy loại đồ.',en:'Bulky garbage disposal costs around ¥500–2,000 depending on the item.'}},
+  {id:'qi_g13',catId:'garbage',question:{ja:'粗大ゴミを無断でゴミ置き場に捨てると？',vi:'Bỏ rác cồng kềnh không xin phép thì sao?',en:'What happens if you dump oversized waste without permission?'},choices:{ja:['違法になる可能性がある','誰かが持って行く','自治体が無料処分','特に問題ない'],vi:['Có thể bị coi là vi phạm pháp luật','Sẽ có người lấy đi','Chính quyền xử lý miễn phí','Không sao cả'],en:['May be illegal','Someone will take it','Municipality disposes for free','No problem at all']},answer:0,explanation:{ja:'無断投棄は不法投棄とみなされ罰則を受ける可能性があります。必ず正規の手続きを踏みましょう。',vi:'Vứt rác không phép có thể bị coi là vứt rác bất hợp pháp và bị phạt. Hãy làm đúng thủ tục.',en:'Illegal dumping may result in penalties. Always follow the proper procedures.'}},
+  {id:'qi_g14',catId:'garbage',question:{ja:'粗大ゴミの申し込み先は？',vi:'Đăng ký bỏ rác cồng kềnh ở đâu?',en:'Where do you apply to dispose of oversized waste?'},choices:{ja:['市区町村のウェブサイト・電話','コンビニATM','市役所に直接持参のみ','捨てるだけでOK'],vi:['Website / điện thoại của thành phố','ATM cửa hàng tiện lợi','Chỉ mang thẳng tới văn phòng','Bỏ thẳng là được'],en:['City website or phone','Convenience store ATM','Bring directly to city hall only','Just throw it away']},answer:0,explanation:{ja:'市区町村のウェブサイトか電話で申し込み、処理券を購入して指定日に出します。',vi:'Đăng ký qua website hoặc điện thoại thành phố, mua nhãn xử lý và để rác vào ngày quy định.',en:'Apply via city website or phone, purchase a disposal sticker, and set it out on the designated day.'}},
+  {id:'qi_g15',catId:'garbage',question:{ja:'「粗大ゴミ」に含まれるものは？',vi:'\"Rác cồng kềnh\" bao gồm những gì?',en:'What is included in \"oversized waste\"?'},choices:{ja:['大型の家具・家電','大量の燃えるゴミ','古い服まとめて','大きい段ボール'],vi:['Đồ nội thất, thiết bị lớn','Nhiều rác cháy','Nhiều quần áo cũ','Hộp carton lớn'],en:['Large furniture and appliances','Large amount of burnable waste','Lots of old clothing','Large cardboard boxes']},answer:0,explanation:{ja:'粗大ゴミは一辺が30cm以上の大型ごみが基準。家具や家電が主な対象です。',vi:'Rác cồng kềnh là đồ vật có ít nhất một cạnh trên 30cm, chủ yếu là nội thất và thiết bị.',en:'Oversized waste is generally items with one side over 30cm, mainly furniture and appliances.'}},
+  {id:'qi_g16',catId:'garbage',question:{ja:'びんは何ゴミ？',vi:'Chai thủy tinh là loại rác gì?',en:'What type of garbage are glass bottles?'},choices:{ja:['燃えないゴミ・資源ゴミ','燃えるゴミ','粗大ゴミ','なんでもOK'],vi:['Rác không đốt được / Tái chế','Rác đốt được','Rác cồng kềnh','Loại nào cũng được'],en:['Non-burnable / Recyclable','Burnable garbage','Bulky garbage','Any type is fine']},answer:0,explanation:{ja:'びんは燃えないゴミまたは資源ゴミです。地域によって分別方法が異なります。',vi:'Chai thủy tinh là rác không đốt hoặc rác tái chế, tùy địa phương.',en:'Glass bottles are non-burnable or recyclable garbage, depending on the area.'}},
+  {id:'qi_g17',catId:'garbage',question:{ja:'飲み物の缶は何ゴミ？',vi:'Lon đồ uống là loại rác gì?',en:'What type of waste are beverage cans?'},choices:{ja:['資源ゴミ（多くの地域）','燃えるゴミ','燃えないゴミ','粗大ゴミ'],vi:['Rác tái chế (hầu hết các vùng)','Rác cháy được','Rác không cháy','Rác cồng kềnh'],en:['Recyclable waste (most areas)','Burnable','Non-burnable','Oversized']},answer:0,explanation:{ja:'アルミ缶・スチール缶は金属として資源ゴミに分類されます。つぶしてから出す地域もあります。',vi:'Lon nhôm và lon thép được phân loại là rác tái chế. Một số nơi yêu cầu bẹp lon trước khi bỏ.',en:'Aluminum and steel cans are recyclable metal. Some areas require crushing them first.'}},
+  {id:'qi_g18',catId:'garbage',question:{ja:'ゴミカレンダーはどこで確認する？',vi:'Xem lịch thu gom rác ở đâu?',en:'Where do you check the garbage collection calendar?'},choices:{ja:['市のウェブサイト・配布チラシ','テレビ','コンビニ','職場の掲示板'],vi:['Website thành phố / tờ rơi phát','Truyền hình','Cửa hàng tiện lợi','Bảng thông báo nơi làm việc'],en:['City website / distributed flyer','TV','Convenience store','Workplace bulletin board']},answer:0,explanation:{ja:'引越し時は自治体のウェブサイトやチラシで最初に収集日を確認しましょう。',vi:'Khi chuyển nhà, hãy kiểm tra website thành phố hoặc tờ rơi để biết ngày thu gom.',en:'When moving, first check the city website or distributed flyer for collection days.'}},
+  {id:'qi_g19',catId:'garbage',question:{ja:'分別が間違っていたゴミはどうなる？',vi:'Nếu phân loại sai, điều gì xảy ra?',en:'What happens if garbage is sorted incorrectly?'},choices:{ja:['収集されない','翌週回収してもらえる','罰金が来る','業者が分けてくれる'],vi:['Không được thu gom','Thu gom tuần sau','Bị phạt tiền','Người thu gom sẽ phân loại'],en:['Not collected','Collected next week','Get a fine','Collector will sort it']},answer:0,explanation:{ja:'分別が間違っていると収集されずにゴミ置き場に残ります。その週は捨てられません。',vi:'Nếu phân loại sai, rác sẽ không được thu gom và phải chờ tuần sau.',en:'Incorrectly sorted garbage is left behind and not collected that week.'}},
+  {id:'qi_g20',catId:'garbage',question:{ja:'乾電池は何ゴミ？',vi:'Pin khô là loại rác gì?',en:'What type of garbage are dry batteries?'},choices:{ja:['燃えないゴミ・特定回収','燃えるゴミ','資源ゴミ','普通に捨てられる'],vi:['Rác không đốt / Thu gom đặc biệt','Rác đốt được','Rác tái chế','Vứt bình thường'],en:['Non-burnable / Special collection','Burnable garbage','Recyclable','Can be thrown away normally']},answer:0,explanation:{ja:'乾電池は燃えないゴミまたは特定の回収ボックスに入れます。普通のゴミと一緒に捨てないでください。',vi:'Pin khô là rác không đốt hoặc bỏ vào hộp thu gom đặc biệt. Không trộn với rác thường.',en:'Batteries are non-burnable or go in special collection boxes. Don\'t mix with regular garbage.'}},
+  {id:'qi_gr01',catId:'greeting',question:{ja:'朝の職場のあいさつは？',vi:'Lời chào buổi sáng ở nơi làm việc là gì?',en:'What is the morning greeting at work?'},choices:{ja:['おはようございます','こんにちは','よろしくお願いします','お疲れ様です'],vi:['Ohayō gozaimasu','Konnichiwa','Yoroshiku onegaishimasu','Otsukaresama desu'],en:['Ohayō gozaimasu','Konnichiwa','Yoroshiku onegaishimasu','Otsukaresama desu']},answer:0,explanation:{ja:'「おはようございます」は朝の基本あいさつです。時間帯に関わらず午前中はこれを使います。',vi:'\"Ohayō gozaimasu\" là lời chào buổi sáng cơ bản.',en:'\"Ohayō gozaimasu\" is the basic morning greeting, used until noon regardless of time.'}},
+  {id:'qi_gr02',catId:'greeting',question:{ja:'「お疲れ様です」は何時から使える？',vi:'\"Otsukaresama desu\" dùng được lúc nào?',en:'When can you use \"Otsukaresama desu\"?'},choices:{ja:['時間問わずいつでも','午後のみ','仕事後のみ','深夜のみ'],vi:['Bất cứ lúc nào','Chỉ buổi chiều','Chỉ sau giờ làm','Chỉ ban đêm'],en:['Anytime','Afternoon only','After work only','Late night only']},answer:0,explanation:{ja:'「お疲れ様です」は朝昼夜問わず職場で使える万能な挨拶です。',vi:'\"Otsukaresama desu\" là câu chào vạn năng có thể dùng bất cứ lúc nào tại nơi làm việc.',en:'\"Otsukaresama desu\" is a versatile greeting you can use anytime at work.'}},
+  {id:'qi_gr03',catId:'greeting',question:{ja:'初めて会う人への最初の言葉は？',vi:'Câu đầu tiên khi gặp người lần đầu là gì?',en:'What is the first thing to say when meeting someone for the first time?'},choices:{ja:['はじめまして','お疲れ様です','こんにちは','よろしく'],vi:['Hajimemashite','Otsukaresama desu','Konnichiwa','Yoroshiku'],en:['Hajimemashite (Nice to meet you)','Otsukaresama desu','Konnichiwa','Yoroshiku']},answer:0,explanation:{ja:'「はじめまして」は初対面の挨拶。続けて「よろしくお願いします」と言うのがセットです。',vi:'\"Hajimemashite\" là câu chào khi gặp lần đầu. Nối tiếp bằng \"Yoroshiku onegaishimasu\".',en:'\"Hajimemashite\" is the greeting for first meetings. Follow it with \"Yoroshiku onegaishimasu\".'}},
+  {id:'qi_gr04',catId:'greeting',question:{ja:'「ご苦労様です」を上司に言うと？',vi:'Nói \"Gokurōsama desu\" với cấp trên thì sao?',en:'What happens if you say \"Gokurōsama desu\" to your boss?'},choices:{ja:['失礼になる','喜ばれる','普通','問題ない'],vi:['Bất lịch sự','Cấp trên vui','Bình thường','Không sao'],en:['It\'s rude','Boss will be happy','Normal','No problem']},answer:0,explanation:{ja:'「ご苦労様」は目上の人が目下の人に使う言葉です。上司には「お疲れ様です」を使いましょう。',vi:'\"Gokurōsama\" chỉ dùng từ trên xuống dưới. Với cấp trên, dùng \"Otsukaresama desu\".',en:'\"Gokurōsama\" is used by superiors to subordinates. Use \"Otsukaresama desu\" for your boss.'}},
+  {id:'qi_gr05',catId:'greeting',question:{ja:'何かをお願いする時の締めの言葉は？',vi:'Câu kết thúc khi nhờ vả ai đó là gì?',en:'What is the closing phrase when asking a favor?'},choices:{ja:['よろしくお願いします','ありがとうございます','お疲れ様です','はじめまして'],vi:['Yoroshiku onegaishimasu','Arigatou gozaimasu','Otsukaresama desu','Hajimemashite'],en:['Yoroshiku onegaishimasu','Arigatou gozaimasu','Otsukaresama desu','Hajimemashite']},answer:0,explanation:{ja:'お願いごとの締めには「よろしくお願いします」が定番。丁寧さを伝える重要なフレーズです。',vi:'\"Yoroshiku onegaishimasu\" là câu kết thúc chuẩn khi nhờ vả, thể hiện sự lịch sự.',en:'\"Yoroshiku onegaishimasu\" is the standard closing when making a request.'}},
+  {id:'qi_gr06',catId:'greeting',question:{ja:'電話に出る時の基本的な言い方は？',vi:'Câu cơ bản khi bắt máy điện thoại là gì?',en:'What is the basic phrase when answering the phone?'},choices:{ja:['「はい、○○（名前）です」','「もしもし」','「何ですか」','「はい」のみ'],vi:['\"Hai, đây là [tên]\"','\"Moshi moshi\"','\"Gì vậy?\"','Chỉ nói \"Hai\"'],en:['\"This is [name]\"','\"Moshi moshi\"','\"What is it?\"','Just \"Hai\"']},answer:0,explanation:{ja:'職場では「はい、〇〇（名前）です」と名乗るのが基本。もしもしは日常会話向けです。',vi:'Ở nơi làm việc, bắt máy bằng \"Hai, đây là [tên]\" là cơ bản. \"Moshi moshi\" chỉ dùng trong cuộc sống thường ngày.',en:'At work, answer with \"This is [name]\". \"Moshi moshi\" is for personal calls.'}},
+  {id:'qi_gr07',catId:'greeting',question:{ja:'「わかりました」のより丁寧な表現は？',vi:'Cách nói \"Wakarimashita\" lịch sự hơn là gì?',en:'What is a more polite way to say \"I understand\"?'},choices:{ja:['承知しました','わかりました','OK','了解です'],vi:['Shōchi shimashita','Wakarimashita','OK','Ryōkai desu'],en:['Shōchi shimashita','Wakarimashita','OK','Ryōkai desu']},answer:0,explanation:{ja:'「承知しました」が最も丁寧な表現です。上司・お客様への返答に使います。',vi:'\"Shōchi shimashita\" là cách nói lịch sự nhất, dùng với cấp trên và khách hàng.',en:'\"Shōchi shimashita\" is the most polite form, used with superiors and customers.'}},
+  {id:'qi_gr08',catId:'greeting',question:{ja:'「お疲れ様」と「ご苦労様」の使い分けは？',vi:'Phân biệt \"Otsukaresama\" và \"Gokurōsama\" như thế nào?',en:'How do you distinguish \"Otsukaresama\" and \"Gokurōsama\"?'},choices:{ja:['「ご苦労様」は上司→部下のみ自然','同じ意味で使い分け不要','「お疲れ様」が目上専用','地域で異なる'],vi:['\"Gokurōsama\" chỉ tự nhiên khi cấp trên nói với cấp dưới','Nghĩa như nhau, không cần phân biệt','\"Otsukaresama\" chỉ dành cho cấp trên','Khác nhau theo vùng'],en:['\"Gokurōsama\" is natural only from superior to subordinate','Same meaning, no need to differentiate','\"Otsukaresama\" is only for superiors','Varies by region']},answer:0,explanation:{ja:'「ご苦労様」を上司に使うのは失礼。「お疲れ様」は誰にでも使えます。',vi:'Nói \"Gokurōsama\" với cấp trên là thiếu lịch sự. \"Otsukaresama\" có thể dùng với tất cả mọi người.',en:'Using \"Gokurōsama\" to a superior is rude. \"Otsukaresama\" is safe to use with everyone.'}},
+  {id:'qi_gr09',catId:'greeting',question:{ja:'廊下ですれ違う時のお辞儀の角度は？',vi:'Khi đi ngang nhau trong hành lang, cúi đầu bao nhiêu độ?',en:'When passing someone in a corridor, what angle bow do you use?'},choices:{ja:['15度（会釈）','30度','45度','お辞儀は不要'],vi:['15 độ (Eshaku)','30 độ','45 độ','Không cần cúi'],en:['15 degrees (Eshaku)','30 degrees','45 degrees','No bow needed']},answer:0,explanation:{ja:'廊下ですれ違う時は15度の会釈が適切です。',vi:'Khi đi ngang trong hành lang, cúi 15 độ (Eshaku) là phù hợp.',en:'A 15-degree bow (Eshaku) is appropriate when passing someone in a corridor.'}},
+  {id:'qi_gr10',catId:'greeting',question:{ja:'通常の挨拶でのお辞儀の角度は？',vi:'Khi chào hỏi bình thường, cúi đầu bao nhiêu độ?',en:'For a normal greeting, what angle bow do you use?'},choices:{ja:['30度','15度','45度','90度'],vi:['30 độ','15 độ','45 độ','90 độ'],en:['30 degrees','15 degrees','45 degrees','90 degrees']},answer:0,explanation:{ja:'通常の挨拶は30度のお辞儀です。迷ったら30度にしておけば大丈夫です。',vi:'Chào hỏi bình thường là cúi 30 độ. Nếu không chắc, cúi 30 độ là an toàn.',en:'Normal greetings use a 30-degree bow. When in doubt, 30 degrees is always safe.'}},
+  {id:'qi_gr11',catId:'greeting',question:{ja:'深い謝罪をする時のお辞儀の角度は？',vi:'Khi xin lỗi sâu sắc, cúi đầu bao nhiêu độ?',en:'For a deep apology, what angle bow do you use?'},choices:{ja:['45度','30度','15度','60度'],vi:['45 độ','30 độ','15 độ','60 độ'],en:['45 degrees','30 degrees','15 degrees','60 degrees']},answer:0,explanation:{ja:'深い謝罪・深いお礼の時は45度のお辞儀をします。',vi:'Khi xin lỗi hoặc cảm ơn sâu sắc, cúi 45 độ.',en:'For deep apologies or deep thanks, use a 45-degree bow.'}},
+  {id:'qi_gr12',catId:'greeting',question:{ja:'お辞儀しながらやってはいけないことは？',vi:'Điều gì không nên làm khi cúi đầu chào?',en:'What should you not do while bowing?'},choices:{ja:['スマホを見る','微笑む','手を前に組む','目線を下げる'],vi:['Nhìn điện thoại','Mỉm cười','Chắp tay trước ngực','Nhìn xuống'],en:['Look at your phone','Smile','Clasp hands in front','Look downward']},answer:0,explanation:{ja:'お辞儀中のスマホ操作は相手への失礼にあたります。挨拶時は手を体の横に添えるのが基本です。',vi:'Nhìn điện thoại khi cúi đầu là thiếu lịch sự. Để tay dọc theo người khi chào.',en:'Looking at your phone while bowing is disrespectful. Keep your hands at your sides.'}},
+  {id:'qi_gr13',catId:'greeting',question:{ja:'お辞儀の角度に迷ったら？',vi:'Khi không chắc góc cúi đầu phải làm gì?',en:'When unsure about the bowing angle, what should you do?'},choices:{ja:['30度にしておけば安全','15度で十分','45度が最も安全','深ければ深いほどよい'],vi:['30 độ là an toàn nhất','15 độ là đủ','45 độ là an toàn nhất','Càng sâu càng tốt'],en:['30 degrees is safe','15 degrees is enough','45 degrees is safest','Deeper is always better']},answer:0,explanation:{ja:'30度は通常の挨拶に適した汎用的な角度。迷った時はこれで問題ありません。',vi:'30 độ là góc đa năng cho lời chào thông thường. Khi không chắc, dùng 30 độ là ổn.',en:'30 degrees is a versatile angle for regular greetings. When in doubt, 30 degrees works fine.'}},
+  {id:'qi_gr14',catId:'greeting',question:{ja:'お辞儀を避けるべき状況は？',vi:'Tình huống nào không nên cúi đầu chào?',en:'In which situation should you avoid bowing?'},choices:{ja:['歩きながら','立ちながら','外では失礼','笑顔ではしない'],vi:['Khi đang đi','Khi đang đứng','Ngoài trời là thất lễ','Không cúi khi đang cười'],en:['While walking','While standing','Outdoors is rude','Don\'t bow while smiling']},answer:0,explanation:{ja:'歩きながらのお辞儀は不安定で相手にも伝わりにくい。一度立ち止まってから挨拶しましょう。',vi:'Cúi đầu khi đang đi là không ổn định và khó truyền đạt. Hãy dừng lại trước khi chào.',en:'Bowing while walking is unstable and hard to convey. Stop first, then bow.'}},
+  {id:'qi_gr15',catId:'greeting',question:{ja:'自分の会社を外部の人に言う時は？',vi:'Khi nói về công ty mình với người ngoài, dùng từ gì?',en:'How do you refer to your own company to outsiders?'},choices:{ja:['弊社','我が社','御社','うちの会社'],vi:['Heisha (弊社)','Wagasha (我が社)','Osha (御社)','Uchi no kaisha'],en:['Heisha (our company, humble)','Wagasha','Osha (your company)','Our company']},answer:0,explanation:{ja:'自分の会社は「弊社」（へいしゃ）と謙遜して言います。相手の会社は「御社」です。',vi:'Dùng \"Heisha\" (겸손) khi nói về công ty mình. Công ty đối phương là \"Osha\".',en:'Use \"Heisha\" (humble form) for your own company. The other party\'s company is \"Osha\".'}},
+  {id:'qi_gr16',catId:'greeting',question:{ja:'相手の会社を敬って指す言葉は？',vi:'Từ kính trọng để chỉ công ty của đối phương là gì?',en:'What is the respectful term for the other party\'s company?'},choices:{ja:['御社（口頭）','弊社','あなたの会社','そちら'],vi:['Osha (nói)','Heisha','Công ty của bạn','Bên đó'],en:['Osha (spoken)','Heisha','Your company','That side']},answer:0,explanation:{ja:'相手の会社は口頭で「御社」、書面では「貴社」。自分の会社は「弊社」です。',vi:'Gọi công ty đối phương là \"Osha\" (nói) hoặc \"Kisha\" (viết). Công ty mình là \"Heisha\".',en:'Use \"Osha\" (spoken) or \"Kisha\" (written) for their company. Use \"Heisha\" for your own.'}},
+  {id:'qi_gr17',catId:'greeting',question:{ja:'「食べます」の謙譲語は？',vi:'Dạng khiêm tốn của \"tabemasu\" (ăn) là gì?',en:'What is the humble form of \"tabemasu\" (to eat)?'},choices:{ja:['いただきます','食べられます','お食べになります','召し上がります'],vi:['Itadakimasu','Taberaremasu','Otabe ni narimasu','Meshiagarimasu'],en:['Itadakimasu','Taberaremasu','Otabe ni narimasu','Meshiagarimasu']},answer:0,explanation:{ja:'「いただきます」は「食べる・もらう」の謙譲語です。「召し上がります」は相手への尊敬語です。',vi:'\"Itadakimasu\" là dạng khiêm tốn của \"ăn/nhận\". \"Meshiagarimasu\" là dạng kính trọng dành cho người khác.',en:'\"Itadakimasu\" is the humble form of \"eat/receive\". \"Meshiagarimasu\" is the respectful form used for others.'}},
+  {id:'qi_gr18',catId:'greeting',question:{ja:'「います」の尊敬語は？',vi:'Dạng kính trọng của \"imasu\" (có mặt) là gì?',en:'What is the respectful form of \"imasu\" (to be/exist)?'},choices:{ja:['いらっしゃいます','おります','います','あります'],vi:['Irasshaimasu','Orimasu','Imasu','Arimasu'],en:['Irasshaimasu','Orimasu','Imasu','Arimasu']},answer:0,explanation:{ja:'「いらっしゃいます」は「います」の尊敬語です。自分には「おります」を使います。',vi:'\"Irasshaimasu\" là dạng kính trọng. Dùng \"Orimasu\" cho bản thân (khiêm tốn).',en:'\"Irasshaimasu\" is the respectful form. Use \"Orimasu\" humbly for yourself.'}},
+  {id:'qi_gr19',catId:'greeting',question:{ja:'「言います」の謙譲語は？',vi:'Dạng khiêm nhường của \"iimasu\" là gì?',en:'What is the humble form of \"iimasu\" (to say)?'},choices:{ja:['申します','おっしゃいます','話されます','言われます'],vi:['Mōshimasu','Osshaimasu','Hanasaremasu','Iwaremasu'],en:['Mōshimasu','Osshaimasu','Hanasaremasu','Iwaremasu']},answer:0,explanation:{ja:'謙譲語「申します」は自分をへりくだる表現。「おっしゃいます」は相手への尊敬語です。',vi:'\"Mōshimasu\" là dạng khiêm nhường của người nói. \"Osshaimasu\" là dạng kính trọng dành cho đối phương.',en:'\"Mōshimasu\" humbly refers to the speaker\'s own actions. \"Osshaimasu\" is honorific for the other person.'}},
+  {id:'qi_gr20',catId:'greeting',question:{ja:'お礼の正式な表現は？',vi:'Cách nói cảm ơn trang trọng là gì?',en:'What is the formal way to say thank you?'},choices:{ja:['ありがとうございます','ありがとう','どうも','サンキュー'],vi:['Arigatō gozaimasu','Arigatō','Dōmo','Thank you'],en:['Arigatō gozaimasu','Arigatō','Dōmo','Thank you']},answer:0,explanation:{ja:'「ありがとうございます」が最も丁寧なお礼の表現です。職場では常にこの形を使いましょう。',vi:'\"Arigatō gozaimasu\" là cách cảm ơn trang trọng nhất. Luôn dùng ở nơi làm việc.',en:'\"Arigatō gozaimasu\" is the most polite form. Always use this at work.'}}
 ];
 
 const BADGES=[
@@ -1570,18 +1669,27 @@ function rHome(){
     </div>
     <div class="home-prog-strip">
         <div class="hps-item">
-          <div class="hps-val">${doneItems()}<span style="font-size:11px;color:var(--muted);font-weight:400;"> / ${totalItems()}</span></div>
-          <div class="hps-lbl">レッスン完了</div>
+          <div class="hps-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div>
+            <div class="hps-val">${doneItems()}<span style="font-size:10px;color:var(--muted);font-weight:400;"> / ${totalItems()}</span></div>
+            <div class="hps-lbl">完了</div>
+          </div>
         </div>
         <div class="hps-div"></div>
         <div class="hps-item">
-          <div class="hps-val">${S.points}</div>
-          <div class="hps-lbl">pt</div>
+          <div class="hps-icon"><svg viewBox="0 0 24 24" fill="var(--gold)" stroke="none" style="width:13px;height:13px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+          <div>
+            <div class="hps-val gold">${S.points}</div>
+            <div class="hps-lbl">pt</div>
+          </div>
         </div>
         <div class="hps-div"></div>
         <div class="hps-item">
-          <div class="hps-val">${S.streak}</div>
-          <div class="hps-lbl">日連続</div>
+          <div class="hps-icon"><svg viewBox="0 0 24 24" fill="var(--gold)" stroke="none" style="width:13px;height:13px;filter:drop-shadow(0 0 3px rgba(251,191,36,0.6));"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
+          <div>
+            <div class="hps-val gold">${S.streak}</div>
+            <div class="hps-lbl">日連続</div>
+          </div>
         </div>
       </div>
       <div class="hcont">
@@ -1600,8 +1708,8 @@ function rHome(){
         <div class="daily-ttl">${tc(daily.titles)}</div>
         <div class="daily-sub">${dailyCat?tc(dailyCat.titles):''} · ${S.progress[daily.id]?'完了済':'未読'}</div>        <div class="daily-footer">
           <div class="daily-btn">
+            <svg viewBox="0 0 24 24" fill="var(--accent)" stroke="none" style="width:10px;height:10px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             ${t('home.start')}
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
           </div>
           <div class="daily-progress">
             <div class="daily-progress-dots">
